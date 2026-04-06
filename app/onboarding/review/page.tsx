@@ -142,7 +142,7 @@ export default function ReviewPage() {
                     <motion.button
                         whileHover={{ scale: 1.02, y: -2 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={() => router.push("/onboarding/reveal")}
+                        onClick={() => router.push("/onboarding/pricing-setup")}
                         className="w-full h-16 rounded-full bg-primary text-background font-sans font-bold flex items-center justify-center gap-3 text-lg shadow-[0_15px_30px_-10px_rgba(44,62,45,0.4)] hover:bg-primary/90 transition-all uppercase tracking-widest"
                     >
                         <span>Build my week</span>

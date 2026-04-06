@@ -49,15 +49,28 @@ function DraggableOrderCard({ order }: { order: Order }) {
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                    <span className="text-xl">{order.meal_emoji}</span>
-                    <span className="text-[11px] font-bold text-[#9C9C9C] font-mono">#{order.id.toUpperCase()}</span>
+                    <div className="flex -space-x-2">
+                        {order.items.slice(0, 3).map((item, idx) => (
+                            <span key={idx} className="text-xl bg-white rounded-full border border-border w-8 h-8 flex items-center justify-center shadow-sm relative z-[1]">
+                                {item.meal_emoji}
+                            </span>
+                        ))}
+                    </div>
+                    <span className="text-[11px] font-bold text-[#9C9C9C] font-mono">#{order.id.split('-').pop()?.toUpperCase()}</span>
                 </div>
                 <span className="text-lg font-bold text-[#2F8B60]">{order.total_mad} MAD</span>
             </div>
-            {/* Meal name */}
-            <p className="text-sm font-semibold text-[#2D2D2D] mb-1">{order.meal_name}</p>
+            {/* Meal info */}
+            <div className="mb-2">
+                <p className="text-sm font-semibold text-[#2D2D2D] mb-1">
+                    {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                </p>
+                <div className="text-[10px] text-text-muted truncate max-w-[180px]">
+                    {order.items.map(i => `${i.quantity}x ${i.meal_name}`).join(', ')}
+                </div>
+            </div>
             {/* User */}
-            <p className="text-xs text-[#6B6B6B] mb-2">{order.user_name}</p>
+            <p className="text-xs text-[#6B6B6B] mb-2 font-medium">{order.user_name}</p>
             {/* Address */}
             <div className="flex items-center gap-1.5 text-[11px] text-[#9C9C9C]">
                 <MapPin size={11} />
@@ -210,13 +223,18 @@ export default function AdminOrdersPage() {
 
                     <DragOverlay>
                         {activeOrder && (
-                            <div className="p-4 rounded-2xl bg-white border-2 border-[#6BC4A0] w-64"
-                                style={{ boxShadow: "0 16px 48px rgba(107,196,160,0.25)" }}>
+                            <div className="p-4 rounded-2xl bg-white border-2 border-[#6BC4A0] w-64 shadow-2xl">
                                 <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-xl">{activeOrder.meal_emoji}</span>
-                                    <span className="text-[11px] font-bold text-[#9C9C9C]">#{activeOrder.id.toUpperCase()}</span>
+                                    <div className="flex -space-x-1">
+                                        {activeOrder.items.slice(0, 3).map((item, idx) => (
+                                            <span key={idx} className="text-sm bg-white rounded-full border border-border w-6 h-6 flex items-center justify-center">
+                                                {item.meal_emoji}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <span className="text-[11px] font-bold text-[#9C9C9C]">#{activeOrder.id.split('-').pop()?.toUpperCase()}</span>
                                 </div>
-                                <p className="text-sm font-semibold text-[#2D2D2D]">{activeOrder.meal_name}</p>
+                                <p className="text-sm font-semibold text-[#2D2D2D]">{activeOrder.items.length} Items</p>
                                 <p className="text-xs text-[#6B6B6B]">{activeOrder.user_name}</p>
                             </div>
                         )}

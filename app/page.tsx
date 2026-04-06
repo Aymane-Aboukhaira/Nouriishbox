@@ -21,6 +21,7 @@ import { MenuSection } from "@/components/ui/menu-section";
 import { TestimonialsSection } from "@/components/ui/testimonials-section";
 import { CtaSection } from "@/components/ui/cta-section";
 import { FaqSection } from "@/components/ui/faq-section";
+import { PricingSection } from "@/components/ui/pricing-section";
 import { SmoothScroll } from "@/components/ui/smooth-scroll";
 
 const staggerContainer: Variants = {
@@ -154,58 +155,8 @@ export default function LandingPage() {
         {/* 5. MEAL PREVIEW GRID */}
         <MenuSection onNavigate={() => router.push("/client/menu")} />
 
-        {/* 7. PRICING */}
-        <section id="pricing" className="py-32 px-6 bg-[#F5F0E8] border-y border-[#C4602A]">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-20">
-              <h2 className="font-serif text-5xl md:text-7xl text-[#1A1A1A] mb-6 capitalize tracking-tight leading-[0.9]">Simple, Transparent Pricing.</h2>
-              <p className="text-xl text-[#1A1A1A]/70 font-sans max-w-xl mx-auto leading-[1.7]">Pause anytime. No hidden fees. Cancel in exactly 2 clicks.</p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 items-center">
-              {[
-                { name: "SOLO", price: 320, perMeal: "≈ 64 MAD / MEAL", meals: "5 meals/week", highlight: false },
-                { name: "COUPLE", price: 590, perMeal: "≈ 59 MAD / MEAL", meals: "10 meals/week", highlight: true },
-                { name: "FAMILY", price: 890, perMeal: "≈ 44.5 MAD / MEAL", meals: "20 meals/week", highlight: false },
-              ].map((plan, idx) => (
-                <motion.div
-                  key={plan.name}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.2, duration: 0.6 }}
-                  className={`bg-[#FAFAF7] rounded-[20px] p-10 text-center relative transition-transform hover:scale-105 border ${plan.highlight ? 'border-[#2C3E2D] shadow-2xl z-10 scale-105' : 'border-[#C4602A] shadow-md'}`}
-                >
-                  {plan.highlight && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#2C3E2D] text-[#F5F0E8] px-6 py-2 text-xs font-bold font-sans capitalize tracking-widest shadow-sm rounded-full">
-                      Most Popular
-                    </div>
-                  )}
-                  <h3 className="font-serif capitalize text-3xl text-[#1A1A1A] mb-8">{plan.name}</h3>
-                  <div className="mb-2 flex items-end justify-center gap-2">
-                    <span className="font-serif text-7xl text-[#1A1A1A] leading-none">{plan.price}</span>
-                    <span className="text-[#C4602A] font-bold font-sans text-sm tracking-widest mb-1">MAD</span>
-                  </div>
-                  <p className="text-xs font-bold font-sans tracking-widest text-[#2C3E2D] mb-10">{plan.perMeal}</p>
-
-                  <ul className="space-y-4 mb-10 text-left text-sm font-sans font-medium tracking-wide text-[#1A1A1A] capitalize">
-                    <li className="flex items-center gap-3"><span className="text-[#C4602A]">■</span> {plan.meals}</li>
-                    <li className="flex items-center gap-3"><span className="text-[#C4602A]">■</span> Free delivery</li>
-                    <li className="flex items-center gap-3"><span className="text-[#C4602A]">■</span> Macro-customized</li>
-                    <li className="flex items-center gap-3"><span className="text-[#C4602A]">■</span> Access to AI Clinic</li>
-                  </ul>
-
-                  <button
-                    onClick={() => router.push(`/onboarding?plan=${plan.name.toLowerCase()}`)}
-                    className={`w-full py-5 font-bold font-sans text-sm capitalize tracking-wide transition-all rounded-full border ${plan.highlight ? 'bg-[#2C3E2D] text-[#F5F0E8] border-[#2C3E2D] hover:bg-[#1A1A1A]' : 'bg-transparent text-[#1A1A1A] border-[#C4602A] hover:bg-[#1A1A1A] hover:text-[#FAFAF7] hover:border-[#1A1A1A]'}`}
-                  >
-                    Choose {plan.name}
-                  </button>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* 7. SIMPLE PRICING */}
+        <PricingSection />
 
         {/* 8. TESTIMONIALS & COMMUNITY */}
         <TestimonialsSection />

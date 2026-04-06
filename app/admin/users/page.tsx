@@ -12,18 +12,6 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
     cancelled: { label: "Annulé", color: "#FFA07A", bg: "#FFF0E8" },
 };
 
-const PLAN_LABELS: Record<string, string> = {
-    starter_3: "Starter 3",
-    balanced_5: "Balanced 5",
-    premium_7: "Premium 7",
-};
-
-const PLAN_COLORS: Record<string, string> = {
-    starter_3: "#A8E6CF",
-    balanced_5: "#B09AE0",
-    premium_7: "#6BC4A0",
-};
-
 export default function AdminUsersPage() {
     const { users, updateUserStatus } = useAdminUsersStore();
     const [search, setSearch] = useState("");
@@ -113,8 +101,8 @@ export default function AdminUsersPage() {
                 {/* User table */}
                 <div className="bg-white rounded-[20px] overflow-hidden"
                     style={{ border: "1px solid #F0E4D8", boxShadow: "0 4px 24px rgba(45,45,45,0.06)" }}>
-                    <div className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr_auto] gap-4 px-6 py-3 bg-[#FFF8F4] border-b border-[#F0E4D8]">
-                        {["Utilisateur", "Email", "Plan", "Commandes", "Statut", "Actions"].map((h) => (
+                    <div className="grid grid-cols-[2fr_2fr_1.5fr_1fr_1fr_auto] gap-4 px-6 py-3 bg-[#FFF8F4] border-b border-[#F0E4D8]">
+                        {["Utilisateur", "Email", "Configuration", "Commandes", "Statut", "Actions"].map((h) => (
                             <span key={h} className="text-[11px] font-bold capitalize tracking-wide text-[#9C9C9C]">{h}</span>
                         ))}
                     </div>
@@ -128,7 +116,7 @@ export default function AdminUsersPage() {
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, x: -20 }}
                                     transition={{ delay: idx * 0.04 }}
-                                    className="grid grid-cols-[2fr_2fr_1fr_1fr_1fr_auto] gap-4 px-6 py-4 items-center hover:bg-[#FFF8F4] transition-colors border-b border-[#F0E4D8] last:border-0"
+                                    className="grid grid-cols-[2fr_2fr_1.5fr_1fr_1fr_auto] gap-4 px-6 py-4 items-center hover:bg-[#FFF8F4] transition-colors border-b border-[#F0E4D8] last:border-0"
                                 >
                                     {/* User */}
                                     <div className="flex items-center gap-3">
@@ -145,12 +133,9 @@ export default function AdminUsersPage() {
                                     </div>
                                     {/* Email */}
                                     <p className="text-sm text-[#6B6B6B] truncate">{user.email}</p>
-                                    {/* Plan */}
-                                    <span
-                                        className="px-2.5 py-1 rounded-full text-[11px] font-bold w-fit"
-                                        style={{ background: PLAN_COLORS[user.plan] + "33", color: "#2D2D2D" }}
-                                    >
-                                        {PLAN_LABELS[user.plan]}
+                                    {/* Setup */}
+                                    <span className="text-[11px] font-bold text-primary bg-primary/5 px-3 py-1 rounded-full w-fit">
+                                        {(user as any).setup}
                                     </span>
                                     {/* Orders */}
                                     <p className="text-sm font-semibold text-[#2D2D2D]">{user.total_orders}</p>

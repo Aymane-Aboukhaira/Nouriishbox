@@ -11,11 +11,6 @@ import {
 import { useProfileStore, useMealsStore, usePlannerStore } from "@/lib/store";
 import { toast } from "sonner";
 
-const PLANS = [
-    { id: "solo", name: "Solo", price: 320, meals: "5 meals", desc: "Perfect for building a solo habit" },
-    { id: "couple", name: "Couple", price: 590, meals: "10 meals", desc: "Save 50 MAD vs two Solo plans" },
-    { id: "family", name: "Family", price: 890, meals: "20 meals", desc: "Everyone eats right, together" },
-];
 
 export default function RevealPage() {
     const router = useRouter();
@@ -24,7 +19,6 @@ export default function RevealPage() {
     const { plan: plannerStoreData, addMealToDay } = usePlannerStore();
 
     const [hasMounted, setHasMounted] = useState(false);
-    const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
     const [addedMeals, setAddedMeals] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
@@ -75,9 +69,7 @@ export default function RevealPage() {
     };
 
     const handleCheckout = () => {
-        if (selectedPlan) {
-            router.push(`/checkout?plan=${selectedPlan}`);
-        }
+        router.push("/onboarding/pricing-setup");
     };
 
     const containerVariants = {
@@ -270,81 +262,46 @@ export default function RevealPage() {
                     </div>
                 </section>
 
-                {/* Plan Selection with Premium Cards */}
-                <section className="mb-40">
-                    <div className="text-center mb-24">
-                        <span className="text-[10px] font-bold text-accent uppercase tracking-[0.3em] mb-4 block">Finalize Fulfillment</span>
-                        <h2 className="font-serif text-4xl lg:text-7xl text-background mb-8">Choose your box size</h2>
-                    </div>
-
-                    <div className="flex flex-col lg:flex-row gap-8 max-w-5xl mx-auto mb-20">
-                        {PLANS.map((plan, i) => {
-                            const isSelected = selectedPlan === plan.id;
-                            return (
-                                <motion.div
-                                    key={plan.id}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    viewport={{ once: true }}
-                                    onClick={() => setSelectedPlan(plan.id)}
-                                    className={`flex-1 rounded-[40px] p-12 text-center transition-all cursor-pointer relative overflow-hidden group border-2 ${
-                                        isSelected
-                                            ? "bg-accent border-accent shadow-[0_30px_60px_-15px_rgba(196,96,42,0.4)] translate-y-[-10px]"
-                                            : "bg-background/5 border-background/10 hover:border-background/30 hover:bg-background/10"
-                                    }`}
-                                >
-                                    {isSelected && (
-                                        <div className="absolute top-6 right-6 text-background">
-                                            <Check size={32} />
-                                        </div>
-                                    )}
-                                    <h3 className={`font-serif text-3xl mb-2 transition-colors ${isSelected ? "text-background" : "text-background"}`}>{plan.name}</h3>
-                                    <p className={`text-[10px] font-bold uppercase tracking-widest mb-10 transition-colors ${isSelected ? "text-background/80" : "text-background/40"}`}>{plan.meals}</p>
-                                    <div className="mb-10">
-                                        <div className="flex items-start justify-center">
-                                            <span className={`text-6xl font-serif leading-none ${isSelected ? "text-background" : "text-background"}`}>{plan.price}</span>
-                                            <span className={`text-xs font-bold uppercase tracking-widest ml-2 mt-1 ${isSelected ? "text-background/80" : "text-background/40"}`}>MAD</span>
-                                        </div>
-                                        <span className={`text-[9px] font-bold uppercase tracking-widest mt-2 block ${isSelected ? "text-background/60" : "text-background/30"}`}>per week</span>
-                                    </div>
-                                    <p className={`text-xs leading-relaxed max-w-[200px] mx-auto ${isSelected ? "text-background/90" : "text-background/60"}`}>{plan.desc}</p>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
-
-                    <div className="text-center">
+                {/* Call to Action: Proceed to Dynamic Pricing */}
+                <section className="mb-40 text-center">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        className="bg-background/5 backdrop-blur-xl border border-background/20 rounded-[48px] p-12 lg:p-20 max-w-4xl mx-auto"
+                    >
+                        <span className="text-[10px] font-bold text-accent uppercase tracking-[0.4em] mb-6 block">Ready to start?</span>
+                        <h2 className="font-serif text-4xl lg:text-7xl text-background mb-10 leading-tight">
+                            Build your <br /><span className="italic text-accent">bespoke</span> delivery.
+                        </h2>
+                        <p className="text-background/60 text-lg lg:text-xl font-sans max-w-xl mx-auto mb-16 leading-relaxed">
+                            No fixed plans. No hidden fees. <br />
+                            Choose your delivery frequency, household size, and hand-pick your favorite meals.
+                        </p>
+                        
                         <motion.button
-                            whileHover={selectedPlan ? { scale: 1.02, y: -4 } : {}}
-                            whileTap={selectedPlan ? { scale: 0.98 } : {}}
-                            onClick={handleCheckout}
-                            disabled={!selectedPlan}
-                            className={`w-full max-w-xl mx-auto h-20 rounded-full font-sans font-bold text-xl transition-all flex items-center justify-center gap-4 uppercase tracking-[0.2em] shadow-2xl ${
-                                selectedPlan 
-                                    ? "bg-background text-primary shadow-white/10" 
-                                    : "bg-background/10 text-background/30 cursor-not-allowed border border-background/10"
-                            }`}
+                            whileHover={{ scale: 1.02, y: -4 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => router.push("/onboarding/pricing-setup")}
+                            className="w-full max-w-md h-24 bg-accent text-background rounded-full font-sans font-bold text-2xl transition-all flex items-center justify-center gap-4 uppercase tracking-[0.2em] shadow-[0_30px_60px_-15px_rgba(196,96,42,0.4)] group"
                         >
-                            <span>Proceed to Checkout</span>
-                            <ArrowRight size={24} />
+                            <span>Build my week</span>
+                            <ArrowRight size={28} className="group-hover:translate-x-2 transition-transform" />
                         </motion.button>
-                    </div>
-                </section>
-
-                {/* trust signals footer */}
-                <section className="flex flex-wrap items-center justify-center gap-12 pt-16 border-t border-background/10">
-                    {[
-                        { icon: ShieldCheck, text: "SSL Secured Payments" },
-                        { icon: PauseCircle, text: "No Commitment, Pause Anytime" },
-                        { icon: Truck, text: "Temperature Controlled Delivery" },
-                        { icon: ShoppingBag, text: "Curated Box Options" },
-                    ].map((t, i) => (
-                        <div key={i} className="flex items-center gap-3 text-background/40 hover:text-background/80 transition-colors">
-                            <t.icon size={20} strokeWidth={1.5} />
-                            <span className="text-[10px] font-bold uppercase tracking-widest">{t.text}</span>
+                        
+                        <div className="flex flex-wrap items-center justify-center gap-8 mt-16 pt-16 border-t border-background/10">
+                            {[
+                                { icon: ShieldCheck, text: "Fixed Discounts Up to 15%" },
+                                { icon: PauseCircle, text: "No Commitment, Pause Anytime" },
+                                { icon: Truck, text: "Eco-Friendly Logistics" },
+                            ].map((t, i) => (
+                                <div key={i} className="flex items-center gap-2 text-background/40">
+                                    <t.icon size={16} strokeWidth={1.5} />
+                                    <span className="text-[9px] font-bold uppercase tracking-widest">{t.text}</span>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </motion.div>
                 </section>
 
             </main>

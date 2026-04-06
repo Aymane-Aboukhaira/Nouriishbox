@@ -92,25 +92,36 @@ export interface WeeklyPlan {
 export interface Subscription {
     id: string;
     user_id: string;
-    plan: SubscriptionPlan;
     status: SubscriptionStatus;
-    price_mad: number;
+    people_count: number;
+    days_per_week: number;
+    meals_per_day: number;
+    price_mad: number; // Weekly Total
     starts_at: string;
     renews_at: string;
     paused_until?: string;
 }
 
-export interface Order {
-    id: string;
+export interface OrderItem {
     meal_id: string;
     meal_name: string;
     meal_emoji: string;
-    user_name: string;
+    price_at_order: number;
+    quantity: number;
+}
+
+export interface Order {
+    id: string;
     user_id: string;
+    user_name: string;
     status: OrderStatus;
+    items: OrderItem[];
+    people_count: number;
+    days_per_week: number;
+    discount_percent: number;
+    total_mad: number;
     created_at: string;
     address: string;
-    total_mad: number;
 }
 
 export interface User {

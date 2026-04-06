@@ -437,15 +437,73 @@ export const useOrdersStore = create<OrdersState>()(
 // ──────────────────────────────────────────────────────────────
 // SUBSCRIPTION STORE
 // ──────────────────────────────────────────────────────────────
+// ──────────────────────────────────────────────────────────────
+// ONBOARDING STORE (Build Your Week)
+// ──────────────────────────────────────────────────────────────
+interface OnboardingState {
+    selections: {
+        peopleCount: number;
+        daysPerWeek: number;
+        mealsPerDay: number;
+        selectedMealIds: string[];
+    };
+    updateSelections: (updates: Partial<OnboardingState["selections"]>) => void;
+    toggleMeal: (mealId: string) => void;
+    clearSelections: () => void;
+}
+
+export const useOnboardingStore = create<OnboardingState>()(
+    persist(
+        (set) => ({
+            selections: {
+                peopleCount: 1,
+                daysPerWeek: 5,
+                mealsPerDay: 1,
+                selectedMealIds: [],
+            },
+            updateSelections: (updates) =>
+                set((state) => ({ selections: { ...state.selections, ...updates } })),
+            toggleMeal: (mealId) =>
+                set((state) => {
+                    const exists = state.selections.selectedMealIds.includes(mealId);
+                    const maxAllowed = state.selections.peopleCount * state.selections.daysPerWeek * state.selections.mealsPerDay;
+                    
+                    if (exists) {
+                        return {
+                            selections: {
+                                ...state.selections,
+                                selectedMealIds: state.selections.selectedMealIds.filter(id => id !== mealId)
+                            }
+                        };
+                    } else {
+                        // Normally we limit or just add. Let's just add for now and handle limits in UI.
+                        return {
+                            selections: {
+                                ...state.selections,
+                                selectedMealIds: [...state.selections.selectedMealIds, mealId]
+                            }
+                        };
+                    }
+                }),
+            clearSelections: () => set({ 
+                selections: { peopleCount: 1, daysPerWeek: 5, mealsPerDay: 1, selectedMealIds: [] } 
+            }),
+        }),
+        { name: "nourishbox-onboarding-v2" }
+    )
+);
+
+// ──────────────────────────────────────────────────────────────
+// SUBSCRIPTION STORE
+// ──────────────────────────────────────────────────────────────
 interface SubscriptionState {
     subscription: Subscription & { skippedWeeks?: string[] };
     pauseSubscription: (weeks: number | string) => void;
     resumeSubscription: () => void;
     cancelSubscription: () => void;
     updateStatus: (status: SubscriptionStatus) => void;
-    setSubscription: (data: { plan: SubscriptionPlan; status: SubscriptionStatus; orderId: string; startDate: string }) => void;
+    setSubscription: (data: Partial<Subscription>) => void;
     skipWeek: () => void;
-    setPlan: (plan: SubscriptionPlan) => void;
 }
 
 export const useSubscriptionStore = create<SubscriptionState>()(
@@ -478,7 +536,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
                 })),
             cancelSubscription: () =>
                 set((state) => ({
-                    subscription: { ...state.subscription, status: "cancelled", orderId: "" },
+                    subscription: { ...state.subscription, status: "cancelled" },
                 })),
             updateStatus: (status) =>
                 set((state) => ({
@@ -488,9 +546,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
                 set((state) => ({
                     subscription: {
                         ...state.subscription,
-                        plan: data.plan,
-                        status: data.status,
-                        // Update remaining days or anything else if needed, but the prompt just requires orderId and startDate storage or similar tracking.
+                        ...data,
                     },
                 })),
             skipWeek: () =>
@@ -504,10 +560,6 @@ export const useSubscriptionStore = create<SubscriptionState>()(
                         }
                     }
                 }),
-            setPlan: (plan) =>
-                set((state) => ({
-                    subscription: { ...state.subscription, plan }
-                })),
         }),
         { name: "nourishbox-subscription" }
     )
