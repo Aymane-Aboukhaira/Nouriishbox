@@ -1,0 +1,13 @@
+﻿app/client/rewards/page.tsx(68,70): error TS1127: Invalid character.
+app/client/rewards/page.tsx(68,88): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+app/client/rewards/page.tsx(68,89): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+app/client/rewards/page.tsx(70,26): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+app/client/rewards/page.tsx(73,79): error TS1127: Invalid character.
+app/client/rewards/page.tsx(73,138): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+app/client/rewards/page.tsx(122,39): error TS1127: Invalid character.
+app/client/rewards/page.tsx(125,29): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+app/client/rewards/page.tsx(125,30): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+app/client/rewards/page.tsx(126,26): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+app/client/rewards/page.tsx(127,23): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+app/client/rewards/page.tsx(143,16): error TS1127: Invalid character.
+app/client/rewards/page.tsx(242,1): error TS1160: Unterminated template literal.

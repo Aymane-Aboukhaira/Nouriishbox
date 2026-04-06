@@ -1,0 +1,104 @@
+# Nourishbox Frontend — Task Checklist
+
+## Phase 1: Project Scaffolding & Setup
+- [x] Check existing directory
+- [x] Scaffold Next.js 14 project with TypeScript
+- [x] Install all dependencies (shadcn/ui, Zustand, Framer Motion, Recharts, dnd-kit, React Hook Form, Zod)
+- [x] Configure tailwind.config.ts with Nourishbox design tokens
+- [x] Configure shadcn/ui components
+- [x] Set up Google Fonts (DM Serif Display / Nunito)
+
+## Phase 2: Mock Data Layer & Zustand Store
+- [x] Create types/interfaces for all entities (Users, Meals, Subscriptions, Orders, Family Members)
+- [x] Create mock data (meals, subscriptions, orders, family members, analytics)
+- [x] Build Zustand store with persist middleware (meals, planner, cart, subscriptions, users, orders)
+- [x] Implement CRUD actions in store
+
+## Phase 3: Shared Components & Layout
+- [x] Root layout with sidebar + header
+- [x] Sidebar navigation component
+- [x] Header component (NourishPoints badge, user avatar)
+- [x] Toast notification provider
+- [x] MacroBlob animated progress component
+- [x] MealCard component (hover overlay, macro chips, Add CTA)
+- [x] ChatBubble component
+
+## Phase 4: Client Portal Screens
+
+### Dashboard (`app/client/dashboard`)
+- [x] Macro tracking cards (animated Framer Motion fills)
+- [x] Today's Meals list (dynamic)
+- [x] Streak plant widget
+- [x] NourishPoints display
+
+### Menu Discovery (`app/client/menu`)
+- [x] "Built for you today" smart recommendation row
+- [x] Macro Match score pills on every meal card
+- [x] Exclusive "Fix my macros" smart filter
+- [x] Quick-add Day Selector popover based on exact target rects
+- [x] Meal Detail sliding bottom drawer (animated macro bars, ingredients, allergens)
+- [x] Masonry grid layout with stagger animations
+- [x] Custom beautifully structured empty states
+
+### Weekly Planner (`app/client/planner`)
+- [x] 7-day drag-and-drop grid (dnd-kit) with decoupled pointers
+- [x] String-based `dayKey` precise targeting
+- [x] Quick-Add Meal drawer HUB with macro-aware search & "Copy" ability
+- [x] "Replan week" faux-modal with 3 distinct macro generation strategies
+- [x] Live week preview grids and single-click regeneration shuffle
+- [x] Pause day & swap methodologies
+
+### Family Hub (`app/client/family`)
+- [x] Multi-profile selector
+- [x] Assign meals to family members
+- [x] Add/edit family member form
+
+### Analytics (`app/client/analytics`)
+- [x] Recharts line graph (macro trends over time)
+- [x] 28-cell CSS grid heatmap (goal adherence)
+- [x] Weight trend chart
+
+### Virtual Clinic (`app/client/clinic`)
+- [x] Chat interface UI
+- [x] Simulated AI typing with setTimeout
+- [x] Predefined response logic
+
+## Phase 5: Admin Portal Screens
+
+### Admin Overview (`app/admin/dashboard`)
+- [x] MRR, Active Subscribers, Delivery Success Rate metrics
+- [x] Recharts overview charts
+
+### Menu Builder (`app/admin/menu`)
+- [x] Meal list table (Add/Edit/Delete)
+- [x] Meal form with React Hook Form + Zod validation
+- [x] Macro input validation
+
+### Order Management (`app/admin/orders`)
+- [x] Kanban board (dnd-kit)
+- [x] Order cards with drag through stages
+- [x] Status update with toasts
+
+### User Management (`app/admin/users`)
+- [x] Data table of subscribers
+- [x] Pause/cancel subscription actions
+
+## Phase 6: Polish & Verification
+- [x] Ensure all buttons trigger toasts
+- [x] Verify global state updates reflect across pages
+- [x] Verify Zustand persist middleware works across reloads
+- [x] Verify no sharp edges / harsh colors
+- [x] Run dev server and check all routes
+
+## Phase 7: Loading States & Data Fetching Simulation
+- [x] Create generic `Skeleton` component (animate-pulse)
+- [x] Create `MacroBlobSkeleton` for Dashboard
+- [x] Create `MealCardSkeleton` for Menu and Dashboard
+- [x] Implement `isLoading` state and simulated latency (800ms) on Dashboard 
+- [x] Implement `isLoading` state and simulated latency (800ms) on Menu
+
+## Phase 8: Onboarding Wizard
+- [x] Update `lib/types.ts` with UserProfile interfaces
+- [x] Create `useProfileStore` in `lib/store.ts`
+- [x] Build multi-step `app/onboarding/page.tsx` (Framer Motion, React Hook Form)
+- [x] Implement BMR and TDEE macro calculation logic
