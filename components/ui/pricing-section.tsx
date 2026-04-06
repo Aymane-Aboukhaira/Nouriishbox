@@ -200,15 +200,15 @@ export function PricingSection() {
                     >
                         {/* Top: Price */}
                         <div className="mb-12">
-                            <span className="block text-[10px] font-bold text-[#F5F0E8]/60 uppercase tracking-[0.3em] mb-4">
+                            <span className="block text-sm font-bold text-[#F5F0E8]/70 uppercase tracking-[0.4em] mb-6">
                                 À PARTIR DE
                             </span>
-                            <div className="flex items-baseline gap-4">
-                                <span className="font-serif text-[100px] lg:text-[140px] text-[#F5F0E8] leading-none tracking-tight">
+                            <div className="flex items-baseline gap-6">
+                                <span className="font-serif text-[110px] lg:text-[160px] text-[#F5F0E8] leading-none tracking-tight">
                                     {price}
                                 </span>
-                                <div className="pb-4 lg:pb-8">
-                                    <span className="block text-lg lg:text-xl font-sans text-[#F5F0E8]/70 font-medium">
+                                <div className="pb-6 lg:pb-10">
+                                    <span className="block text-xl lg:text-3xl font-sans text-[#F5F0E8]/80 font-bold">
                                         MAD / repas
                                     </span>
                                 </div>
@@ -216,11 +216,11 @@ export function PricingSection() {
                         </div>
 
                         {/* Divider */}
-                        <div className="w-full h-[1px] bg-accent/30 mb-12" />
+                        <div className="w-full h-[2px] bg-accent/40 mb-16" />
 
                         {/* Middle: Discounts */}
-                        <div className="space-y-8 mb-16">
-                            <span className="block text-[10px] font-bold text-[#F5F0E8]/50 uppercase tracking-[0.3em] mb-6">
+                        <div className="space-y-10 mb-20">
+                            <span className="block text-sm font-bold text-[#F5F0E8]/60 uppercase tracking-[0.4em] mb-10">
                                 RÉDUCTIONS GROUPE
                             </span>
                             <div className="space-y-4">
@@ -231,22 +231,22 @@ export function PricingSection() {
                         </div>
 
                         {/* Bottom: Truck & CTA */}
-                        <div className="space-y-10">
-                            <div className="flex items-center gap-3 text-[#F5F0E8] font-sans font-medium">
-                                <div className="p-2 bg-[#F5F0E8]/10 rounded-lg">
-                                    <Truck size={20} className="text-[#F5F0E8]" />
+                        <div className="space-y-12">
+                            <div className="flex items-center gap-5 text-[#F5F0E8] font-sans font-bold">
+                                <div className="p-3 bg-[#F5F0E8]/10 rounded-xl">
+                                    <Truck size={28} className="text-[#F5F0E8]" />
                                 </div>
-                                <span className="tracking-wide">Livraison offerte</span>
+                                <span className="text-xl lg:text-2xl tracking-wide">Livraison offerte</span>
                             </div>
 
                             <motion.button
                                 whileHover={{ scale: 1.02, backgroundColor: "#C4602A", color: "#F5F0E8" }}
                                 whileTap={{ scale: 0.98 }}
-                                className="w-full py-6 bg-[#3D523E] text-[#F5F0E8] rounded-full font-sans font-bold text-lg uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 group"
+                                className="w-full py-8 bg-[#3D523E] text-[#F5F0E8] rounded-[32px] font-sans font-bold text-xl lg:text-2xl uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-4 group shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]"
                                 onClick={() => window.location.href = "/onboarding"}
                             >
                                 <span>Construire mon plan</span>
-                                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                                <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
                             </motion.button>
                         </div>
                         
