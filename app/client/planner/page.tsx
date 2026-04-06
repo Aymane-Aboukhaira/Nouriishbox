@@ -456,7 +456,7 @@ function DayColumn({
 // ── Main Planner Page ────────────────────────────────────────
 export default function PlannerPage() {
     const router = useRouter();
-    const { plan, moveMeal, togglePauseDay, setConfirmed, removeMealFromDay, assignMeal, deliveryAssignments, setDeliveryAssignment, plannerDays } = usePlannerStore();
+    const { plan, moveMeal, togglePauseDay, setConfirmed, removeMealFromDay, assignMeal, deliveryAssignments, setDeliveryAssignment, plannerDays, clearMemberPlan } = usePlannerStore();
     const { meals } = useMealsStore();
     const { profile, setSavedAddress } = useProfileStore();
     const { members, activeMemberId, setActiveMember } = useFamilyStore();
@@ -628,9 +628,8 @@ export default function PlannerPage() {
     };
 
     const handleApplyProposedPlan = () => {
-        // First wipe current meals to replace them entirely.
-        const currentIds = plan.planned_meals.map(pm => pm.id);
-        currentIds.forEach(id => removeMealFromDay(id));
+        // First wipe only current member's meals to replace them independently.
+        clearMemberPlan(activeMemberId);
 
         // Assign the proposed meals
         Object.entries(proposedPlan).forEach(([dayKey, meal]) => {
@@ -1068,7 +1067,7 @@ export default function PlannerPage() {
                                         {DAY_LABELS.map((label, i) => (
                                             <button
                                                 key={i}
-                                                onClick={() => { assignMeal(DAY_KEYS[i], duplicateMeal.id); toast.success(`Copied to ${label}`); }}
+                                                onClick={() => { assignMeal(DAY_KEYS[i], duplicateMeal.id, activeMemberId); toast.success(`Copied to ${label}`); }}
                                                 className="bg-[#F1FAF4] hover:bg-[#6BC4A0] hover:text-white text-[#6BC4A0] px-4 py-2.5 rounded-xl text-sm font-bold transition-colors whitespace-nowrap shadow-sm border border-[#A8E6CF]"
                                             >
                                                 + {label}
@@ -1674,7 +1673,7 @@ export default function PlannerPage() {
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => {
                                         // Assign meal to the selected day (not the original drawer day)
-                                        assignMeal(sheetSelectedDay, pendingMeal.meal.id);
+                                        assignMeal(sheetSelectedDay, pendingMeal.meal.id, activeMemberId);
                                         // Get the new plannedMeal id from the latest store state
                                         const newPm = usePlannerStore.getState().plan.planned_meals.find(
                                             pm => pm.meal_id === pendingMeal.meal.id && DAY_KEYS.indexOf(sheetSelectedDay) === pm.day_index

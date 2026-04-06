@@ -147,6 +147,7 @@ interface PlannerState {
     updateMealStatus: (plannedMealId: string, status: "planned" | "confirmed" | "skipped") => void;
     setDeliveryAssignment: (pmId: string, assignment: MealDeliveryAssignment) => void;
     clearDeliveryAssignment: (pmId: string) => void;
+    clearMemberPlan: (memberId: string) => void;
     
     // MVP Jury Pitch Fields
     plannerDays?: any[]; // To avoid circular imports, just use any[] or import PlannerDay if willing to tangle
@@ -289,6 +290,13 @@ export const usePlannerStore = create<PlannerState>()(
                     delete next[pmId];
                     return { deliveryAssignments: next };
                 }),
+            clearMemberPlan: (memberId: string) =>
+                set((state) => ({
+                    plan: {
+                        ...state.plan,
+                        planned_meals: state.plan.planned_meals.filter((pm) => pm.family_member_id !== memberId),
+                    },
+                })),
         }),
         { name: "nourishbox-planner" }
     )
