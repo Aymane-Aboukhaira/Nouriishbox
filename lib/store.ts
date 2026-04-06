@@ -114,9 +114,10 @@ export const useMealsStore = create<MealsState>()(
                 if (state) {
                     const isStale = state.meals.length < MOCK_MEALS.length;
                     const hasMissingImages = state.meals.some(m => !m.image_url);
+                    const hasLegacyPaths = state.meals.some(m => m.image_url.includes(" ") || m.image_url.includes("/public/"));
                     
-                    if (isStale || hasMissingImages) {
-                        console.log("Stale meal data detected. Syncing store with latest mock data...");
+                    if (isStale || hasMissingImages || hasLegacyPaths) {
+                        console.log("Stale or legacy meal data detected. Hard-syncing with latest hyphenated assets...");
                         state.resetStore();
                     }
                 }
