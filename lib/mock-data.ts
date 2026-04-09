@@ -959,7 +959,7 @@ export const MOCK_ORDERS: Order[] = [
         discount_percent: 0,
         total_mad: 325,
         created_at: "2025-03-20T08:30:00Z",
-        address: "12, Rue Anfa, Casablanca",
+        address: "12, Rue Anfa, Tanger",
     },
     {
         id: "ord2",
@@ -974,7 +974,7 @@ export const MOCK_ORDERS: Order[] = [
         discount_percent: 8,
         total_mad: 828,
         created_at: "2025-03-20T09:15:00Z",
-        address: "45, Bd Zerktouni, Casablanca",
+        address: "45, Bd Zerktouni, Tanger",
     },
     {
         id: "ord3",
@@ -989,7 +989,7 @@ export const MOCK_ORDERS: Order[] = [
         discount_percent: 0,
         total_mad: 180,
         created_at: "2025-03-20T07:45:00Z",
-        address: "8, Résidence Ghandi, Casablanca",
+        address: "8, Résidence Ghandi, Tanger",
     },
     {
         id: "ord4",
@@ -1004,7 +1004,7 @@ export const MOCK_ORDERS: Order[] = [
         discount_percent: 12,
         total_mad: 792,
         created_at: "2025-03-20T08:00:00Z",
-        address: "33, Rue Ibn Rochd, Casablanca",
+        address: "33, Rue Ibn Rochd, Tanger",
     },
     {
         id: "ord5",
@@ -1019,7 +1019,7 @@ export const MOCK_ORDERS: Order[] = [
         discount_percent: 0,
         total_mad: 325,
         created_at: "2025-03-20T07:00:00Z",
-        address: "22, Rue Riyad, Casablanca",
+        address: "22, Rue Riyad, Tanger",
     },
     {
         id: "ord6",
@@ -1034,7 +1034,7 @@ export const MOCK_ORDERS: Order[] = [
         discount_percent: 0,
         total_mad: 280,
         created_at: "2025-03-20T07:30:00Z",
-        address: "5, Bd Massira, Casablanca",
+        address: "5, Bd Massira, Tanger",
     },
     {
         id: "ord7",
@@ -1064,7 +1064,7 @@ export const MOCK_ORDERS: Order[] = [
         discount_percent: 15,
         total_mad: 1071,
         created_at: "2025-03-20T06:30:00Z",
-        address: "10, Bd de la Corniche, Casablanca",
+        address: "10, Bd de la Corniche, Tanger",
     },
 ];
 

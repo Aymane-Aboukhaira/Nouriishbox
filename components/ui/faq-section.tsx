@@ -34,7 +34,7 @@ export function FaqSection() {
   const FAQs = [
     { q: "Puis-je annuler ou mettre en pause mon abonnement ?", a: "Absolument. Vous pouvez mettre en pause ou annuler votre abonnement à tout moment sans frais cachés. Faites-le simplement avant la limite hebdomadaire." },
     { q: "Comment calculez-vous mes macros ?", a: "Nous utilisons l'équation cliniquement validée de Mifflin-St Jeor, modifiée par votre niveau d'activité unique et vos objectifs (perte de gras, maintien, ou prise de masse)." },
-    { q: "Où livrez-vous vos repas ?", a: "Actuellement, nous opérons uniquement à Casablanca pour garantir la fraîcheur absolue de nos livraisons." },
+    { q: "Où livrez-vous vos repas ?", a: "Actuellement, nous opérons uniquement à Tanger pour garantir la fraîcheur absolue de nos livraisons." },
     { q: "Puis-je choisir mes propres repas ?", a: "Les deux ! Nous générons automatiquement un menu parfait basé sur vos macros, mais vous pouvez échanger n'importe quel repas facilement dans votre planificateur." },
     { q: "Puis-je commander pour le reste de ma famille ?", a: "Oui. Notre plan familial vous permet de définir des profils et des portions individuels pour votre partenaire et vos enfants." },
     { q: "Qu'en est-il des allergies ?", a: "Lors de votre inscription, vous pouvez spécifier des préférences (Végétalien, Sans Gluten) ou des allergies spécifiques, et nous filtrerons automatiquement votre menu." }

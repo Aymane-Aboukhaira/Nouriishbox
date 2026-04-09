@@ -161,7 +161,7 @@ function SignUpContent() {
 
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold text-text-primary px-1">Adresse de Livraison</label>
-                <Input {...register("address")} placeholder="Rue, quartier, Casablanca" error={!!errors.address} />
+                <Input {...register("address")} placeholder="Rue, quartier, Tanger" error={!!errors.address} />
                 {errors.address && <p className="text-accent text-[10px] font-bold px-4 uppercase tracking-widest mt-1">{errors.address.message}</p>}
               </div>
 

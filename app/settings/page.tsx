@@ -178,7 +178,7 @@ function PersonalInfoCard() {
                         <Field label="Email" field="email" register={register} isEditing={isEditing} error={errors.email} note="Utilisé pour les confirmations de livraison" />
                     </div>
                     <div className="md:col-span-2">
-                        <Field label="Adresse de livraison" field="address" placeholder="Rue, quartier, Casablanca" register={register} isEditing={isEditing} error={errors.address} />
+                        <Field label="Adresse de livraison" field="address" placeholder="Rue, quartier, Tanger" register={register} isEditing={isEditing} error={errors.address} />
                     </div>
                 </div>
 

@@ -8,7 +8,7 @@ import { FloatingBackgroundIcons } from "./floating-background-icons";
 
 // ─── Marquee content (duplicated so it truly loops seamlessly) ────────────────
 const TICKER =
-  "Nutrition Personnalisée · Livré à Casablanca · Zéro Devins · Macros Calculées · Préparé par un Chef · +150K Repas · ";
+  "Nutrition Personnalisée · Livré à Tanger · Zéro Devins · Macros Calculées · Préparé par un Chef · +150K Repas · ";
 
 // ─── Feature pills ────────────────────────────────────────────────────────────
 const FEATURES = [

@@ -11,14 +11,7 @@ const VEGGIE_ICONS = [
   "/visuals/icons of menu section/tomato icon.png",
 ];
 
-const TESTIMONIAL_PHOTOS = [
-  "/visuals/Menu/testemonials/PHOTO 01 — @fitness_sarah.jfif",
-  "/visuals/Menu/testemonials/PHOTO 02 — @coach_dave.jfif",
-  "/visuals/Menu/testemonials/PHOTO 03 — @lena_eats.jfif",
-  "/visuals/Menu/testemonials/PHOTO 04 — @marcos_daily.jfif",
-];
-
-const ICON_ASSETS = [...VEGGIE_ICONS, ...TESTIMONIAL_PHOTOS];
+const ICON_ASSETS = [...VEGGIE_ICONS];
 
 interface FloatingBackgroundIconsProps {
   count?: number;
@@ -47,7 +40,6 @@ export function FloatingBackgroundIcons({ count = 8 }: FloatingBackgroundIconsPr
   return (
     <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         {icons.map((icon) => {
-          const isPhoto = TESTIMONIAL_PHOTOS.includes(icon.src);
           return (
             <motion.div
               key={icon.id}
@@ -60,7 +52,7 @@ export function FloatingBackgroundIcons({ count = 8 }: FloatingBackgroundIconsPr
               }}
               animate={{ 
                 y: [0, -icon.yOffset, 0],
-                opacity: isPhoto ? 0.08 : 0.12 // Photos even subtler
+                opacity: 0.12 
               }}
               transition={{
                 y: {
@@ -72,14 +64,14 @@ export function FloatingBackgroundIcons({ count = 8 }: FloatingBackgroundIconsPr
                 opacity: { duration: 1.5, delay: icon.delay }
               }}
               className="absolute"
-              style={{ width: isPhoto ? "120px" : "80px", height: isPhoto ? "120px" : "80px" }} 
+              style={{ width: "80px", height: "80px" }} 
             >
-              <div className={`relative w-full h-full ${isPhoto ? 'rounded-full overflow-hidden border-2 border-[#C4602A]/20 grayscale-[50%]' : ''}`}>
+              <div className="relative w-full h-full">
                 <Image
                   src={icon.src}
                   alt="floating asset"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
               </div>
             </motion.div>

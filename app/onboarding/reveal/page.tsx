@@ -34,8 +34,8 @@ export default function RevealPage() {
 
     const { kcal, protein_g, carbs_g, fats_g } = profile.targets;
     const mealCount = Math.round(kcal / 500);
-    const goalLabel = profile.goal === "weight_loss" ? "Lose weight" :
-        profile.goal === "muscle_gain" ? "Build muscle" : "Maintain health";
+    const goalLabel = profile.goal === "weight_loss" ? "Perte de poids" :
+        profile.goal === "muscle_gain" ? "Prise de masse" : "Équilibre & Santé";
 
     const targetMealMacros = {
         protein: protein_g / 3,
@@ -64,7 +64,7 @@ export default function RevealPage() {
                 setAddedMeals((prev) => ({ ...prev, [mealId]: false }));
             }, 1500);
         } else {
-            toast.error("Your planner is full — visit the planner to make space");
+            toast.error("Votre planificateur est plein — visitez le planificateur pour faire de la place");
         }
     };
 
@@ -106,7 +106,7 @@ export default function RevealPage() {
                     <motion.div variants={itemVariants} className="flex justify-center mb-8">
                         <div className="bg-background/10 backdrop-blur-md border border-background/20 px-6 py-2 rounded-full flex items-center gap-2">
                             <Sparkles size={16} className="text-accent" />
-                            <span className="text-[10px] font-bold text-background uppercase tracking-[0.2em]">Precision Plan Generated</span>
+                            <span className="text-[10px] font-bold text-background uppercase tracking-[0.2em]">Plan de Précision Généré</span>
                         </div>
                     </motion.div>
 
@@ -114,14 +114,14 @@ export default function RevealPage() {
                         variants={itemVariants}
                         className="font-serif text-5xl lg:text-8xl text-background mb-8 leading-[0.9] tracking-tight"
                     >
-                        Your journey <br /> to <span className="italic text-accent">precision</span> starts here.
+                        Votre voyage <br /> vers la <span className="italic text-accent">précision</span> commence ici.
                     </motion.h1>
 
                     <motion.p 
                         variants={itemVariants}
                         className="text-xl lg:text-2xl text-background/60 max-w-2xl mx-auto font-sans font-light leading-relaxed"
                     >
-                        We've analyzed your morphology, activity, and goals to build a scientifically matched week of nutrition.
+                        Nous avons analysé votre morphologie, votre activité et vos objectifs pour construire une semaine de nutrition scientifiquement adaptée.
                     </motion.p>
                 </motion.section>
 
@@ -133,10 +133,10 @@ export default function RevealPage() {
                     className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-32"
                 >
                     {[
-                        { label: "Daily Calories", value: kcal, unit: "kcal", icon: Flame, color: "text-accent" },
-                        { label: "Target Protein", value: protein_g, unit: "g", icon: Zap, color: "text-primary" },
-                        { label: "Healthy Carbs", value: carbs_g, unit: "g", icon: Flame, color: "text-primary" },
-                        { label: "Planned Fats", value: fats_g, unit: "g", icon: Droplets, color: "text-primary" },
+                        { label: "Calories Quotidiennes", value: kcal, unit: "kcal", icon: Flame, color: "text-accent" },
+                        { label: "Cible Protéines", value: protein_g, unit: "g", icon: Zap, color: "text-primary" },
+                        { label: "Glucides Sains", value: carbs_g, unit: "g", icon: Flame, color: "text-primary" },
+                        { label: "Lipides Prévus", value: fats_g, unit: "g", icon: Droplets, color: "text-primary" },
                     ].map((m, i) => (
                         <motion.div 
                             key={i}
@@ -180,8 +180,8 @@ export default function RevealPage() {
                             <UtensilsCrossed size={32} strokeWidth={1.5} />
                         </div>
                         <div>
-                            <h4 className="font-serif text-2xl text-background mb-1">{mealCount} Meals / Day</h4>
-                            <p className="text-sm text-background/60 uppercase tracking-widest font-bold">Scientific Portions</p>
+                            <h4 className="font-serif text-2xl text-background mb-1">{mealCount} Repas / Jour</h4>
+                            <h5 className="text-sm text-background/60 uppercase tracking-widest font-bold">Portions Scientifiques</h5>
                         </div>
                     </div>
                     <div className="flex items-center gap-6">
@@ -190,7 +190,7 @@ export default function RevealPage() {
                         </div>
                         <div>
                             <h4 className="font-serif text-2xl text-background mb-1">{goalLabel}</h4>
-                            <p className="text-sm text-background/60 uppercase tracking-widest font-bold">Primary KPI</p>
+                            <h5 className="text-sm text-background/60 uppercase tracking-widest font-bold">Objectif Principal</h5>
                         </div>
                     </div>
                     <div className="flex items-center gap-6">
@@ -198,8 +198,8 @@ export default function RevealPage() {
                             <Truck size={32} strokeWidth={1.5} />
                         </div>
                         <div>
-                            <h4 className="font-serif text-2xl text-background mb-1">Free Delivery</h4>
-                            <p className="text-sm text-background/60 uppercase tracking-widest font-bold">Casablanca & Rabat</p>
+                            <h4 className="font-serif text-2xl text-background mb-1">Livraison Gratuite</h4>
+                            <p className="text-sm text-background/60 uppercase tracking-widest font-bold">Tanger</p>
                         </div>
                     </div>
                 </motion.section>
@@ -207,9 +207,9 @@ export default function RevealPage() {
                 {/* Meal Preview Section */}
                 <section className="mb-40">
                     <div className="text-center mb-20">
-                        <h2 className="font-serif text-4xl lg:text-6xl text-background mb-6">Matched to your profile</h2>
+                        <h2 className="font-serif text-4xl lg:text-6xl text-background mb-6">Adapté à votre profil</h2>
                         <p className="text-background/60 text-lg lg:text-xl font-sans max-w-xl mx-auto leading-relaxed">
-                            These meals were precisely curated to hit your custom macro targets for the week.
+                            Ces repas ont été précisément sélectionnés pour atteindre vos objectifs de macros personnalisés pour la semaine.
                         </p>
                     </div>
 
@@ -237,14 +237,14 @@ export default function RevealPage() {
                                         )}
                                         <div className="absolute top-6 left-6 flex flex-col gap-2">
                                             <div className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-bold text-primary uppercase tracking-widest shadow-xl">
-                                                Perfect Match
+                                                Match Parfait
                                             </div>
                                         </div>
                                     </div>
                                     <div className="px-6 pb-8 flex-1 flex flex-col">
                                         <div className="flex items-center gap-3 mb-4">
                                             <span className="px-3 py-1 bg-primary/5 rounded-full text-[10px] font-bold text-primary uppercase tracking-widest">{meal.macros.kcal} Kcal</span>
-                                            <span className="px-3 py-1 bg-accent/10 rounded-full text-[10px] font-bold text-accent uppercase tracking-widest">{meal.macros.protein_g}g Protein</span>
+                                            <span className="px-3 py-1 bg-accent/10 rounded-full text-[10px] font-bold text-accent uppercase tracking-widest">{meal.macros.protein_g}g Protéines</span>
                                         </div>
                                         <h3 className="font-serif text-2xl text-primary leading-tight mb-8 group-hover:text-accent transition-colors">{meal.name}</h3>
                                         <button
@@ -253,7 +253,7 @@ export default function RevealPage() {
                                                 added ? "bg-primary text-background shadow-lg" : "border-2 border-primary/10 text-primary hover:border-primary"
                                             }`}
                                         >
-                                            {added ? <><CheckCircle2 size={16} /> Added to Plan</> : "Add to plan"}
+                                            {added ? <><CheckCircle2 size={16} /> Ajouté au Plan</> : "Ajouter au plan"}
                                         </button>
                                     </div>
                                 </motion.div>
@@ -270,13 +270,13 @@ export default function RevealPage() {
                         viewport={{ once: true }}
                         className="bg-background/5 backdrop-blur-xl border border-background/20 rounded-[48px] p-12 lg:p-20 max-w-4xl mx-auto"
                     >
-                        <span className="text-[10px] font-bold text-accent uppercase tracking-[0.4em] mb-6 block">Ready to start?</span>
+                        <span className="text-[10px] font-bold text-accent uppercase tracking-[0.4em] mb-6 block">Prêt à commencer ?</span>
                         <h2 className="font-serif text-4xl lg:text-7xl text-background mb-10 leading-tight">
-                            Build your <br /><span className="italic text-accent">bespoke</span> delivery.
+                            Construisez votre <br /><span className="italic text-accent">livraison</span> sur mesure.
                         </h2>
                         <p className="text-background/60 text-lg lg:text-xl font-sans max-w-xl mx-auto mb-16 leading-relaxed">
-                            No fixed plans. No hidden fees. <br />
-                            Choose your delivery frequency, household size, and hand-pick your favorite meals.
+                            Pas de plans fixes. Pas de frais cachés. <br />
+                            Choisissez votre fréquence de livraison, la taille de votre foyer et sélectionnez vos plats préférés.
                         </p>
                         
                         <motion.button
@@ -285,15 +285,15 @@ export default function RevealPage() {
                             onClick={() => router.push("/onboarding/pricing-setup")}
                             className="w-full max-w-md h-24 bg-accent text-background rounded-full font-sans font-bold text-2xl transition-all flex items-center justify-center gap-4 uppercase tracking-[0.2em] shadow-[0_30px_60px_-15px_rgba(196,96,42,0.4)] group"
                         >
-                            <span>Build my week</span>
+                            <span>Configurer ma semaine</span>
                             <ArrowRight size={28} className="group-hover:translate-x-2 transition-transform" />
                         </motion.button>
                         
                         <div className="flex flex-wrap items-center justify-center gap-8 mt-16 pt-16 border-t border-background/10">
                             {[
-                                { icon: ShieldCheck, text: "Fixed Discounts Up to 15%" },
-                                { icon: PauseCircle, text: "No Commitment, Pause Anytime" },
-                                { icon: Truck, text: "Eco-Friendly Logistics" },
+                                { icon: ShieldCheck, text: "Réductions jusqu'à 15%" },
+                                { icon: PauseCircle, text: "Sans engagement, pausez à tout moment" },
+                                { icon: Truck, text: "Logistique Éco-Responsable" },
                             ].map((t, i) => (
                                 <div key={i} className="flex items-center gap-2 text-background/40">
                                     <t.icon size={16} strokeWidth={1.5} />

@@ -206,7 +206,7 @@ export function PricingSection() {
                         <PricingStep 
                             number="03" 
                             title="Livraison" 
-                            desc="Livraison fraîche et gratuite à Casablanca. Des emballages éco-responsables directement à votre porte."
+                            desc="Livraison fraîche et gratuite à Tanger. Des emballages éco-responsables directement à votre porte."
                             index={2}
                         />
                     </div>

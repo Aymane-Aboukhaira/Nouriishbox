@@ -1495,7 +1495,7 @@ export default function PlannerPage() {
                                                         type="text"
                                                         value={pendingAddress.value}
                                                         onChange={e => setPendingAddress(p => p ? { ...p, value: e.target.value } : null)}
-                                                        placeholder="ex: 12 Rue Hassan II, Casablanca"
+                                                        placeholder="ex: 12 Rue Hassan II, Tanger"
                                                         className="flex-1 text-xs px-3 py-2 rounded-2xl border border-[#F0E4D8] bg-white outline-none focus:ring-1 focus:ring-[#6BC4A0]"
                                                     />
                                                     <button
@@ -1649,7 +1649,7 @@ export default function PlannerPage() {
                                                 type="text"
                                                 value={sheetPendingAddress}
                                                 onChange={e => setSheetPendingAddress(e.target.value)}
-                                                placeholder="ex: 12 Rue Hassan II, Casablanca"
+                                                placeholder="ex: 12 Rue Hassan II, Tanger"
                                                 className="flex-1 text-xs px-3 py-2 rounded-2xl border border-[#F0E4D8] bg-white outline-none focus:ring-1 focus:ring-[#6BC4A0]"
                                             />
                                             <button

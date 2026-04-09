@@ -2,7 +2,7 @@
 
 **Date:** March 2026
 **Project Name:** Nourishbox
-**Core Identity:** A premium, bespoke nutrition delivery SaaS based in Casablanca, Morocco.
+**Core Identity:** A premium, bespoke nutrition delivery SaaS based in Tanger, Morocco.
 
 This document serves as the absolute source of truth for the Nourishbox front-end architecture. It vividly describes exactly what the application looks like, how it behaves, its state management layer, and its complete feature set, precisely as if you were navigating it with your own eyes.
 

@@ -30,7 +30,7 @@ const cairo = Cairo({
 export const metadata: Metadata = {
   title: "Nourishbox — Nutrition Premium",
   description:
-    "Votre compagnon nutritionnel personnalisé — livraison de repas santé à Casablanca.",
+    "Votre compagnon nutritionnel personnalisé — livraison de repas santé à Tanger.",
 };
 
 export default function RootLayout({

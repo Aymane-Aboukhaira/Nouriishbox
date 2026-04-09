@@ -15,60 +15,60 @@ const PLANS = [
         id: "solo",
         name: "Solo",
         weekly: 320,
-        desc: "5 meals/week · 1 profile",
-        tagline: "Perfect for building a solo habit",
-        perMeal: "= 64 MAD / meal",
+        desc: "5 repas/semaine · 1 profil",
+        tagline: "Parfait pour instaurer une habitude solo",
+        perMeal: "= 64 MAD / repas",
         features: [
-            "Weekly meal plan",
-            "1 nutrition profile",
-            "Macro tracking dashboard",
-            "Virtual clinic access",
-            "Free delivery",
-            "Pause or skip anytime"
+            "Plan de repas hebdomadaire",
+            "1 profil nutritionnel",
+            "Tableau de bord de suivi",
+            "Accès clinique virtuelle",
+            "Livraison gratuite",
+            "Pause ou report à tout moment"
         ],
-        btnLabel: "Start with Solo →"
+        btnLabel: "Démarrer avec Solo →"
     },
     {
         id: "couple",
         name: "Couple",
         weekly: 590,
-        desc: "10 meals/week · 2 profiles",
-        tagline: "Save 50 MAD vs two Solo plans",
-        perMeal: "= 59 MAD / meal",
+        desc: "10 repas/semaine · 2 profils",
+        tagline: "Économisez 50 MAD vs deux plans Solo",
+        perMeal: "= 59 MAD / repas",
         features: [
-            "Everything in Solo ×2",
-            "2 separate nutrition profiles",
-            "Individual macro targets",
-            "Shared weekly planner",
-            "Save 50 MAD vs 2× Solo"
+            "Tout ce qu'il y a dans Solo ×2",
+            "2 profils nutritionnels séparés",
+            "Objectifs de macros individuels",
+            "Planificateur hebdomadaire partagé",
+            "Économisez 50 MAD vs 2× Solo"
         ],
-        btnLabel: "Start with Couple →"
+        btnLabel: "Démarrer avec Couple →"
     },
     {
         id: "family",
-        name: "Family",
+        name: "Famille",
         weekly: 890,
-        desc: "Up to 20 meals/week · 4 profiles",
-        tagline: "Everyone eats right, together",
-        perMeal: "= 44 MAD / meal",
+        desc: "Jusqu'à 20 repas/semaine · 4 profils",
+        tagline: "Toute la famille mange bien, ensemble",
+        perMeal: "= 44 MAD / repas",
         features: [
-            "Everything in Couple",
-            "Up to 4 profiles",
-            "Family hub dashboard",
-            "Kids meal options",
-            "Priority support"
+            "Tout ce qu'il y a dans Couple",
+            "Jusqu'à 4 profils",
+            "Tableau de bord familial",
+            "Options de repas pour enfants",
+            "Support prioritaire"
         ],
-        btnLabel: "Start with Family →"
+        btnLabel: "Démarrer avec Famille →"
     }
 ];
 
 const FAQS = [
-    { q: "What happens after my first week — am I locked in?", a: "Not at all. Nourishbox is fully flexible. After your first box, you continue week to week with no minimum commitment. Pause, skip, or cancel any time from your dashboard." },
-    { q: "Is delivery really free on all plans?", a: "Yes, always. Free delivery is included on every plan, every week, with no minimum order value. We deliver across Casablanca and Rabat." },
-    { q: "Can I upgrade or downgrade my plan mid-subscription?", a: "Yes. You can change your plan at any time from your dashboard. Changes take effect from your next weekly cycle." },
-    { q: "What's the cutoff to skip or pause a week?", a: "Thursday midnight. If you tap 'skip' or 'pause' before Thursday midnight, your next week is cancelled and you are not charged." },
-    { q: "Do you offer student or referral discounts?", a: "We have a referral programme — share your code and earn 50 MAD credit for every friend who subscribes. Student discounts are coming soon." },
-    { q: "How does billing work — weekly or monthly?", a: "By default you are billed weekly every Monday. You can switch to monthly billing (and save 15%) at any time from your subscription settings." }
+    { q: "Que se passe-t-il après ma première semaine — suis-je engagé ?", a: "Pas du tout. Nourishbox est totalement flexible. Après votre première box, vous continuez de semaine en semaine sans engagement minimum. Suspendez, reportez ou annulez à tout moment depuis votre tableau de bord." },
+    { q: "La livraison est-elle vraiment gratuite sur tous les plans ?", a: "Oui, toujours. La livraison gratuite est incluse sur chaque plan, chaque semaine, sans montant minimum de commande. Nous livrons sur tout Tanger." },
+    { q: "Puis-je changer de plan au milieu de mon abonnement ?", a: "Oui. Vous pouvez modifier votre abonnement à tout moment depuis vos paramètres. Les changements prennent effet dès votre prochain cycle hebdomadaire." },
+    { q: "Quelle est la date limite pour reporter ou suspendre une semaine ?", a: "Le jeudi à minuit. Si vous suspendez avant jeudi minuit, votre prochaine semaine est annulée et vous n'êtes pas débité." },
+    { q: "Proposez-vous des remises pour étudiants ou parrainage ?", a: "Nous avons un programme de parrainage — partagez votre code et gagnez 50 MAD de crédit pour chaque ami qui s'abonne. Les remises étudiantes arrivent bientôt." },
+    { q: "Comment fonctionne la facturation — hebdomadaire ou mensuelle ?", a: "Par défaut, vous êtes facturé chaque semaine le lundi. Vous pouvez passer à une facturation mensuelle (et économiser 15%) à tout moment." }
 ];
 
 function PricingContent() {
@@ -92,7 +92,7 @@ function PricingContent() {
                         transition={{ duration: 0.4, ease: "easeOut" }}
                         className="font-serif text-5xl md:text-6xl text-[#2D2D2D] mb-4"
                     >
-                        Simple, honest pricing
+                        Des prix simples et honnêtes
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0 }}
@@ -100,7 +100,7 @@ function PricingContent() {
                         transition={{ delay: 0.15, duration: 0.4 }}
                         className="text-lg text-[#9C9C9C] font-sans max-w-xl mx-auto mb-10"
                     >
-                        No hidden fees. No lock-in. Pause or cancel any time from your dashboard.
+                        Pas de frais cachés. Aucun engagement. Suspendez ou annulez à tout moment.
                     </motion.p>
 
                     <motion.div
@@ -111,13 +111,16 @@ function PricingContent() {
                     >
                         <LayoutGroup>
                             <div className="bg-white border border-[#F0E4D8] rounded-full p-1 flex items-center shadow-sm relative">
-                                {['weekly', 'monthly'].map((type) => {
-                                    const isActive = billing === type;
+                                {[
+                                    { id: 'weekly', label: 'Hebdomadaire' },
+                                    { id: 'monthly', label: 'Mensuel' }
+                                ].map((type) => {
+                                    const isActive = billing === type.id;
                                     return (
                                         <button
-                                            key={type}
-                                            onClick={() => setBilling(type as 'weekly' | 'monthly')}
-                                            className={`relative w-32 py-2.5 rounded-full text-sm font-bold z-10 transition-colors ${isActive ? 'text-[#2D2D2D]' : 'text-[#9C9C9C] hover:text-[#2D2D2D]'}`}
+                                            key={type.id}
+                                            onClick={() => setBilling(type.id as 'weekly' | 'monthly')}
+                                            className={`relative w-36 py-2.5 rounded-full text-sm font-bold z-10 transition-colors ${isActive ? 'text-[#2D2D2D]' : 'text-[#9C9C9C] hover:text-[#2D2D2D]'}`}
                                         >
                                             {isActive && (
                                                 <motion.div
@@ -126,7 +129,7 @@ function PricingContent() {
                                                     transition={{ type: "spring", stiffness: 300, damping: 24 }}
                                                 />
                                             )}
-                                            <span className="capitalize">{type}</span>
+                                            <span>{type.label}</span>
                                         </button>
                                     );
                                 })}
@@ -142,7 +145,7 @@ function PricingContent() {
                                         exit={{ opacity: 0, scale: 0.8 }}
                                         className="bg-[#F59E0B]/10 text-[#B45309] border border-[#F59E0B]/20 text-xs font-bold px-3 py-1 rounded-full capitalize tracking-wider"
                                     >
-                                        Save 15%
+                                        Économisez 15%
                                     </motion.span>
                                 )}
                             </AnimatePresence>
@@ -175,7 +178,7 @@ function PricingContent() {
                                             transition={{ duration: 0.8, delay: 0.5 }}
                                             className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#6BC4A0] text-[#085041] px-4 py-1 rounded-full text-xs font-bold capitalize tracking-wider shadow-sm"
                                         >
-                                            Most popular
+                                            Le plus populaire
                                         </motion.div>
                                     )}
 
@@ -191,7 +194,7 @@ function PricingContent() {
                                         >
                                             {currentPrice}
                                         </motion.span>
-                                        <span className="text-[#9C9C9C] font-semibold text-sm">MAD / {billing === 'weekly' ? 'wk' : 'mo'}</span>
+                                        <span className="text-[#9C9C9C] font-semibold text-sm">MAD / {billing === 'weekly' ? 'sem' : 'mois'}</span>
                                     </div>
                                     <p className="text-xs font-semibold text-[#9C9C9C] mb-6">{plan.perMeal}</p>
 
@@ -230,13 +233,13 @@ function PricingContent() {
                     <div className="bg-[#FFF8F4] border border-[#F0E4D8] rounded-[2rem] p-8 md:p-12 shadow-[0_12px_40px_rgba(45,45,45,0.06)] relative overflow-hidden text-center md:text-left">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-white/50 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2" />
 
-                        <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-10 text-center">How does it compare?</h2>
+                        <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-10 text-center">Comment ça se compare ?</h2>
 
                         <div className="space-y-6 max-w-2xl mx-auto">
                             {[
                                 { label: "Nourishbox Solo", price: 64, pct: "12.8%", color: "#6BC4A0" },
-                                { label: "Restaurant (Casablanca avg)", price: 120, pct: "24%", color: "#D1CBC3" },
-                                { label: "Nutritionist session", price: 500, pct: "100%", color: "#D1CBC3" }
+                                { label: "Restaurant (Moyenne Tanger)", price: 120, pct: "24%", color: "#D1CBC3" },
+                                { label: "Session Nutritionniste", price: 500, pct: "100%", color: "#D1CBC3" }
                             ].map((row, i) => (
                                 <div key={i} className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
                                     <span className="w-[200px] text-sm font-bold text-[#2D2D2D] md:text-right shrink-0">{row.label}</span>
@@ -255,7 +258,7 @@ function PricingContent() {
                             ))}
                         </div>
                         <p className="text-center text-xs text-[#9C9C9C] mt-8 pt-8 border-t border-[#F0EBE3] max-w-xl mx-auto">
-                            Price per meal includes preparation, macro calculation, packaging, and free delivery to your door.
+                            Le prix par repas comprend la préparation, le calcul des macros, l'emballage et la livraison gratuite à domicile.
                         </p>
                     </div>
                 </section>
@@ -263,16 +266,16 @@ function PricingContent() {
                 {/* 4. What's always included */}
                 <section className="bg-white py-24 px-6 border-y border-[#F0E4D8]">
                     <div className="max-w-6xl mx-auto">
-                        <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-12 text-center">Every box includes</h2>
+                        <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-12 text-center">Chaque box comprend</h2>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {[
-                                { icon: ChefHat, bg: "#E8F7F1", color: "#6BC4A0", title: "Chef-prepared meals", desc: "Cooked fresh, portioned to your exact macros" },
-                                { icon: BarChart2, bg: "#F0EDF9", color: "#B09AE0", title: "Macro-matched planning", desc: "Your weekly plan built around your personal targets" },
-                                { icon: Truck, bg: "#E8F7F1", color: "#6BC4A0", title: "Free delivery", desc: "To your door every week, no minimum order" },
-                                { icon: PauseCircle, bg: "#FFF0EA", color: "#FFA07A", title: "Pause or skip anytime", desc: "Miss a week? One tap from your dashboard" },
-                                { icon: Stethoscope, bg: "#F0EDF9", color: "#B09AE0", title: "Virtual nutrition clinic", desc: "Chat with our AI nutritionist any time" },
-                                { icon: TrendingUp, bg: "#FFF9DB", color: "#F59E0B", title: "Weekly progress tracking", desc: "Streaks, heatmaps, and goal adherence charts" }
+                                { icon: ChefHat, bg: "#E8F7F1", color: "#6BC4A0", title: "Repas de Chef", desc: "Cuisinés frais, portionnés selon vos macros exactes" },
+                                { icon: BarChart2, bg: "#F0EDF9", color: "#B09AE0", title: "Planification des Macros", desc: "Votre plan hebdomadaire élaboré selon vos objectifs personnels" },
+                                { icon: Truck, bg: "#E8F7F1", color: "#6BC4A0", title: "Livraison Gratuite", desc: "À votre porte chaque semaine, sans commande minimum" },
+                                { icon: PauseCircle, bg: "#FFF0EA", color: "#FFA07A", title: "Pausez à tout moment", desc: "Besoin d'une pause ? Un clic suffit depuis votre dashboard" },
+                                { icon: Stethoscope, bg: "#F0EDF9", color: "#B09AE0", title: "Clinique de Nutrition Virtuelle", desc: "Discutez avec notre nutritionniste IA à tout moment" },
+                                { icon: TrendingUp, bg: "#FFF9DB", color: "#F59E0B", title: "Suivi des Progrès", desc: "Streaks, badges et graphiques d'adhérence à vos objectifs" }
                             ].map((feat, i) => (
                                 <motion.div
                                     key={i}
@@ -294,12 +297,12 @@ function PricingContent() {
 
                 {/* 5. Flexibility Guarantees */}
                 <section className="max-w-4xl mx-auto px-6 py-24">
-                    <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-12 text-center md:text-left">You're always in control</h2>
+                    <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-12 text-center md:text-left">Vous gardez le contrôle</h2>
                     <div className="space-y-6">
                         {[
-                            { icon: Pause, title: "Pause anytime", desc: "Going on holiday? Pause from your dashboard. No calls, no forms, no penalties." },
-                            { icon: SkipForward, title: "Skip a week", desc: "Just tap 'skip' before your Thursday cutoff. Nothing is charged for that week." },
-                            { icon: X, title: "Cancel in 2 clicks", desc: "We'll be sad to see you go, but there is no retention wall. No surveys, no holds. Ever." }
+                            { icon: Pause, title: "Pausez quand vous voulez", desc: "En vacances ? Suspendez depuis votre tableau de bord. Pas de formulaires, pas de pénalités." },
+                            { icon: SkipForward, title: "Reportez une semaine", desc: "Désactivez simplement avant la limite du jeudi. Rien ne vous sera facturé." },
+                            { icon: X, title: "Annulation en 2 clics", desc: "Nous serons tristes de vous voir partir, mais il n'y a aucun barrage. C'est simple et direct." }
                         ].map((item, i) => (
                             <motion.div
                                 key={i}
@@ -324,18 +327,18 @@ function PricingContent() {
                 {/* 6. Testimonials */}
                 <section className="bg-[#FFF8F4] py-24 px-6 border-y border-[#F0E4D8]">
                     <div className="max-w-6xl mx-auto">
-                        <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-12 text-center">What our members say</h2>
+                        <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-12 text-center">Ce que disent nos membres</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {[
                                 {
-                                    q: "I was skeptical about the price but honestly the per-meal cost is less than my usual lunch spot in Maarif. And I actually know what I'm eating now.",
-                                    author: "Mehdi T., Casablanca",
-                                    date: "member since Jan 2025"
+                                    q: "J'étais sceptique sur le prix mais honnêtement le coût par repas est moins élevé que mon déjeuner habituel au centre de Tanger. Et je mange enfin équilibré.",
+                                    author: "Mehdi T., Tanger",
+                                    date: "Membre depuis Jan 2025"
                                 },
                                 {
-                                    q: "I paused for a month when I went to Dubai and resumed in literally one tap. No guilt, no penalty, no customer service call.",
-                                    author: "Ines B., Rabat",
-                                    date: "member since March 2025"
+                                    q: "J'ai suspendu pendant un mois lors d'un déplacement et j'ai repris en un seul clic. Pas de culpabilité, pas de service client à appeler.",
+                                    author: "Ines B., Tanger",
+                                    date: "Membre depuis Mars 2025"
                                 }
                             ].map((test, i) => (
                                 <motion.div
@@ -362,7 +365,7 @@ function PricingContent() {
 
                 {/* 7. FAQ Accordion */}
                 <section className="max-w-3xl mx-auto px-6 py-24">
-                    <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-12 text-center">Frequently asked</h2>
+                    <h2 className="font-serif text-3xl md:text-4xl text-[#2D2D2D] mb-12 text-center">Questions fréquentes</h2>
                     <div className="space-y-4">
                         {FAQS.map((faq, i) => {
                             const isOpen = openFaq === i;
@@ -408,8 +411,8 @@ function PricingContent() {
                         className="bg-[#6BC4A0]/10 rounded-[3rem] py-16 px-8 text-center border border-[#6BC4A0]/20 relative overflow-hidden"
                     >
                         <div className="absolute top-0 right-10 w-64 h-64 bg-[#6BC4A0]/20 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2" />
-                        <h2 className="font-serif text-4xl md:text-5xl text-[#2D2D2D] mb-4">Your macros. Your meals. Your pace.</h2>
-                        <p className="text-lg text-[#6B6B6B] max-w-2xl mx-auto mb-10">Start with a free 2-minute assessment. No credit card until you choose a plan.</p>
+                        <h2 className="font-serif text-4xl md:text-5xl text-[#2D2D2D] mb-4">Vos macros. Vos repas. Votre rythme.</h2>
+                        <p className="text-lg text-[#6B6B6B] max-w-2xl mx-auto mb-10">Commencez par une évaluation gratuite de 2 minutes. Aucun paiement requis avant d'avoir choisi votre plan.</p>
 
                         <motion.button
                             whileHover={{ scale: 1.02 }}
@@ -417,10 +420,10 @@ function PricingContent() {
                             onClick={() => router.push("/onboarding")}
                             className="bg-[#6BC4A0] text-white px-10 py-5 rounded-full text-xl font-bold shadow-[0_8px_32px_rgba(107,196,160,0.3)] hover:bg-[#5BB38F] transition-colors flex items-center justify-center gap-2 mx-auto"
                         >
-                            Get my free plan <ArrowRight size={22} />
+                            Obtenir mon plan gratuit <ArrowRight size={22} />
                         </motion.button>
                         <p className="text-xs text-[#9C9C9C] font-semibold tracking-wide mt-6 capitalize">
-                            Takes 2 minutes · No spam · Cancel anytime
+                            Prend 2 minutes · Sans engagement · Annulez à tout moment
                         </p>
                     </motion.div>
                 </section>
