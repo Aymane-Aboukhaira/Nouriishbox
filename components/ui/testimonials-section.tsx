@@ -25,10 +25,26 @@ function InfiniteFeed() {
   }, [isHovered, controls]);
 
   const items = [
-    { username: "@fitness_sarah", caption: "Obsessed with the Atlas Salmon Bowl!" },
-    { username: "@marcos_daily", caption: "Zero guesswork, perfectly matched to my training." },
-    { username: "@lena_eats", caption: "The Moroccan spices on this tagine are incredible." },
-    { username: "@coach_dave", caption: "Fueling my PRs with Nourishbox this week." },
+    { 
+      username: "@sarah_fit_casa", 
+      caption: "Fan absolue du Atlas Salmon Bowl !",
+      image: "/visuals/Menu/testemonials/PHOTO 01 — @fitness_sarah.jfif"
+    },
+    { 
+      username: "@coach_achraf", 
+      caption: "Mes PR explosent avec Nourishbox cette semaine.",
+      image: "/visuals/Menu/testemonials/PHOTO 02 — @coach_dave.jfif"
+    },
+    { 
+      username: "@kenza_eats", 
+      caption: "Les épices marocaines de ce tagine sont une tuerie.",
+      image: "/visuals/Menu/testemonials/PHOTO 03 — @lena_eats.jfif"
+    },
+    { 
+      username: "@yassine_macros", 
+      caption: "Fini les devinettes, parfaitement adapté à mon entraînement.",
+      image: "/visuals/Menu/testemonials/PHOTO 04 — @marcos_daily.jfif"
+    },
   ];
 
   // duplicate items to create seamless loop
@@ -62,10 +78,12 @@ function InfiniteFeed() {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="w-full aspect-square relative bg-[#FAFAF7] border border-[#2C3E2D]/10 overflow-hidden flex items-center justify-center text-center cursor-pointer shadow-sm rounded-[16px]"
             >
-              <div className="w-full h-full bg-[#E2725B]/10 flex items-center justify-center px-4">
-                <span className="text-[10px] md:text-xs text-[#1A1A1A] font-bold capitalize tracking-widest z-10 transition-transform group-hover:scale-110">
-                  COMMUNITY PHOTO
-                </span>
+              <div className="w-full h-full relative">
+                <img 
+                  src={item.image} 
+                  alt={item.username}
+                  className="w-full h-full object-cover"
+                />
               </div>
             </motion.div>
             <div>
@@ -89,16 +107,16 @@ function InfiniteFeed() {
 export function TestimonialsSection() {
   const testimonials = [
     { 
-      name: "Sarah M.", 
+      name: "Salma O.", 
       rotate: -2.5, 
       align: "self-start", 
-      text: `"The meals are consistently incredible. As an athlete, knowing my macros are precisely hit every single delivery completely transforms my training schedule."` 
+      text: `"Les repas sont systématiquement incroyables. En tant qu'athlète, savoir que mes macros sont précisément respectées à chaque livraison transforme totalement mon planning d'entraînement."` 
     },
     { 
-      name: "David L.", 
+      name: "Youssef B.", 
       rotate: 1.5, 
       align: "self-end", 
-      text: `"The zero-waste Sunday lock means I never have to worry about meal prep anymore. Everything arrives fresh, perfect, and genuinely delicious."` 
+      text: `"Grâce aux livraisons, je n'ai plus jamais à me soucier de la préparation de mes repas. Tout arrive frais, parfait et sincèrement délicieux."` 
     }
   ];
 
@@ -127,13 +145,13 @@ export function TestimonialsSection() {
         
         {/* Section Heading mixing font weights */}
         <h2 className="mb-24 text-center leading-[1.1] flex flex-wrap items-baseline justify-center gap-x-4">
-          <span className="font-serif font-black text-5xl md:text-[5.5rem] text-[#1A1A1A]">Testimonials</span>
+          <span className="font-serif font-black text-5xl md:text-[5.5rem] text-[#1A1A1A]">Témoignages</span>
           <span className="font-serif font-light italic text-4xl md:text-[4.5rem] text-[#C4602A]">&</span>
           <span 
             className="font-sans font-bold capitalize text-[2rem] md:text-[3.5rem] tracking-tight"
             style={{ WebkitTextStroke: "1px #1A1A1A", color: "transparent" }}
           >
-            Community Shared
+            Communauté
           </span>
         </h2>
         
@@ -195,10 +213,10 @@ export function TestimonialsSection() {
           <div className="w-full flex justify-center lg:justify-end">
             <div className="w-full max-w-sm">
               <h3 className="font-sans font-bold text-xs text-[#1A1A1A]/50 mb-6 border-b border-[#1A1A1A]/10 pb-4 uppercase tracking-[0.3em] flex items-center justify-between">
-                <span>Live Feed</span>
+                <span>Flux Direct</span>
                 <span className="flex items-center gap-2 text-[#C4602A]">
                   <span className="w-2 h-2 rounded-full bg-[#C4602A] animate-pulse" />
-                  Live
+                  Direct
                 </span>
               </h3>
               <InfiniteFeed />

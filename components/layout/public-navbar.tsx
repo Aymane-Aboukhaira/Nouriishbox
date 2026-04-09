@@ -48,7 +48,7 @@ export function PublicNavbar() {
         <div className="relative z-10">
           {/* 1. ANNOUNCEMENT BAR */}
           <div className="bg-[#1A261B] text-background py-2 px-4 text-[11px] font-sans font-medium text-center w-full tracking-widest uppercase">
-            <span dangerouslySetInnerHTML={{ __html: "NOUVEAU — LIVRAISON GRATUITE SUR TOUTES LES COMMANDES DE PLUS DE <span class='text-[#C4602A] font-bold'>500 MAD</span>" }} />
+            <span dangerouslySetInnerHTML={{ __html: "LIVRAISON <span class='text-[#C4602A] font-bold'>OFFERTE</span> SUR TOUTES VOS COMMANDES — SANS MINIMUM" }} />
           </div>
 
           <div className={`transition-all duration-500 ${scrolled ? "py-3" : "py-5"}`}>

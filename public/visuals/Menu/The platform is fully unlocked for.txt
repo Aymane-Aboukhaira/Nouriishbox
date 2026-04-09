@@ -1,0 +1,129 @@
+The platform is fully unlocked for everyone. The meals are priced per item at their actual cost — clients pay for exactly what they eat. No bundling, no averaging, no unfairness. To encourage families and heavy users, automatic discounts are applied based on the total number of meals in the cart.
+
+Volume Discounts (Applied automatically at checkout)
+
+1–9 meals/week: Base price
+
+10–19 meals/week: 5% off total cart
+
+20+ meals/week: 10% off total cart
+
+Meal pricing tiers (per item, shown on every card)
+
+Budget (35–50 MAD): Student bowls, salads, grain-based
+
+Standard (55–75 MAD): Chicken, eggs, legumes, balanced macros
+
+Premium (80–110 MAD): Salmon, lean beef, complex prep
+
+Kids (28–42 MAD): Smaller portions, age-appropriate
+
+Ordering flow (step by step)
+Step 1 — Plan your week (Sunday through Friday)
+Open the planner. For each profile (e.g., Youssef, Salma, Amine), select meals for each day. Each meal card shows: name, macros, price, tier badge. Meals can be filtered by that profile's macro targets.
+For each meal added, assign:
+
+Delivery time slot: 7am / 12:30pm / 6pm / 9pm
+
+Delivery location: saved addresses per profile (home, office, campus, gym, school)
+
+The planner header shows a running total that updates live as meals are added: "This week: 14 meals across 3 profiles — 847 MAD before discount → 804.65 MAD after 5% Volume Discount."
+
+Step 2 — Review & confirm (by Saturday)
+A prominent "Confirm & pay week" button in the planner opens an itemized bill modal:
+
+Youssef (5 meals)
+  Mon 07:00 Domicile  — Smoothie protéiné      55 MAD
+  Mon 12:30 Bureau    — Bowl quinoa            68 MAD
+  Mon 21:00 Salle     — Saumon post-gym        95 MAD
+  ...
+  Subtotal:                                   420 MAD
+
+Salma (3 meals)
+  ...
+  Subtotal:                                   245 MAD
+
+Amine — enfant (2 meals)
+  ...
+  Subtotal:                                   168 MAD
+──────────────────────────────────────────
+Subtotal:                                     833 MAD
+Volume discount (5% for 10+ meals):           −41.65 MAD
+Total charged Saturday:                       791.35 MAD
+
+Client confirms → card charged → week locks.
+
+Step 3 — Locked Sunday
+The planner becomes read-only. Every edit button is disabled. A banner: "Your week is confirmed — deliveries begin Monday." A WhatsApp button is visible: "Emergency change? Contact us before 9am — subject to availability."
+
+Step 4 — Daily fresh delivery
+Each meal arrives at its scheduled time at its assigned location. The confirmation screen and dashboard show a live delivery timeline: "Mon 07:00 — Smoothie protéiné — En route."
+
+Abuse prevention mechanics
+Rules enforced silently in the planner to protect your margins and logistics:
+
+Meal balance rule: A minimum 40% of planned meals must be Budget or Standard tier. The planner shows a small "Meal balance" bar: green when healthy, amber when close to the limit, red when violated with a tooltip explaining why. This prevents users from building 100% premium boxes just to exploit the 10% volume discount.
+
+Location consistency check: If a profile adds a 9pm gym delivery on a Tuesday but no gym address is saved, the system prompts to save the address before confirming. Prevents phantom delivery slots.
+
+Three concrete scenarios
+Scenario A — Gymrat
+Youssef, 28, bulking. Plans 4 meals/day Monday through Friday, 2 on weekends.
+
+Mon–Fri: 07:00 home (smoothie 55 MAD), 12:30 office (chicken bowl 68 MAD), 18:00 home (standard meal 65 MAD), 21:00 gym (salmon post-workout 95 MAD)
+
+Sat–Sun: 10:00 home (brunch bowl 60 MAD), 14:00 home (lunch 68 MAD)
+
+Weekly meals: 24 meals. Subtotal: ~1,740 MAD.
+
+After 10% Volume discount: 1,566 MAD. Per meal: ~65 MAD average. He pays exactly for what he eats — mostly premium, some standard.
+
+Scenario B — Family
+Karim, wife Nadia, two children (8 and 12).
+
+Karim: 3 meals/day at home and office — mostly standard tier
+
+Nadia: 2 meals/day at home — balanced macros
+
+Child 1: 1 kids meal delivered to school at 12:30
+
+Child 2: 1 kids meal delivered to school at 12:30, 1 snack at home at 17:00
+
+Weekly: Karim 420 MAD, Nadia 280 MAD, children 245 MAD. Total meals: ~25. Subtotal: 945 MAD.
+
+After 10% Volume discount: ~850 MAD. Per person per day: ~30 MAD — competitive with any decent restaurant, and highly convenient.
+
+Scenario C — Student
+Imane, 21, campus. Orders 2 meals/day, budget tier only, 1 location (campus).
+
+Lunch 12:30 campus: budget bowl 42 MAD
+
+Dinner 19:00 campus: budget bowl 38 MAD
+
+Weekly: 14 meals × avg 40 MAD = 560 MAD.
+
+After 5% Volume discount: 532 MAD. She gets her affordable meals, and you maintain your margin because she selected lower-cost ingredients.
+
+What changes in the UI
+Meal cards: Add a price: number and tier: 'budget' | 'standard' | 'premium' | 'kids' field to every meal in useMealsStore. Display price prominently on every card.
+
+Planner: Running weekly total in the header, per-profile subtotals, meal balance indicator bar, "Confirm & pay week" button replacing "Confirm plan", Sunday read-only lock state with WhatsApp emergency button.
+
+Checkout: Becomes the "Confirm & pay week" modal — itemised bill, volume discount applied based on meal count, total charged. Not a standalone page anymore — it's a modal inside the planner triggered on Saturday.
+
+Profiles: Everyone has access to the "Family Hub" features (multiple profiles, macro tracking, kids profiles). Kids profiles automatically filter to the kids meal tier.
+
+What to build next (implementation order)
+Add price and tier fields to useMealsStore meal objects.
+
+Update MealCard to display price + tier badge.
+
+Add delivery slot + location assignment per meal in the planner.
+
+Build the running weekly total calculation (with 5% and 10% volume discount logic) in the planner header.
+
+Build the "Confirm & pay week" itemized bill modal.
+
+Add Sunday lock state to the planner.
+
+Add meal balance indicator (40% rule).

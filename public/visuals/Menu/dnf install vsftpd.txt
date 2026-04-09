@@ -1,0 +1,32 @@
+dnf install vsftpd 
+useradd userftp1
+echo userftp1 /etc/vsftpd/user_list
+
+vim /etc/vsftpd/vsftpd.conf
+
+anonymous_enable=yes
+local_enable=yes
+write_enable=yes
+chroot_local_user=yes
+allow_writable_chroot=yes
+userlist_enable=yes
+userlist_deny=yes
+
+---
+setsebool -P ftp_home_dir on
+firewall-cmd --add-service=ftp
+
+=====
+
+fstab /dev/sdb
+mkfs.ext4 /dev/sdb1
+tune2fs -m 1 /dev/sdb1
+
+vim /etc/fstab:
+UUID=[UUID] /mnt/data default,usrquota,grpquota 0 0
+
+mount -a
+
+quotacheck -cmug /mnt/data
+quotaon /mnt/data
+adquota -u 

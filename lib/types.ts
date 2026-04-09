@@ -66,6 +66,9 @@ export interface FamilyMember {
     relation: Relation;
     avatar_color: string;
     age?: number;
+    height_cm?: number;
+    weight_kg?: number;
+    gender?: 'male' | 'female';
     goal: Goal;
     daily_kcal: number;
     assigned_meal_ids: string[];

@@ -17,8 +17,26 @@ export function BodySlider({ label, unit, value, min, max, step = 1, onChange }:
         <div className="w-full bg-white p-8 rounded-[20px] border-[1.5px] border-border shadow-[0_4px_20px_rgba(44,62,45,0.02)]">
             <div className="flex items-center justify-between mb-8">
                 <span className="text-sm font-bold text-text-muted uppercase tracking-[0.15em] font-sans">{label}</span>
-                <div className="flex items-baseline gap-1.5">
-                    <span className="text-5xl font-serif text-text-primary leading-none transition-all duration-300">{value}</span>
+                <div className="flex items-baseline gap-1.5 ">
+                    <input 
+                        type="number"
+                        min={min}
+                        max={max}
+                        value={value}
+                        onChange={(e) => {
+                            const val = Number(e.target.value);
+                            if (val >= 0 && val <= max) {
+                                onChange(val);
+                            }
+                        }}
+                        onBlur={(e) => {
+                            let val = Number(e.target.value);
+                            if (val < min) val = min;
+                            if (val > max) val = max;
+                            onChange(val);
+                        }}
+                        className="w-24 text-5xl font-serif text-text-primary leading-none bg-transparent border-none focus:outline-none focus:ring-0 text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
                     <span className="text-xs font-bold text-accent uppercase tracking-wider font-sans">{unit}</span>
                 </div>
             </div>

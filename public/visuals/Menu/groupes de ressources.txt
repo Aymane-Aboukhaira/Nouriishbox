@@ -1,0 +1,21 @@
+groupes de ressources
+cree
+name it
+select th region
+
+2)cree reseau virtue
+reseau virtuel
+cree
+selectionner group de ressource (or create new one)
+name it
+must be same region of thr GR
+
+configurer l'espace d'addressage
+name it
+validate and wait for the deployement
+
+3)cree une vm
+redandance : non
+choose the size
+configure the resources
+mise en reseau

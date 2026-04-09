@@ -1,0 +1,725 @@
+# Nourishbox — Complete Project Context & Continuation Guide
+
+> Upload this file at the start of any new conversation to resume exactly where this project left off. This document contains the full architecture, every feature built, every prompt used, and the exact current state of the project as of Sprint 4 completion.
+
+---
+
+## 0. How to use this document
+
+When starting a new conversation, paste this document and say:
+> "This is the full context for the Nourishbox project. Read everything carefully and confirm you understand the current state before we continue."
+
+Claude will have full context on: the tech stack, design system, all 9 Zustand stores, every screen built, every sprint completed, and what comes next.
+
+---
+
+## 1. Project identity
+
+| Field | Value |
+|---|---|
+| Project name | Nourishbox |
+| Type | Premium nutrition delivery SaaS |
+| Location | Casablanca, Morocco |
+| Currency | MAD (Moroccan Dirham) |
+| Language | English UI, Moroccan context |
+| Local path | `C:\Users\lenovo\nnn` |
+| Dev server | `localhost:3000` |
+
+---
+
+## 2. Tech stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 14 (App Router, Client Components) |
+| Language | TypeScript — strict mode, zero compilation errors enforced |
+| Styling | Tailwind CSS with custom design tokens |
+| State management | Zustand with `persist` middleware (localStorage + cookies) |
+| Animations | Framer Motion — page transitions, stagger, shared layout, micro-interactions |
+| Drag and drop | `@dnd-kit/core` + `@dnd-kit/sortable` |
+| Forms & validation | `react-hook-form` + `@hookform/resolvers/zod` + `zod` |
+| Data visualisation | Recharts |
+| Icons | `lucide-react` |
+| UI primitives | shadcn/ui |
+| Fonts | `DM Serif Display` (headings) + `Nunito` (body) via Google Fonts |
+
+---
+
+## 3. Design system
+
+### Colors
+| Token | Hex | Usage |
+|---|---|---|
+| Cream (background) | `#FFF8F4` | Global page background |
+| Mint (primary) | `#6BC4A0` | CTAs, active states, healthy badges |
+| Lavender | `#B09AE0` | Protein macros, secondary highlights |
+| Peach | `#FFA07A` | Fats macros, warnings |
+| Gold | `#F59E0B` | Calories, star ratings, "great match" badges |
+| Charcoal (text) | `#2D2D2D` | Primary text |
+| Muted gray | `#6B6B6B` | Secondary text |
+
+### Typography
+- Headings: `DM Serif Display` — editorial, premium feel
+- Body: `Nunito` — round, legible, warm
+
+### Shape rules
+- No sharp corners anywhere — `rounded-2xl` (24px) or `rounded-3xl` (32px) on all cards
+- Soft floating shadows: `shadow-[0_12px_40px_rgba(45,45,45,0.06)]`
+- Buttons: `whileHover={{ scale: 1.02 }}` + `whileTap={{ scale: 0.98 }}` on all interactive elements
+
+### UX principles
+1. Anticipate needs before the user clicks
+2. Context over raw numbers — "44g to go" not "120g / 164g"
+3. Motion communicates state — not just decoration
+4. One primary action per screen
+5. Personalisation that's visible — goal-aware copy throughout
+
+---
+
+## 4. Zustand stores (`lib/store.ts`)
+
+All 9 stores use `persist` middleware. Store 9 (`useAuthStore`) uses cookie storage for middleware compatibility. All others use localStorage.
+
+### Store 1 — `useProfileStore`
+```ts
+interface UserProfile {
+  name: string
+  age: number
+  gender: 'male' | 'female'
+  weight: number        // kg
+  height: number        // cm
+  activityLevel: 'sedentary' | 'light' | 'moderate' | 'active' | 'very_active'
+  goal: 'lose_weight' | 'build_muscle' | 'maintain' | 'eat_cleaner'
+  dailyCalories: number // calculated via Mifflin-St Jeor
+  protein: number       // g — 30% of calories
+  carbs: number         // g — 45% of calories
+  fats: number          // g — 25% of calories
+}
+```
+
+### Store 2 — `useMealsStore`
+- 30+ mock meals with: `id`, `name`, `kcal`, `protein`, `carbs`, `fats`, `category`, `allergens[]`, `isVegan`, `isNew`, `rating?`
+- Actions: `addMeal`, `editMeal`, `deleteMeal`
+
+### Store 3 — `usePlannerStore`
+- 7-day meal plan: array of `{ dayKey: string, meal: Meal | null, isPaused: boolean, consumed: boolean }`
+- Day keys: `'monday'` through `'sunday'`
+- Actions: `assignMeal(dayKey, mealId)`, `removeMeal(dayKey)`, `togglePause(dayKey)`, `setConfirmed(confirmed)`, `updateMealStatus(dayKey, mealId, consumed)`
+- `isConfirmed: boolean`
+- `pausedDays: string[]`
+
+### Store 4 — `useFamilyStore`
+- Array of family member profiles with individual macro targets
+- Actions: `addMember`, `editMember`, `removeMember`, `assignMealToMember`
+
+### Store 5 — `useOrdersStore`
+- Admin Kanban: orders with stages `'pending' | 'preparing' | 'out_for_delivery' | 'delivered'`
+- Actions: `updateOrderStage(orderId, stage)`
+
+### Store 6 — `useSubscriptionStore`
+```ts
+interface SubscriptionState {
+  status: 'active' | 'paused' | 'cancelled' | null
+  plan: 'solo' | 'couple' | 'family' | null
+  orderId: string | null
+  startDate: string | null  // ISO string
+}
+// Action added in checkout build:
+setSubscription(data: { plan, status, orderId, startDate }): void
+```
+
+### Store 7 — `usePointsStore`
+- `points: number` — NourishPoints balance
+- `streak: number` — consecutive days with logged meals
+- Actions: `addPoints(amount)`, `incrementStreak()`, `resetStreak()`
+
+### Store 8 — `useClinicStore`
+- `messages: { id, sender: 'user' | 'ai', text, timestamp }[]`
+- Actions: `addMessage`, `clearHistory`
+
+### Store 9 — `useAuthStore` (cookie storage)
+```ts
+interface AuthUser {
+  id: string        // crypto.randomUUID()
+  name: string
+  email: string
+  phone: string
+  address: string
+  createdAt: string // ISO string
+}
+interface AuthState {
+  user: AuthUser | null
+  isAuthenticated: boolean
+  signUp(data): void    // creates user, sets isAuthenticated true
+  signIn(email): boolean // mock — checks email match
+  signOut(): void
+}
+```
+Cookie storage implementation allows Next.js middleware to read auth state server-side.
+
+---
+
+## 5. File structure (app directory)
+
+```
+app/
+├── page.tsx                          ✅ Landing page (Phase 9)
+├── pricing/
+│   └── page.tsx                      ✅ Public pricing page (Phase 11)
+├── onboarding/
+│   ├── page.tsx                      ✅ 6-step wizard (Phase 8)
+│   └── reveal/
+│       └── page.tsx                  ✅ Personalised plan reveal (Phase 10)
+├── auth/
+│   ├── signup/
+│   │   └── page.tsx                  ✅ Sign-up (Phase 12)
+│   └── signin/
+│       └── page.tsx                  ✅ Sign-in (Phase 12)
+├── checkout/
+│   └── page.tsx                      ✅ Checkout & payment (Phase 13)
+├── confirmation/
+│   └── page.tsx                      ✅ Order confirmation (Phase 14)
+├── client/
+│   ├── dashboard/
+│   │   └── page.tsx                  ✅ Dashboard v2 — concierge (Sprint 1)
+│   ├── menu/
+│   │   └── page.tsx                  ✅ Menu v2 — guided discovery (Sprint 4)
+│   ├── planner/
+│   │   └── page.tsx                  ✅ Planner v2 — smart week builder (Sprint 3)
+│   ├── family/
+│   │   └── page.tsx                  ✅ Family hub
+│   ├── analytics/
+│   │   └── page.tsx                  ✅ Analytics + heatmap
+│   ├── clinic/
+│   │   └── page.tsx                  ⏳ Virtual clinic (Sprint 2 skipped — see below)
+│   ├── subscription/
+│   │   └── page.tsx                  ❌ MISSING — Sprint 5
+│   └── profile/
+│       └── page.tsx                  ❌ MISSING — Sprint 5
+├── admin/
+│   ├── dashboard/page.tsx            ✅
+│   ├── menu/page.tsx                 ✅
+│   ├── orders/page.tsx               ✅
+│   └── users/page.tsx                ✅
+└── settings/
+    └── page.tsx                      ✅
+```
+
+### Components
+```
+components/
+├── layout/
+│   ├── public-navbar.tsx             ✅ Shared public navbar (extracted Phase 11)
+│   └── public-footer.tsx            ✅ Shared public footer (extracted Phase 11)
+├── MacroBlob.tsx                     ✅ SVG liquid ring with pathLength animation
+├── MealCard.tsx                      ✅ Atomic meal card component
+├── ChatBubble.tsx                    ✅ Clinic chat bubble
+└── ui/                               ✅ shadcn/ui components
+```
+
+### Other files
+```
+lib/
+├── store.ts                          ✅ All 9 Zustand stores
+└── types.ts                          ✅ All TypeScript interfaces
+middleware.ts                         ✅ Route protection for /client/* and /admin/*
+```
+
+---
+
+## 6. Route protection
+
+`middleware.ts` at project root:
+- Protects `/client/*` and `/admin/*`
+- Reads `auth-storage` cookie (written by `useAuthStore` cookie storage)
+- Redirects unauthenticated users to `/auth/signin?from=[originalPath]`
+- Sign-in page reads `from` param and redirects back after successful login
+
+---
+
+## 7. Complete cold visitor journey (FULLY BUILT ✅)
+
+```
+/ → /onboarding → /onboarding/reveal → /auth/signup?plan=X → /checkout?plan=X → /confirmation → /client/dashboard
+```
+
+Every screen exists. A stranger can click a link, discover the product, understand the value, create an account, pay, receive confirmation, and land in their personalised dashboard.
+
+### Screen details
+
+**`/` — Landing page**
+- Sticky navbar (frosted glass on scroll, conditional "Get my plan" CTA)
+- Hero: word-by-word stagger animation
+- Feature strip (4 pillars), How it works (3 steps), Meal preview from `useMealsStore`
+- Macro science section with `MacroBlob` rings (30% protein, 45% carbs, 25% fats)
+- Pricing cards (Solo 320 MAD / Couple 590 MAD / Family 890 MAD)
+- Testimonials, FAQ accordion (Framer Motion animated), final CTA banner
+
+**`/pricing` — Public pricing**
+- Weekly/monthly toggle with `layoutId` animated thumb, "Save 15%" gold badge
+- Three plan cards — Couple elevated with mint border, "Most popular" badge
+- Per-meal cost visualiser (bar chart comparing vs restaurant / nutritionist)
+- Flexibility guarantees with left-border accents
+- FAQ accordion, final conversion banner
+- Pre-highlights plan card on `?plan=` URL param via `useSearchParams` + `Suspense`
+
+**`/onboarding` — 6-step wizard**
+- `AnimatePresence` horizontal slide between steps
+- Fields: age, gender, weight, height, activity level, goal
+- Validation: `react-hook-form` + `zod`
+- Nutrition engine: Mifflin-St Jeor BMR → TDEE → macro split (30/45/25)
+- Saves to `useProfileStore`
+- On completion: `router.push('/onboarding/reveal')`
+
+**`/onboarding/reveal` — Plan reveal**
+- `hasMounted` guard prevents SSR flash
+- Animated entrance: mint pill badge → personalised headline → subtext
+- Macro summary card: 4 SVG rings with sequential `pathLength` animation (700/850/1000/1150ms)
+- Insight strip: 3 pills (meals/day, protein equivalent in chicken breasts, goal label)
+- Matched meals: top 3 from `useMealsStore` by macro proximity algorithm
+- Plan selection: Solo / Couple / Family cards, sticky mobile bottom bar
+- Routes to `/auth/signup?plan=X`
+
+**`/auth/signup` and `/auth/signin`**
+- Two-column layout: form left, decorative brand panel right
+- `react-hook-form` + `zod` on all fields
+- Password show/hide toggle (Lucide `Eye`/`EyeOff`)
+- Card number auto-format, expiry auto-slash
+- `useAuthStore.signUp()` creates account, persists to cookie
+- Redirects to `/checkout?plan=X` after signup (preserving plan param)
+- Sign-in reads `?from=` param and redirects back after login
+- If already authenticated: redirects to `/client/dashboard`
+- Social login buttons (visual only — shows "coming soon" toast)
+
+**`/checkout` — Checkout**
+- Minimal header (no navbar) with lock icon + "Secure checkout"
+- Two-column: order summary left, payment form right
+- Order summary: plan name, 10% first-week discount, free delivery, total today
+- Payment method selector: Credit card / PayPal (PayPal shows "not yet available" error)
+- Card fields: cardholder name, card number (auto-spaces XXXX XXXX XXXX XXXX), expiry (auto-slash MM/YY), CVV (password type, ? tooltip)
+- Floating labels on focus
+- 1800ms simulated payment processing with `Loader2` spinner
+- On success: generates `NB-XXXXX` order ID, calls `useSubscriptionStore.setSubscription()`, adds 100 NourishPoints, routes to `/confirmation?orderId=X&plan=X`
+
+**`/confirmation` — Order confirmation**
+- Animated mint checkmark (spring scale + pathLength)
+- Personalised headline from `useProfileStore.name`
+- Order summary card with next billing date (startDate + 7 days, `Intl.DateTimeFormat`)
+- 4-step delivery timeline with gradient connector lines
+- Gold NourishPoints welcome card (+100 pts)
+- App download prompt (shows "coming soon" toast)
+- CSS confetti burst (20 `motion.div` pieces, no library)
+- "Go to my dashboard →" CTA
+
+---
+
+## 8. Client portal — current state
+
+### Dashboard (`/client/dashboard`) — v2 COMPLETE ✅
+
+**Smart greeting strip:**
+- Time-of-day aware: Good morning / afternoon / evening / "Still up,"
+- Contextual sub-line (priority order): Thursday cutoff warning → empty planner → no meals logged → protein gap → streak → default
+- Goal context chip: Cutting (peach) / Bulking (mint) / Maintaining (lavender) / Clean eating (mint)
+
+**AI insight cards strip:**
+- Protein gap chip (lavender, Dumbbell icon)
+- Streak at risk chip (peach, Flame icon)
+- Empty planner days chip (mint, Calendar icon)
+- On-track chip (gold, Trophy icon)
+- New meal chip (mint, Sparkles icon)
+- If perfect day: single gold "You're nailing it today" chip
+
+**Macro rings (MacroBlob):**
+- Gap labels instead of raw numbers: "44g to go" / "On track" / "+12g over"
+- 100% celebration: ring pulse (spring scale 1 → 1.08 → 1) + "✓ Target hit!" label, fires once per macro per session via `useRef<Set<string>>`
+
+**Post-meal rating bottom sheet:**
+- Triggered after tapping "Eat" on a meal
+- 5-star rating (gold hover fill) + 3 emoji pills (Energised / Full / Still hungry)
+- +10 NourishPoints on submit with floating gold `+10` animation
+- `position: sticky; bottom: 0` — never `position: fixed`
+
+**Next delivery countdown widget:**
+- Shows delivery day + time window
+- Three states: normal (mint) → arriving tomorrow (amber tint) → unplanned + cutoff (red tint + pulse)
+- Live HH:MM:SS countdown to Thursday midnight cutoff via `setInterval`
+
+**Goal-aware empty state:**
+- Different headline per goal (lose_weight / build_muscle / maintain / eat_cleaner)
+- CTA routes to `/client/menu?filter=today-match`
+
+**Weekly summary card:**
+- Appears Sundays after 17:00 only
+- Stats: days planned, avg calories %, best streak
+- Dismissable per session
+
+### Menu (`/client/menu`) — v2 COMPLETE ✅
+
+**"Built for you today" section:**
+- Computes today's remaining macro targets from consumed meals
+- Scores all meals via `scoreMealAgainstRemaining()` — weighted: protein 50%, carbs 30%, fats 20%
+- Shows top 4 as wide horizontal scroll cards with micro macro bars
+- Edge cases: target already hit (trophy card), nothing logged yet (per-meal average)
+
+**Macro match score pill:**
+- On every meal card — absolute positioned top-right
+- ≥80: "X% match" mint pill
+- 60–79: "Good" gold pill
+- <60: "X%" gray pill
+- Target met: "Tomorrow?" lavender pill
+
+**"Fix my macros" smart filter:**
+- First pill in filter row, Zap icon
+- Filters to score ≥ 60, sorts descending
+- Mutually exclusive with category filters
+- Shows gap sub-label: "Showing meals that close your Xg protein · Yg carbs · Zg fats gap"
+
+**Quick-add day selector popover:**
+- Appears on `"+ Add"` tap
+- 7 day pills: empty (mint) / has meal (muted with dot) / paused (strikethrough, disabled) / today (bold + "Today" label)
+- Viewport-aware positioning via `getBoundingClientRect`
+- Assigns to chosen day, button shows checkmark for 1.5s, +5 NourishPoints
+
+**Meal detail bottom drawer:**
+- Triggered by tapping the meal card (not the add button)
+- Full macro bars animated on open
+- Ingredient chips, allergen warnings (red chips or "No allergens" mint shield)
+- Rating history if previously consumed
+- "Add to plan →" or "Swap with another day →" based on plan state
+- Swipe-down to close (deltaY > 60px)
+
+**Three empty states:**
+- No search results: magnifying glass SVG
+- Empty category: magnifying glass with × 
+- Macros fixed: CheckCircle mint
+
+### Planner (`/client/planner`) — v2 COMPLETE ✅
+
+**Week nutrition score:**
+- 0–100 composite score, counting animation on mount (0 → score over 800ms)
+- Color: gray (0–49) → peach (50–74) → gold (75–89) → mint (90–100)
+- "✦ Excellent week" label at 90+
+
+**Per-day macro bars:**
+- 3px bars per day column: protein (lavender) / carbs (gold) / fats (peach)
+- Framer Motion width animation on meal change
+- Hover tooltip: "P: Xg · C: Yg · F: Zg"
+- Day header color: mint (>70%) → gold (<50%) → peach pulse (empty + cutoff within 24h)
+
+**Thursday cutoff urgency system:**
+- 3 states: Normal (>48h) → Warning (24–48h, gold pulse) → Urgent (<24h, peach/red shimmer + continuous pulse)
+- Full-width banner when empty days exist + <24h: "Fill gaps →" link
+
+**Quick-add meal drawer:**
+- `position: sticky; bottom: 0` — always in page flow
+- Collapsed to 48px handle bar when inactive
+- Triggered by `+` on any empty slot
+- Shows top macro-matched meals, horizontal scroll, search input
+- "Already in your week — use again" section for duplication
+- Meal adds instantly, drawer stays open for multi-day filling
+- Day targeting: `activeDrawerDay` uses string keys (`'monday'` etc.), ref-mirrored to prevent stale closures
+- `assignMeal(dayKey, mealId)` maps string → index in store
+
+**Replan week modal:**
+- Triggered by "Replan week" button (Wand2 icon) in header
+- Faux-viewport overlay (never `position: fixed`)
+- 3 strategies: Balanced macros / Maximum variety / Repeat favourites
+- Live 7-day preview grid with animated stagger on strategy change
+- Projected score shown in mint/gold/muted
+- "Regenerate ↺" shuffles while preserving macro quality
+- "Apply plan" writes to store, +15 NourishPoints, column stagger animation
+
+**dnd-kit drag — FIXED:**
+- `motion.div` is visual wrapper ONLY
+- `...listeners` and `...attributes` on inner plain `div` — never on `motion.div`
+- All `useSortable({ id })` IDs match `SortableContext items={[...]}` exactly
+
+**Confirm plan — smart routing:**
+- Empty days → shows incomplete warning modal (faux-viewport)
+- Not subscribed → routes to `/checkout?plan=X`
+- Active subscriber → confirms, shows delivery date toast, +25 NourishPoints
+
+**Meal duplication:**
+- Same meal allowed on multiple days — de-duplication filter removed
+- "Copy" icon on meal cards opens drawer in duplicate mode
+
+### Analytics (`/client/analytics`) ✅
+- 30-day Recharts line chart (protein / carbs / fats adherence)
+- 28-cell CSS grid heatmap (dark mint = 100%, cream = 0%)
+- Weight trend chart
+
+### Virtual Clinic (`/client/clinic`) ⏳
+- Chat UI with `useClinicStore` messages
+- Simulated typing (3-dot bounce indicator)
+- Keyword regex response matching
+- **Note: Sprint 2 (real Claude API) was intentionally skipped — build when ready**
+
+### Family Hub (`/client/family`) ✅
+- Netflix-style profile switcher
+- `useFamilyStore` meal assignments per member
+- Zod-validated "Add Member" modal
+
+---
+
+## 9. Admin portal ✅
+
+All admin screens are fully built:
+
+- **`/admin/dashboard`** — KPI cards (MRR in MAD, churn, success rate), Recharts charts
+- **`/admin/menu`** — Full CRUD table, Zod-validated add/edit modal
+- **`/admin/orders`** — 4-column dnd-kit Kanban (Pending → Preparing → Out for delivery → Delivered)
+- **`/admin/users`** — Subscriber directory, force pause/cancel actions
+
+---
+
+## 10. Shared components
+
+### `MacroBlob`
+SVG progress ring. Props: `percentage`, `color`, `label`. Features:
+- `pathLength` animated from 0 → target on mount
+- Gap label display (context-aware text, not raw numbers)
+- 100% celebration: spring pulse + "✓ Target hit!" label (fires once via `useRef<Set<string>>`)
+
+### `MealCard`
+Atomic meal card. Used in: menu grid, planner, reveal screen, admin menu builder. Features:
+- Hover overlay with macro chips
+- Add to plan CTA integration with `usePlannerStore`
+- `isNew` badge support
+
+### `PublicNavbar` + `PublicFooter`
+Extracted in Phase 11. Used on: `/`, `/pricing`, `/onboarding/reveal`. Not used on auth or checkout pages.
+
+### `ChatBubble`
+Used in clinic. Supports `sender: 'user' | 'ai'` with bounce-animating typing indicator.
+
+### Skeleton framework
+`animate-pulse` blocks matching exact dimensions of their target components. Used in dashboard (MacroBlobSkeleton) and menu (MealCardSkeleton) with 800ms simulated latency.
+
+---
+
+## 11. Nutrition engine
+
+Used in the onboarding wizard and profile editor:
+
+```
+BMR (male)   = (10 × weight_kg) + (6.25 × height_cm) - (5 × age) + 5
+BMR (female) = (10 × weight_kg) + (6.25 × height_cm) - (5 × age) - 161
+
+Activity multipliers:
+  sedentary   = 1.2
+  light       = 1.375
+  moderate    = 1.55
+  active      = 1.725
+  very_active = 1.9
+
+TDEE = BMR × activity_multiplier
+
+Goal adjustments:
+  lose_weight  = TDEE - 500
+  build_muscle = TDEE + 300
+  maintain     = TDEE
+  eat_cleaner  = TDEE
+
+Macro split:
+  protein = (dailyCalories × 0.30) / 4   → grams
+  carbs   = (dailyCalories × 0.45) / 4   → grams
+  fats    = (dailyCalories × 0.25) / 9   → grams
+```
+
+---
+
+## 12. Pricing data
+
+```ts
+const PLANS = {
+  solo:   { name: 'Solo',   weekly: 320,  monthly: 1088, meals: 5,  profiles: 1 },
+  couple: { name: 'Couple', weekly: 590,  monthly: 2006, meals: 10, profiles: 2 },
+  family: { name: 'Family', weekly: 890,  monthly: 3026, meals: 20, profiles: 4 },
+}
+const FIRST_WEEK_DISCOUNT = 0.10  // 10% off first week
+// Per-meal costs: Solo 64 MAD, Couple 59 MAD, Family 44 MAD
+// Monthly = weekly × 4 × 0.85 (15% discount)
+```
+
+---
+
+## 13. Sprint progress
+
+| Sprint | Screen | Status |
+|---|---|---|
+| Sprint 1 | Dashboard v2 — concierge command centre | ✅ Complete |
+| Sprint 2 | AI Clinic — real Claude API | ⏭ Skipped (intentional) |
+| Sprint 3 | Planner v2 — smart week builder | ✅ Complete |
+| Sprint 4 | Menu v2 — guided discovery | ✅ Complete |
+| Sprint 5 | Subscription management + Profile editor | ❌ Not started |
+| Sprint 6 | Notifications + Rewards hub | ❌ Not started |
+
+---
+
+## 14. Sprint 5 — what to build next
+
+Two screens that don't exist yet. Both are critical for retention.
+
+### `/client/subscription`
+
+**Subscription status card:**
+- Plan name, next billing date, next delivery date
+- Status badge: Active (mint) / Paused (gold) / Cancelled (gray)
+
+**Skip next week:**
+- One-tap button
+- Shows Thursday cutoff warning if close
+- Updates `useSubscriptionStore`
+
+**Pause subscription flow:**
+- Select duration: 1 week / 2 weeks / 4 weeks
+- Shows resume date live as duration changes
+- Confirmation step
+
+**Cancel save flow (retention-critical):**
+- Multi-step modal — never a single button
+- Step 1: "Before you go" — shows streak count, upcoming delivery value, NourishPoints balance
+- Step 2: Offer alternatives — "Pause for 2 weeks instead?" with single confirm
+- Step 3: Reason selector (optional) + final confirm
+- Updates `useSubscriptionStore.status` to `'cancelled'`
+
+**Upgrade / downgrade:**
+- Side-by-side current vs new plan
+- Price difference shown clearly
+- Takes effect next billing cycle
+
+### `/client/profile`
+
+**Profile editor:**
+- Weight slider (live BMR/TDEE recalculation as it moves)
+- Height, age inputs
+- Activity level selector (tile buttons, same as onboarding)
+- Goal selector (tile buttons)
+- On save: recalculates macros via Mifflin-St Jeor, updates `useProfileStore`
+
+**Allergen management:**
+- Toggle chips: Gluten / Dairy / Nuts / Shellfish / Eggs / Soy
+- Selected allergens filter out matching meals from menu score
+- Stored in `useProfileStore`
+
+---
+
+## 15. Sprint 6 — after Sprint 5
+
+### `NotificationDrawer` component
+
+- Bell icon in existing portal header with red dot badge (count from unread notifications)
+- Slide-in drawer from the right
+- Notification types (Zustand-driven, not real push):
+  - Streak at risk ("Your 7-day streak resets tonight")
+  - Planner gap ("Thursday cutoff in 2 hours — Wednesday is empty")
+  - New meal match ("3 new meals match your macros perfectly")
+  - Points milestone ("You just hit 500 NourishPoints")
+- Each notification: dismissable with swipe or × button
+
+### `/client/rewards`
+
+- NourishPoints balance + history timeline
+- Redemption: 500 points = free meal upgrade (visual only, mock)
+- Referral link generator: unique URL, share buttons (WhatsApp, copy link)
+- "Your friend [name] used your code — you earned 50 MAD credit" — mock notification
+
+---
+
+## 16. Key technical patterns used throughout
+
+### `hasMounted` guard (used everywhere with Zustand)
+```tsx
+const [hasMounted, setHasMounted] = useState(false)
+useEffect(() => setHasMounted(true), [])
+if (!hasMounted) return <SkeletonComponent />
+// Now safe to read Zustand stores
+```
+
+### Faux-viewport modal (never `position: fixed`)
+```tsx
+<div style={{
+  minHeight: '500px',
+  background: 'rgba(45,45,45,0.5)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '24px'
+}}>
+  <div className="modal-card">...</div>
+</div>
+```
+
+### Sticky drawer (never `position: fixed`)
+```tsx
+<div style={{ position: 'sticky', bottom: 0 }}>
+  {/* Always last child of page content flow, outside any overflow:hidden parent */}
+</div>
+```
+
+### dnd-kit + Framer Motion separation rule
+```tsx
+// CORRECT — motion.div is visual only, listeners on plain div
+<motion.div animate={{ opacity: isDragging ? 0.5 : 1 }}>
+  <div ref={setNodeRef} style={...} {...attributes} {...listeners}>
+    {/* card content */}
+  </div>
+</motion.div>
+
+// WRONG — never put listeners on motion.div
+<motion.div {...listeners} {...attributes}>...</motion.div>
+```
+
+### Stale closure prevention for event handlers
+```tsx
+const activeDrawerDayRef = useRef(activeDrawerDay)
+useEffect(() => { activeDrawerDayRef.current = activeDrawerDay }, [activeDrawerDay])
+// Use activeDrawerDayRef.current inside callbacks
+```
+
+### Document mousedown listener (for outside-click close)
+```tsx
+useEffect(() => {
+  if (!isOpen) return
+  const handler = (e: MouseEvent) => {
+    if (!ref.current?.contains(e.target as Node)) setIsOpen(false)
+  }
+  document.addEventListener('mousedown', handler)
+  return () => document.removeEventListener('mousedown', handler)
+}, [isOpen])
+```
+
+---
+
+## 17. Prompt style guide for continuation
+
+When generating prompts for Antigravity (the AI coding agent):
+
+1. Always start with the full context block (stack, design tokens, what's already built)
+2. State the philosophy/intention before the spec
+3. Use `"Complete replacement of [file]"` or `"Targeted edit to [file]"` — be explicit
+4. Provide TypeScript interfaces for new data structures
+5. Provide algorithm logic in code blocks — don't leave it to interpretation
+6. Specify animation values precisely: `y: 40 → 0`, `opacity: 0 → 1`, `duration: 400ms`
+7. Specify which animations use `initial/animate` (above fold) vs `whileInView` (below fold)
+8. Always specify the `position: sticky` pattern for drawers and the faux-viewport pattern for modals
+9. End with a technical requirements section covering: file name, TypeScript strictness, `hasMounted` guard, zero regressions clause
+10. Always say: `"0 TypeScript errors"` as a hard requirement
+
+---
+
+## 18. What NOT to do (lessons learned)
+
+- Never use `position: fixed` on drawers or modals — collapses iframe viewport to `min-height: 100px`
+- Never place `motion.div` with `...listeners` from `useSortable` — breaks dnd-kit entirely
+- Never de-duplicate meals across planner days — users legitimately repeat meals
+- Never hardcode a day index (0) when assigning meals — always use the `dayKey` string
+- Never use `position: fixed` on the confetti burst — use `position: absolute` inside a `position: relative` wrapper
+- Never animate the modal/drawer container height with `height: 'auto'` without `overflow: hidden` on the `motion.div`
+- Never skip the `hasMounted` guard — Zustand localStorage reads cause SSR hydration mismatches in Next.js 14 App Router
+- Never wrap `useSearchParams()` without a `Suspense` boundary in Next.js 14
+
+---
+
+*Generated from the complete Nourishbox development conversation. All phases 1–18 complete as of this export.*

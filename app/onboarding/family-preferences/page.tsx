@@ -4,17 +4,26 @@ import { useRouter } from "next/navigation";
 import { useFamilyStore } from "@/lib/store";
 import { ArrowRight, Sparkles, User, Baby, ChevronDown, MapPin, Clock, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BodySlider } from "../components/BodySlider";
 import type { Goal, DeliveryLocation, DeliveryTimeSlot, SavedLocation } from "@/lib/types";
 
 const GOAL_OPTIONS: { id: Goal; label: string; desc: string }[] = [
-    { id: "maintenance", label: "Maintain", desc: "Keep healthy" },
-    { id: "weight_loss", label: "Lose Weight", desc: "Lean down" },
-    { id: "muscle_gain", label: "Build Muscle", desc: "Gain energy" },
-    { id: "balance", label: "Eat Cleaner", desc: "Pure health" }
+    { id: "maintenance", label: "Maintien", desc: "Santé durable" },
+    { id: "weight_loss", label: "Perte de Poids", desc: "S'affiner" },
+    { id: "muscle_gain", label: "Prise de Muscle", desc: "Énergie & Force" },
+    { id: "balance", label: "Manger Sain", desc: "Santé pure" }
 ];
 
 const ADULT_TAGS: DeliveryLocation[] = ['home', 'office', 'gym', 'campus'];
 const CHILD_TAGS: DeliveryLocation[] = ['home', 'school'];
+const LOCATION_LABELS: Record<string, string> = {
+    home: "Domicile",
+    office: "Bureau",
+    gym: "Salle de sport",
+    campus: "Campus",
+    school: "École",
+    other: "Autre"
+};
 const TIME_SLOTS: DeliveryTimeSlot[] = ['07:00', '12:30', '18:00', '21:00'];
 
 export function FamilyPreferencesPage() {
@@ -56,7 +65,7 @@ export function FamilyPreferencesPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-4 block"
                 >
-                    Step 05
+                    Étape 05
                 </motion.span>
                 <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <Sparkles size={32} strokeWidth={1.5} />
@@ -67,7 +76,7 @@ export function FamilyPreferencesPage() {
                     transition={{ delay: 0.1 }}
                     className="font-serif text-4xl lg:text-5xl text-text-primary mb-4"
                 >
-                    What are their goals?
+                    Quels sont leurs objectifs ?
                 </motion.h1>
                 <motion.p 
                     initial={{ opacity: 0, y: 10 }}
@@ -75,7 +84,7 @@ export function FamilyPreferencesPage() {
                     transition={{ delay: 0.2 }}
                     className="text-text-muted text-lg font-sans max-w-md mx-auto"
                 >
-                    Personalize logistics and taste for everyone at the table.
+                    Personnalisez les besoins nutritionnels et la logistique pour chaque membre.
                 </motion.p>
             </div>
 
@@ -84,6 +93,7 @@ export function FamilyPreferencesPage() {
                     const isOpen = openId === member.id;
                     const availableTags = member.relation === 'child' ? CHILD_TAGS : ADULT_TAGS;
                     const savedLocs = member.savedLocations || [];
+                    const isSelf = member.relation === 'self';
 
                     return (
                         <div 
@@ -105,12 +115,14 @@ export function FamilyPreferencesPage() {
                                 </div>
                                 <div className="flex-1">
                                     <h3 className={`font-serif text-xl lg:text-2xl mb-1 ${isOpen ? "text-primary" : "text-text-primary"}`}>
-                                        {member.name}
+                                        {member.name} {isSelf ? "(Vous)" : ""}
                                     </h3>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-[10px] font-bold text-accent uppercase tracking-widest">{member.relation}</span>
+                                        <span className="text-[10px] font-bold text-accent uppercase tracking-widest">
+                                            {member.relation === 'child' ? 'Enfant' : member.relation === 'partner' ? 'Partenaire' : member.relation === 'self' ? 'Moi' : 'Autre'}
+                                        </span>
                                         <span className="w-1 h-1 bg-border rounded-full" />
-                                        <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{savedLocs.length} Location(s)</span>
+                                        <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">{savedLocs.length} Lieu(x)</span>
                                     </div>
                                 </div>
                                 <motion.div animate={{ rotate: isOpen ? 180 : 0 }} className={`p-2 rounded-full transition-colors ${isOpen ? "bg-primary/10 text-primary" : "bg-background text-text-muted"}`}>
@@ -130,69 +142,119 @@ export function FamilyPreferencesPage() {
                                     >
                                         <div className="p-6 lg:p-8 space-y-10">
                                             
-                                            {/* General Info */}
+                                            {/* Name and Gender */}
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                                                 <div className="space-y-3">
-                                                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Name</label>
+                                                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Prénom</label>
                                                     <input
                                                         type="text"
                                                         value={member.name}
                                                         onChange={(e) => updateMember(member.id, { name: e.target.value })}
                                                         className="w-full bg-white border-[1.5px] border-border focus:border-primary rounded-2xl px-5 py-4 font-serif text-lg text-text-primary transition-all outline-none shadow-sm"
-                                                        placeholder="Enter name..."
+                                                        placeholder="Entrez le nom..."
                                                     />
                                                 </div>
 
                                                 <div className="space-y-3">
-                                                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Dietary Taste</label>
+                                                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Genre</label>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        <button 
+                                                            onClick={() => updateMember(member.id, { gender: 'female' })}
+                                                            className={`py-3 px-4 rounded-xl text-xs font-bold uppercase transition-all border ${member.gender === 'female' ? "bg-primary text-white border-primary" : "bg-white text-text-muted border-border"}`}
+                                                        >
+                                                            {member.relation === 'child' ? "Fille" : "Femme"}
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => updateMember(member.id, { gender: 'male' })}
+                                                            className={`py-3 px-4 rounded-xl text-xs font-bold uppercase transition-all border ${member.gender === 'male' ? "bg-primary text-white border-primary" : "bg-white text-text-muted border-border"}`}
+                                                        >
+                                                            {member.relation === 'child' ? "Garçon" : "Homme"}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Body Metrics */}
+                                            <div className="grid grid-cols-1 gap-6">
+                                                <div className="bg-white p-6 rounded-2xl border border-border shadow-sm space-y-8">
+                                                    <BodySlider 
+                                                        label="Âge" 
+                                                        unit="ans" 
+                                                        min={4} 
+                                                        max={member.relation === 'child' ? 15 : 100} 
+                                                        value={member.age || 25} 
+                                                        onChange={(v) => updateMember(member.id, { age: v })} 
+                                                    />
+                                                    <BodySlider 
+                                                        label="Taille" 
+                                                        unit="cm" 
+                                                        min={120} 
+                                                        max={220} 
+                                                        value={member.height_cm || 170} 
+                                                        onChange={(v) => updateMember(member.id, { height_cm: v })} 
+                                                    />
+                                                    <BodySlider 
+                                                        label="Poids" 
+                                                        unit="kg" 
+                                                        min={15} 
+                                                        max={150} 
+                                                        value={member.weight_kg || 70} 
+                                                        onChange={(v) => updateMember(member.id, { weight_kg: v })} 
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Dietary Taste & Goal */}
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                                                <div className="space-y-3">
+                                                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Préférence Alimentaire</label>
                                                     <div className="relative">
                                                         <select 
                                                             className="w-full bg-white border-[1.5px] border-border rounded-2xl px-5 py-4 font-serif text-lg text-text-primary focus:border-primary outline-none cursor-pointer appearance-none shadow-sm"
                                                             value={member.taste_leaning || 'none'}
                                                             onChange={(e) => updateMember(member.id, { taste_leaning: e.target.value as any })}
                                                         >
-                                                            <option value="none">Standard Balanced</option>
-                                                            <option value="pescatarian">Pescatarian</option>
-                                                            <option value="plant_based">Plant-Based</option>
-                                                            <option value="meat_heavy">Meat Heavy</option>
+                                                            <option value="none">Équilibré Standard</option>
+                                                            <option value="pescatarian">Pescétarien</option>
+                                                            <option value="plant_based">Végétalien</option>
+                                                            <option value="meat_heavy">Riche en Viande</option>
                                                         </select>
                                                         <ChevronDown size={18} className="absolute right-5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            {/* Goal Section */}
-                                            <div className="space-y-4">
-                                                <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Primary Goal</label>
-                                                <div className="flex flex-wrap gap-3">
-                                                    {member.relation === 'child' ? (
-                                                        <div className="px-6 py-3 rounded-full border-[1.5px] border-accent/20 bg-accent/5 text-accent font-bold text-xs uppercase tracking-widest flex items-center gap-2">
-                                                            <Sparkles size={14} />
-                                                            Kids Balanced Nutrition
-                                                        </div>
-                                                    ) : (
-                                                        GOAL_OPTIONS.map((opt) => (
-                                                            <button
-                                                                key={opt.id}
-                                                                onClick={() => updateMember(member.id, { goal: opt.id })}
-                                                                className={`px-6 py-3 rounded-full border-[1.5px] text-xs font-bold uppercase tracking-widest transition-all ${
-                                                                    member.goal === opt.id
-                                                                        ? "bg-primary border-primary text-background shadow-md"
-                                                                        : "bg-white border-border text-text-muted hover:border-primary/30"
-                                                                }`}
-                                                            >
-                                                                {opt.label}
-                                                            </button>
-                                                        ))
-                                                    )}
+                                                <div className="space-y-3">
+                                                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Objectif Principal</label>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {member.relation === 'child' ? (
+                                                            <div className="w-full px-6 py-4 rounded-xl border-[1.5px] border-accent/20 bg-accent/5 text-accent font-bold text-xs uppercase tracking-widest flex items-center gap-3">
+                                                                <Sparkles size={16} />
+                                                                Nutrition Équilibrée (Enfant)
+                                                            </div>
+                                                        ) : (
+                                                            GOAL_OPTIONS.map((opt) => (
+                                                                <button
+                                                                    key={opt.id}
+                                                                    onClick={() => updateMember(member.id, { goal: opt.id })}
+                                                                    className={`px-4 py-3 rounded-xl border-[1.5px] text-[10px] font-bold uppercase tracking-widest transition-all ${
+                                                                        member.goal === opt.id
+                                                                            ? "bg-primary border-primary text-background shadow-md"
+                                                                            : "bg-white border-border text-text-muted hover:border-primary/30"
+                                                                    }`}
+                                                                >
+                                                                    {opt.label}
+                                                                </button>
+                                                            ))
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             {/* Logistics Section */}
                                             <div className="pt-10 border-t border-border space-y-6">
                                                 <div className="space-y-1">
-                                                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Delivery Locations</label>
-                                                    <p className="text-xs text-text-muted px-1">Select drop-off locations for {member.name.split(' ')[0]}</p>
+                                                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Lieux de Livraison</label>
+                                                    <p className="text-xs text-text-muted px-1">Sélectionnez les points de dépôt pour {member.name.split(' ')[0]}</p>
                                                 </div>
                                                 
                                                 <div className="flex flex-wrap gap-2">
@@ -208,7 +270,7 @@ export function FamilyPreferencesPage() {
                                                                         : "bg-white border-border text-text-muted hover:border-accent/30"
                                                                 }`}
                                                             >
-                                                                {tag}
+                                                                {LOCATION_LABELS[tag] || tag}
                                                             </button>
                                                         );
                                                     })}
@@ -230,25 +292,25 @@ export function FamilyPreferencesPage() {
                                                                         <div className="w-10 h-10 bg-accent/10 text-accent rounded-xl flex items-center justify-center">
                                                                             <MapPin size={20} strokeWidth={1.5} />
                                                                         </div>
-                                                                        <h4 className="font-serif text-lg text-text-primary capitalize">{loc.tag} Logistics</h4>
+                                                                        <h4 className="font-serif text-lg text-text-primary capitalize">Logistique: {LOCATION_LABELS[loc.tag] || loc.tag}</h4>
                                                                     </div>
                                                                 </div>
                                                                 
                                                                 <div className="space-y-6">
                                                                     <div className="space-y-2">
-                                                                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Exact Address</label>
+                                                                        <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Adresse Exacte</label>
                                                                         <input
                                                                             type="text"
                                                                             value={loc.address}
                                                                             onChange={(e) => updateLocationField(member.id, loc.tag, 'address', e.target.value)}
-                                                                            placeholder={`e.g., Suite 400 or Door Code...`}
+                                                                            placeholder={`ex: Appt 400, Code porte...`}
                                                                             className="w-full bg-background/50 border-[1.5px] border-border focus:border-primary focus:bg-white rounded-xl px-4 py-3 text-sm text-text-primary outline-none transition-all"
                                                                         />
                                                                     </div>
 
                                                                     <div className="space-y-3">
                                                                         <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
-                                                                            <Clock size={12} strokeWidth={2}/> Target Delivery Time
+                                                                            <Clock size={12} strokeWidth={2}/> Heure de Livraison Cible
                                                                         </label>
                                                                         <div className="flex flex-wrap gap-2">
                                                                             {TIME_SLOTS.map(slot => (
@@ -277,7 +339,7 @@ export function FamilyPreferencesPage() {
                                                             animate={{ opacity: 1 }}
                                                             className="text-xs text-accent font-bold uppercase tracking-widest text-center py-4 px-6 bg-accent/5 rounded-2xl border border-dashed border-accent/30"
                                                         >
-                                                            Please select at least one delivery location
+                                                            Veuillez sélectionner au moins un lieu de livraison
                                                         </motion.div>
                                                     )}
                                                 </div>
@@ -300,9 +362,15 @@ export function FamilyPreferencesPage() {
                         onClick={handleNext}
                         className="w-full h-16 rounded-full bg-primary text-background font-sans font-bold flex items-center justify-center gap-3 text-lg shadow-[0_15px_30px_-10px_rgba(44,62,45,0.4)] hover:bg-primary/90 transition-all uppercase tracking-widest"
                     >
-                        <span>Review Family Profile</span>
+                        <span>Vérifier le profil familial</span>
                         <ArrowRight size={20} />
                     </motion.button>
+                    <button 
+                        onClick={() => router.push("/onboarding/express")}
+                        className="w-full mt-4 py-2 text-text-muted hover:text-primary transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
+                    >
+                        <span>Trop fatigué ? Envoyez une note vocale</span>
+                    </button>
                 </div>
             </div>
         </div>

@@ -1,0 +1,27 @@
+dnf install vsftpd -y
+
+useradd userftp {1,2}
+
+echo userftp2 /etc/vsftpd/user_list
+
+vim /etc/vsftpd/vsftpd.conf
+
+anonymous_enable= NO
+userlist_enable=YES
+userlist_deny=YES
+local_user=YES
+chroot_local_user=YES
+allow_writeable_chroot=YES
+write_enable=YES
+
+
+firewall-cmd --add-service=ftp
+setsebool -P ftp_home_dir on
+
+==
+
+ftp -u userftp1 192.168.10.10
+get fileserver
+mget *
+
+--

@@ -370,9 +370,13 @@ export const useFamilyStore = create<FamilyState>()(
                     for (let i = 1; i < adults; i++) {
                         newMembers.push({
                             id: `adult-${i}-${Date.now()}`,
-                            name: `Adult ${i + 1}`,
+                            name: `Adulte ${i + 1}`,
                             relation: "partner",
                             avatar_color: "#B09AE0",
+                            age: 30,
+                            gender: "female",
+                            height_cm: 165,
+                            weight_kg: 65,
                             goal: "maintenance",
                             daily_kcal: 2000,
                             assigned_meal_ids: []
@@ -383,9 +387,13 @@ export const useFamilyStore = create<FamilyState>()(
                     for (let i = 0; i < children; i++) {
                         newMembers.push({
                             id: `child-${i}-${Date.now()}`,
-                            name: `Child ${i + 1}`,
+                            name: `Enfant ${i + 1}`,
                             relation: "child",
                             avatar_color: "#FFA07A",
+                            age: 10,
+                            gender: "female",
+                            height_cm: 140,
+                            weight_kg: 35,
                             goal: "balance",
                             daily_kcal: 1500,
                             assigned_meal_ids: []

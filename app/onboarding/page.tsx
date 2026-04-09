@@ -79,6 +79,26 @@ export default function OnboardingForkPage() {
                     </div>
                 </motion.button>
             </div>
+
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="w-full max-w-4xl text-center pt-8 border-t border-border/50"
+            >
+                <div className="bg-primary/5 p-8 rounded-[32px] border border-primary/10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="text-left space-y-2">
+                        <h3 className="font-serif text-2xl text-text-primary">Besoin d'aide ? On s'occupe de tout.</h3>
+                        <p className="text-text-muted text-sm">Trop fatigué pour remplir les formulaires ? Envoyez une note vocale ou appelez-nous.</p>
+                    </div>
+                    <button
+                        onClick={() => router.push("/onboarding/express")}
+                        className="px-8 py-4 bg-white border-2 border-primary text-primary font-bold rounded-full hover:bg-primary hover:text-white transition-all whitespace-nowrap"
+                    >
+                        Configuration Concierge
+                    </button>
+                </div>
+            </motion.div>
         </div>
     );
 }

@@ -1,0 +1,322 @@
+
+1. Serveur DNS (Master)
+
+
+Copier
+bash/conf
+ Installation et Démarrage
+dnf install bind bind-utils          
+systemctl enable --now named         
+.
+ Résolution Locale (/etc/resolv.conf)
+nameserver 127.0.0.1                 
+search ntic.ma                       
+.
+ Fichier de configuration principal (/etc/named.conf)
+options {                            
+    listen-on port 53 { 127.0.0.1; 192.168.10.252; }; 
+    allow-query { localhost; any; }; 
+};                                   
+.
+zone "ntic.ma" IN {                  
+    type master;                     
+    file "direct.ntic.ma";           
+};
+.
+zone "10.168.192.in-addr.arpa" IN {  
+    type master;                     
+    file "inverse.ntic.ma";          
+};
+.
+ Zone Directe (/var/named/direct.ntic.ma)
+$TTL 86400                           
+    IN  SOA srvdns1.ntic.ma. admin.ntic.ma. ( # Start of Authority
+        2026010101 ; Serial          
+        3600       ; Refresh         
+        1800       ; Retry           
+        604800     ; Expire          
+        86400 )    ; Minimum         
+.
+        IN  NS      srvdns1.ntic.ma. # Name Server
+        IN  MX  10  mail.ntic.ma.    # Serveur de messagerie (MX)
+.
+srvdns1 IN  A       192.168.10.252   
+ofppt   IN  CNAME   srvdns1          
+PC1     IN  A       192.168.10.10    
+www     IN  A       192.168.10.30    
+.
+ Zone Inverse (/var/named/inverse.ntic.ma)
+$TTL 86400                           
+    IN  SOA srvdns1.ntic.ma. admin.ntic.ma. ( # Start of Authority
+        2026010101 ; Serial          
+        3600       ; Refresh         
+        1800       ; Retry           
+        604800     ; Expire          
+        86400 )    ; Minimum         
+.
+    IN  NS  srvdns1.ntic.ma.         # Name Server pour la zone inverse
+252 IN  PTR srvdns1.ntic.ma.         
+10  IN  PTR PC1.ntic.ma.             
+30  IN  PTR www.ntic.ma.             
+.
+ Vérifications & Firewall
+firewall-cmd --permanent --add-service=dns 
+firewall-cmd --reload                
+named-checkconf                      
+named-checkzone ntic.ma /var/named/direct.ntic.ma 
+systemctl restart named              
+#
+2. DNS Esclave et DDNS
+
+
+Copier
+bash/conf
+ Réseau Slave (nmcli)
+nmcli con modify ens160 ipv4.method manual ipv4.addresses 192.168.10.5/24 ipv4.gateway 192.168.10.1 ipv4.dns "192.168.10.252 127.0.0.1" 
+nmcli con up ens160                  
+.
+ Résolution Slave (/etc/resolv.conf)
+nameserver 192.168.10.252            
+nameserver 127.0.0.1                 
+search ntic.ma                       
+.
+ Configuration du DNS Esclave (/etc/named.conf)
+zone "ntic.ma" IN {                  
+    type slave;                      
+    file "slaves/direct.ntic.ma.slave"; 
+    masters { 192.168.10.252; };     
+};
+.
+zone "10.168.192.in-addr.arpa" IN {  
+    type slave;                      
+    file "slaves/inverse.ntic.ma.slave"; 
+    masters { 192.168.10.252; };     
+};
+.
+ DDNS Côté DNS (/etc/named.conf sur le Master)
+zone "ntic.ma" IN {                  
+    allow-update { 192.168.10.x; };  
+};
+.
+ DDNS Côté DHCP (/etc/dhcp/dhcpd.conf)
+authoritative;                       
+ddns-updates on;                     
+ddns-update-style interim;           
+deny client-updates;                 
+.
+ddns-domainname "ntic.ma.";          
+ddns-rev-domainname "in-addr.arpa."; 
+.
+zone ntic.ma. {                      
+    primary 192.168.10.252;          
+}
+.
+zone 10.168.192.in-addr.arpa. {      
+    primary 192.168.10.252;          
+}
+#
+3. Serveur DHCP & Relais
+
+
+Copier
+bash/conf
+ Serveur DHCP
+dnf install dhcp-server              
+.
+ Configuration du subnet (/etc/dhcp/dhcpd.conf)
+subnet 192.168.10.0 netmask 255.255.255.0 { 
+    range 192.168.10.10 192.168.10.20; 
+    option routers 192.168.10.1;     
+    option domain-name-servers 8.8.8.8; 
+    option domain-name "ntic.local"; 
+    default-lease-time 2400;         
+    max-lease-time 7200;             
+}
+.
+ Réservation DHCP par MAC
+host client1 {                       
+    hardware ethernet 08:00:27:A1:B2:C3; 
+    fixed-address 192.168.10.50;     
+}
+.
+ DHCP-Relay (dhcrelay)
+cp /lib/systemd/system/dhcrelay.service /etc/systemd/system/ 
+systemctl daemon-reload              
+systemctl enable --now dhcrelay      
+.
+ Activation du Routage IPv4
+echo "net.ipv4.ip_forward = 1" > /etc/sysctl.d/99-ipforward.conf 
+sysctl -p /etc/sysctl.d/99-ipforward.conf 
+#
+4. SSH & RSA
+
+
+Copier
+bash/conf
+ Serveur SSH
+dnf install openssh-server openssh-clients 
+systemctl enable --now sshd          
+.
+ Configuration SSH sécurisée (/etc/ssh/sshd_config)
+ListenAddress 192.168.10.10          
+PermitRootLogin prohibit-password    
+.
+ Commandes Clientes
+ssh root@192.168.10.10               
+scp root@192.168.10.10:/root/test.txt . 
+scp /home/client/test.txt root@192.168.10.10:/root/ 
+.
+ Authentification par Clés RSA
+ssh-keygen -t rsa -b 2048 -C "root@192.168.10.10" 
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.10.10 
+.
+ Activation Clés côté Serveur (/etc/ssh/sshd_config)
+PubkeyAuthentication yes             
+AuthorizedKeysFile .ssh/authorized_keys 
+systemctl reload sshd                
+#
+5. Serveur Web Apache
+
+
+Copier
+bash/conf
+ Installation et Dossiers
+dnf install httpd                    
+mkdir -p /var/log/httpd/{afppt,ntic} 
+mkdir -p /var/www/html/site{1,2}     
+echo "<h1>Site AFPPT</h1>" > /var/www/html/site1/index.html 
+echo "<h1>Site NTIC</h1>" > /var/www/html/site2/index.html  
+.
+ Résolution locale (/etc/hosts)
+192.168.10.252 ntic.com www.ntic.com afppt.com www.afppt.com 
+.
+ Fichiers Vhosts (/etc/httpd/conf.d/vhost1.conf)
+<VirtualHost *:80>                   
+    ServerName afppt.com             
+    ServerAlias www.afppt.com        
+    ServerAdmin admin@ntic.ma        
+    DocumentRoot /var/www/html/site1 
+    ErrorLog /var/log/httpd/afppt/error.log 
+    CustomLog /var/log/httpd/afppt/access.log combined 
+</VirtualHost>                       
+#
+6. Postfix & NFS
+
+
+Copier
+bash/conf
+ Postfix (SMTP)
+dnf install postfix                  
+.
+ Configuration de main.cf (/etc/postfix/main.cf)
+myhostname = srvdns1.ntic.ma         
+mydomain = ntic.ma                   
+myorigin = $mydomain                 
+inet_interfaces = all                
+mynetworks = 192.168.10.0/24, 127.0.0.0/8 
+home_mailbox = Maildir/              
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain 
+.
+ Serveur NFS (Partage)
+dnf install nfs-utils                
+mkdir /ID-Sharing                    
+chmod 777 /ID-Sharing                
+.
+ Exporter le dossier (/etc/exports)
+/ID-Sharing 192.168.10.0/24(rw,sync) 
+.
+ Appliquer NFS
+exportfs -arv                        
+systemctl enable --now nfs-server    
+firewall-cmd --permanent --add-service={nfs,rpc-bind,mountd} 
+firewall-cmd --reload                
+.
+ Client NFS
+mkdir /IDData                        
+mount 192.168.10.5:/ID-Sharing /IDData 
+.
+ Montage Persistant (/etc/fstab)
+192.168.10.5:/ID-Sharing /IDData nfs defaults,_netdev 0 0 
+mount -a                             
+#
+7. Samba (SMB/CIFS)
+
+
+Copier
+bash/conf
+ Utilisateurs et Groupes
+groupadd groups                      
+useradd ahmed -g groups              
+smbpasswd -a ahmed                   
+.
+ Serveur Samba
+dnf install samba                    
+mkdir /id-data                       
+chown ahmed:groups /id-data          
+chmod 770 /id-data                   
+chcon -t samba_share_t /id-data      
+.
+ Configuration (/etc/samba/smb.conf)
+[PARTAGE_ID]                         
+    path = /id-data                  
+    writable = yes                   
+    valid users = ahmed              
+    hosts allow = 192.168.10.0/24    
+.
+ Démarrage Samba
+systemctl enable --now smb nmb       
+firewall-cmd --permanent --add-service=samba 
+.
+ Client Samba
+dnf install samba-client cifs-utils  
+smbclient //192.168.10.10/PARTAGE_ID -U ahmed 
+mkdir /ID-REP                        
+.
+ Credentials & Fstab
+echo "username=ahmed" > /root/.smbcredentials 
+chmod 600 /root/.smbcredentials      
+//192.168.10.10/PARTAGE_ID /ID-REP cifs credentials=/root/.smbcredentials,_netdev 0 0
+#
+8. FTP, Quotas & LVM
+
+
+Copier
+bash/conf
+ Serveur FTP (vsftpd)
+dnf install vsftpd -y                
+useradd userftp2                     
+echo "userftp2" >> /etc/vsftpd/user_list 
+.
+ Configuration vsftpd (/etc/vsftpd/vsftpd.conf)
+anonymous_enable=NO                  
+local_enable=YES                     
+write_enable=YES                     
+chroot_local_user=YES                
+allow_writeable_chroot=YES           
+userlist_enable=YES                  
+userlist_deny=NO                     
+.
+ SELinux FTP
+setsebool -P ftp_home_dir on         
+systemctl enable --now vsftpd        
+.
+ Disques et Quotas
+fdisk /dev/sdb                       
+mkfs.ext4 /dev/sdb1                  
+tune2fs -m 1 /dev/sdb1               
+UUID=[UUID] /mnt/data ext4 defaults,usrquota,grpquota 0 0 
+mount -a                             
+quotacheck -cumg /mnt/data           
+quotaon /mnt/data                    
+edquota -u userftp1                  
+.
+ LVM (Logical Volume Manager)
+pvcreate /dev/sdb2                   
+vgcreate vg-data /dev/sdb2           
+lvcreate -L 500M -n lv1 vg-data      
+mkfs.ext4 /dev/vg-data/lv1           
+.
+ Redimensionnement LVM
+lvextend -L +300M /dev/vg-data/lv1   
+resize2fs /dev/vg-data/lv1           
+La maîtrise exige la répétition

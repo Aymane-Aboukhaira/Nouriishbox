@@ -205,34 +205,7 @@ function SplitHeading({ text }: { text: string }) {
   );
 }
 
-// ─── Parallax illustration ────────────────────────────────────────────────────
-function ParallaxDeco({
-  label,
-  className,
-  speedY,
-  speedX = 0,
-}: {
-  label: string;
-  className: string;
-  speedY: number;
-  speedX?: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [0, speedY]);
-  const x = useTransform(scrollYProgress, [0, 1], [0, speedX]);
-
-  return (
-    <motion.div ref={ref} style={{ y, x }} className={`absolute pointer-events-none z-0 ${className}`}>
-      <div className="border border-dashed border-[#C4602A] flex items-center justify-center text-center p-2 opacity-25">
-        <span className="text-[9px] text-[#C4602A] font-bold capitalize tracking-wider">{label}</span>
-      </div>
-    </motion.div>
-  );
-}
+import { FloatingBackgroundIcons } from "./floating-background-icons";
 
 // ─── Main section ─────────────────────────────────────────────────────────────
 export function MenuSection({
@@ -267,12 +240,8 @@ export function MenuSection({
   return (
     <section id="menu" className="py-32 px-6 relative bg-[#F5F0E8] overflow-hidden">
 
-      {/* ── Parallax vegetable illustrations ── */}
-      <ParallaxDeco label="🥕 CARROT"  className="top-10 left-8 w-24 h-24"   speedY={-80} speedX={20}  />
-      <ParallaxDeco label="🍅 TOMATO"  className="bottom-32 left-24 w-32 h-32" speedY={60}  speedX={-15} />
-      <ParallaxDeco label="🌿 HERBS"   className="top-48 right-12 w-28 h-28"  speedY={-40} speedX={30}  />
-      <ParallaxDeco label="🧅 ONION"   className="bottom-16 right-20 w-20 h-20" speedY={50} speedX={-25} />
-      <ParallaxDeco label="🫑 PEPPER"  className="top-[55%] left-[45%] w-16 h-16" speedY={-90} speedX={10} />
+      {/* ── Random floating decorative icons ── */}
+      <FloatingBackgroundIcons count={25} />
 
       <div className="max-w-7xl mx-auto relative z-10">
 

@@ -13,10 +13,10 @@ interface Props {
 const COLORS = ["#6BC4A0", "#B09AE0", "#FFA07A", "#FFD3B6", "#93C5FD", "#FCD34D"];
 const RELATIONS: Relation[] = ["self", "partner", "child", "parent", "other"];
 const GOALS: {id: Goal; label: string}[] = [
-    {id: "maintenance", label: "Maintain"},
-    {id: "weight_loss", label: "Lose Weight"},
-    {id: "muscle_gain", label: "Build Muscle"},
-    {id: "balance", label: "Eat Cleaner"}
+    {id: "maintenance", label: "Maintien"},
+    {id: "weight_loss", label: "Perdre du poids"},
+    {id: "muscle_gain", label: "Prendre du muscle"},
+    {id: "balance", label: "Manger sain"}
 ];
 
 export function FamilyMemberModal({ isOpen, onClose, onAdd }: Props) {
@@ -29,14 +29,17 @@ export function FamilyMemberModal({ isOpen, onClose, onAdd }: Props) {
         if (!name.trim()) return;
         const color = COLORS[Math.floor(Math.random() * COLORS.length)];
         
+        // Ensure age is at least 4
+        const validAge = Math.max(4, age);
+        
         // Very basic TDEE dummy calculation for secondary members to get daily_kcal
         let kcal = 2000;
-        if (age < 12) kcal = 1600;
+        if (validAge < 12) kcal = 1600;
         if (goal === "weight_loss") kcal -= 300;
         if (goal === "muscle_gain") kcal += 300;
 
         onAdd({
-            name, relation, age, goal, daily_kcal: kcal, avatar_color: color
+            name, relation, age: validAge, goal, daily_kcal: kcal, avatar_color: color
         });
         
         setName("");
@@ -64,7 +67,7 @@ export function FamilyMemberModal({ isOpen, onClose, onAdd }: Props) {
                         className="fixed bottom-0 inset-x-0 bg-white rounded-t-3xl z-50 p-6 md:relative md:rounded-[20px] md:w-full md:max-w-md md:mx-auto md:my-auto md:top-20"
                     >
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="font-serif text-2xl text-[#2D2D2D]">Add Member</h3>
+                            <h3 className="font-serif text-2xl text-[#2D2D2D]">Ajouter un membre</h3>
                             <button onClick={onClose} className="p-2 rounded-full bg-[#F8F9FA] text-[#9C9C9C]">
                                 <X size={20} />
                             </button>
@@ -72,12 +75,12 @@ export function FamilyMemberModal({ isOpen, onClose, onAdd }: Props) {
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-[#9C9C9C] capitalize tracking-wider mb-2">First Name</label>
+                                <label className="block text-xs font-bold text-[#9C9C9C] capitalize tracking-wider mb-2">Prénom</label>
                                 <input
                                     type="text"
                                     value={name}
                                     onChange={e => setName(e.target.value)}
-                                    placeholder="e.g. Karim, Lina..."
+                                    placeholder="ex: Karim, Lina..."
                                     className="w-full px-4 py-3 bg-[#F8F9FA] rounded-xl border border-[#E5E7EB] focus:outline-none focus:border-[#6BC4A0] text-[#2D2D2D] font-medium"
                                 />
                             </div>
@@ -90,13 +93,17 @@ export function FamilyMemberModal({ isOpen, onClose, onAdd }: Props) {
                                         onChange={e => setRelation(e.target.value as Relation)}
                                         className="w-full px-4 py-3 bg-[#F8F9FA] rounded-xl border border-[#E5E7EB] focus:outline-none focus:border-[#6BC4A0] text-[#2D2D2D] font-medium appearance-none"
                                     >
-                                        {RELATIONS.map(r => <option key={r} value={r} className="capitalize">{r}</option>)}
+                                        <option value="partner">Partenaire</option>
+                                        <option value="child">Enfant</option>
+                                        <option value="parent">Parent</option>
+                                        <option value="other">Autre</option>
                                     </select>
                                 </div>
                                 <div className="w-24">
-                                    <label className="block text-xs font-bold text-[#9C9C9C] capitalize tracking-wider mb-2">Age</label>
+                                    <label className="block text-xs font-bold text-[#9C9C9C] capitalize tracking-wider mb-2">Âge</label>
                                     <input
                                         type="number"
+                                        min={4}
                                         value={age}
                                         onChange={e => setAge(parseInt(e.target.value))}
                                         className="w-full px-4 py-3 bg-[#F8F9FA] rounded-xl border border-[#E5E7EB] focus:outline-none focus:border-[#6BC4A0] text-[#2D2D2D] font-medium"
@@ -105,7 +112,7 @@ export function FamilyMemberModal({ isOpen, onClose, onAdd }: Props) {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold text-[#9C9C9C] capitalize tracking-wider mb-2">Goal</label>
+                                <label className="block text-xs font-bold text-[#9C9C9C] capitalize tracking-wider mb-2">Objectif</label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {GOALS.map(g => (
                                         <button
@@ -124,7 +131,7 @@ export function FamilyMemberModal({ isOpen, onClose, onAdd }: Props) {
                                 disabled={!name.trim()}
                                 className="w-full mt-6 py-4 rounded-full text-white font-bold bg-[#6BC4A0] disabled:bg-[#E5E7EB] disabled:text-[#9C9C9C] transition-colors"
                             >
-                                Save Profile
+                                Enregistrer le profil
                             </button>
                         </div>
                     </motion.div>

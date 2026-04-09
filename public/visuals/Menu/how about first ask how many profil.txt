@@ -1,0 +1,10 @@
+how about first ask how many profils (and show the options)(adults or childrens)
+each option can be incremented or subcremented 
+
+where to deliver for adults (home work campus gym)
+for childrens (home school)
+
+and how many meals in each place 
+
+then add theoption of calculating the macros to suggest the meal plan based on goal
+

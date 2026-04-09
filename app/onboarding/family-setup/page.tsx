@@ -25,7 +25,7 @@ export default function FamilySetupPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-4 block"
                 >
-                    Step 04
+                    Étape 04
                 </motion.span>
                 <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <Utensils size={32} strokeWidth={1.5} />
@@ -36,7 +36,7 @@ export default function FamilySetupPage() {
                     transition={{ delay: 0.1 }}
                     className="font-serif text-4xl lg:text-5xl text-text-primary mb-4"
                 >
-                    Who is at the table?
+                    Qui est à table ?
                 </motion.h1>
                 <motion.p 
                     initial={{ opacity: 0, y: 10 }}
@@ -44,7 +44,7 @@ export default function FamilySetupPage() {
                     transition={{ delay: 0.2 }}
                     className="text-text-muted text-lg font-sans max-w-md mx-auto"
                 >
-                    We'll help you plan meals for every seat in the house.
+                    Nous vous aiderons à planifier les repas pour chaque membre de la maison.
                 </motion.p>
             </div>
 
@@ -55,7 +55,7 @@ export default function FamilySetupPage() {
                     className="bg-white p-10 rounded-[32px] border-[1.5px] border-border shadow-[0_10px_30px_-10px_rgba(44,62,45,0.05)] transition-all hover:border-primary/30"
                 >
                     <div className="flex flex-col items-center gap-8">
-                        <span className="font-bold text-text-muted uppercase tracking-[0.2em] text-[10px]">Adults</span>
+                        <span className="font-bold text-text-muted uppercase tracking-[0.2em] text-[10px]">Adultes</span>
                         <div className="flex items-center gap-10">
                             <button
                                 onClick={() => setAdults(Math.max(1, adults - 1))}
@@ -80,7 +80,7 @@ export default function FamilySetupPage() {
                     className="bg-white p-10 rounded-[32px] border-[1.5px] border-border shadow-[0_10px_30px_-10px_rgba(44,62,45,0.05)] transition-all hover:border-accent/30"
                 >
                     <div className="flex flex-col items-center gap-8">
-                        <span className="font-bold text-text-muted uppercase tracking-[0.2em] text-[10px]">Children</span>
+                        <span className="font-bold text-text-muted uppercase tracking-[0.2em] text-[10px]">Enfants</span>
                         <div className="flex items-center gap-10">
                             <button
                                 onClick={() => setChildren(Math.max(0, children - 1))}
@@ -108,9 +108,15 @@ export default function FamilySetupPage() {
                         onClick={handleNext}
                         className="w-full h-16 rounded-full bg-primary text-background font-sans font-bold flex items-center justify-center gap-3 text-lg shadow-[0_15px_30px_-10px_rgba(44,62,45,0.4)] hover:bg-primary/90 transition-all uppercase tracking-widest"
                     >
-                        <span>Next Step</span>
+                        <span>Continuer</span>
                         <ArrowRight size={20} />
                     </motion.button>
+                    <button 
+                        onClick={() => router.push("/onboarding/express")}
+                        className="w-full mt-4 py-2 text-text-muted hover:text-primary transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
+                    >
+                        <span>Trop fatigué ? Envoyez une note vocale</span>
+                    </button>
                 </div>
             </div>
         </div>

@@ -11,19 +11,22 @@ export default function BodyMetricsPage() {
     const { profile, updateProfile } = useProfileStore();
 
     const [gender, setGender] = useState<"male" | "female">(profile.gender || "female");
-    const [age, setAge] = useState(profile.age || 30);
-    const [height, setHeight] = useState(profile.height_cm || 165);
-    const [weight, setWeight] = useState(profile.weight_kg || 65);
+    const [age, setAge] = useState(profile.age || 25);
+    const [height, setHeight] = useState(profile.height_cm || 170);
+    const [weight, setWeight] = useState(profile.weight_kg || 70);
     const [tdee, setTdee] = useState(0);
 
     // Calculate TDEE in real time
     useEffect(() => {
+        // Validation to prevent crazy values during manual entry
+        if (weight < 5 || height < 50 || age < 1) return;
+
         let bmr = 10 * weight + 6.25 * height - 5 * age;
         bmr += gender === "male" ? 5 : -161;
         
         // Base sedentary multiplier to show them a baseline
         const baseMultiplier = 1.2;
-        setTdee(Math.round(bmr * baseMultiplier));
+        setTdee(Math.max(1200, Math.round(bmr * baseMultiplier))); // Min floor for safety display
     }, [gender, age, height, weight]);
 
     const handleNext = () => {
@@ -86,9 +89,9 @@ export default function BodyMetricsPage() {
                 </div>
 
                 <div className="space-y-6">
-                    <BodySlider label="Âge" unit="ans" min={16} max={99} value={age} onChange={setAge} />
-                    <BodySlider label="Taille" unit="cm" min={140} max={220} value={height} onChange={setHeight} />
-                    <BodySlider label="Poids" unit="kg" min={40} max={150} value={weight} onChange={setWeight} />
+                    <BodySlider label="Âge" unit="ans" min={4} max={100} value={age} onChange={setAge} />
+                    <BodySlider label="Taille" unit="cm" min={120} max={250} value={height} onChange={setHeight} />
+                    <BodySlider label="Poids" unit="kg" min={15} max={250} value={weight} onChange={setWeight} />
                 </div>
                 
                 <motion.div 
@@ -117,6 +120,12 @@ export default function BodyMetricsPage() {
                     >
                         Continuer vers objectifs <ArrowRight size={20} />
                     </motion.button>
+                    <button 
+                        onClick={() => router.push("/onboarding/express")}
+                        className="w-full mt-4 py-2 text-text-muted hover:text-primary transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
+                    >
+                        <span>Trop fatigué ? Envoyez une note vocale</span>
+                    </button>
                 </div>
             </div>
         </div>

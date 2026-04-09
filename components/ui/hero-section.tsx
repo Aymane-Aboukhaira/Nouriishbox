@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Leaf, Flame, Truck, PauseCircle } from "lucide-react";
+import { FloatingBackgroundIcons } from "./floating-background-icons";
 
 // ─── Marquee content (duplicated so it truly loops seamlessly) ────────────────
 const TICKER =
@@ -43,6 +44,8 @@ export function HeroSection({ onStart }: HeroSectionProps) {
       ref={sectionRef}
       className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-[#F5F0E8]"
     >
+      {/* ── Random floating decorative icons ── */}
+      <FloatingBackgroundIcons count={16} />
       {/* ── Animated grain / noise texture overlay ── */}
       <div
         aria-hidden
