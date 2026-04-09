@@ -379,7 +379,7 @@ function DayColumn({
                 ref={setNodeRef}
                 animate={isEmptyUrgent ? { scale: [1, 1.02, 1] } : { scale: 1 }}
                 transition={isEmptyUrgent ? { repeat: Infinity, duration: 2 } : {}}
-                className={`flex flex-col gap-2 min-h-[500px] flex-1 w-full p-2.5 rounded-2xl transition-all relative ${!hasMeal && !isPaused ? 'cursor-pointer' : ''}`}
+                className={`flex flex-col gap-2 min-h-[120px] lg:min-h-[500px] flex-1 w-full p-2.5 rounded-2xl transition-all relative ${!hasMeal && !isPaused ? 'cursor-pointer' : ''}`}
                 onClick={() => { if (!hasMeal && !isPaused && !isConfirmed) onOpenAddDrawer(); }}
                 style={{
                     background: isPaused
@@ -486,6 +486,13 @@ export default function PlannerPage() {
     const liveMeal: Meal | undefined = selectedMeal ? meals.find(m => m.id === selectedMeal.mealId) : undefined;
 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    // Mobile: which day tab is currently active (0=Mon ... 6=Sun)
+    const [mobileDayIndex, setMobileDayIndex] = useState(() => {
+        const today = new Date().getDay(); // 0=Sun,1=Mon,...6=Sat
+        // Map JS day (0=Sun) to our Mon-indexed array (0=Mon)
+        const mapped = today === 0 ? 6 : today - 1;
+        return mapped;
+    });
 
     // ── Feature 2: Delivery assignment inline edit ────────────
     const [pendingAddress, setPendingAddress] = useState<{ pmId: string; location: DeliveryLocation; value: string } | null>(null);
@@ -978,8 +985,73 @@ export default function PlannerPage() {
                         </motion.button>
                     </motion.div>
                 ) : (
-                    // Kanban Grid
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3 lg:gap-4 overflow-x-auto pb-6 -mx-4 px-4 lg:mx-0 lg:px-0">
+                    // Mobile: tab-based day selector / Desktop: full 7-col kanban
+                    <>
+                        {/* -- MOBILE day pill tabs (hidden on lg+) -- */}
+                        <div className="lg:hidden mb-3">
+                            <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 hide-scrollbar">
+                                {Array.from({ length: 7 }, (_, i) => {
+                                    const hasMeal = activeMemberMeals.some(pm => pm.day_index === i);
+                                    const isPaused = plan.paused_days.includes(i);
+                                    const isActive = mobileDayIndex === i;
+                                    return (
+                                        <button
+                                            key={i}
+                                            onClick={() => setMobileDayIndex(i)}
+                                            className={`flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-2xl border-2 transition-all ${
+                                                isActive
+                                                    ? 'bg-[#6BC4A0] border-[#6BC4A0] text-white shadow-md'
+                                                    : hasMeal
+                                                        ? 'bg-white border-[#6BC4A0]/40 text-[#2D2D2D]'
+                                                        : isPaused
+                                                            ? 'bg-[#FFF8F4] border-[#E8D8CC] text-[#9C9C9C]'
+                                                            : 'bg-white border-[#F0E4D8] text-[#9C9C9C]'
+                                            }`}
+                                        >
+                                            <span className="text-base leading-none">{DAY_EMOJIS[i]}</span>
+                                            <span className="text-[9px] font-bold uppercase tracking-wide leading-none">
+                                                {DAY_LABELS[i].substring(0, 3)}
+                                            </span>
+                                            <div className={`w-1.5 h-1.5 rounded-full mt-0.5 ${
+                                                hasMeal ? (isActive ? 'bg-white' : 'bg-[#6BC4A0]') : 'bg-transparent'
+                                            }`} />
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* -- MOBILE: single active day column -- */}
+                        <div className="lg:hidden">
+                            <DayColumn
+                                dayIndex={mobileDayIndex}
+                                dayKey={DAY_KEYS[mobileDayIndex]}
+                                dayLabel={DAY_LABELS[mobileDayIndex]}
+                                dayEmoji={DAY_EMOJIS[mobileDayIndex]}
+                                plannedMeals={activeMemberMeals.filter(pm => pm.day_index === mobileDayIndex)}
+                                meals={meals}
+                                profile={profile}
+                                isPaused={plan.paused_days.includes(mobileDayIndex)}
+                                isConfirmed={plan.confirmed}
+                                urgencyHours={urgencyHours}
+                                newlyAddedIds={newlyAddedIds}
+                                onTogglePause={() => togglePauseDay(mobileDayIndex)}
+                                onRemoveMeal={(id) => removeMealFromDay(id)}
+                                onDuplicateMeal={(meal) => {
+                                    setDuplicateMeal(meal);
+                                    setActiveDrawerDay(null);
+                                    setDrawerMode('duplicate');
+                                }}
+                                onOpenAddDrawer={() => {
+                                    setActiveDrawerDay(DAY_KEYS[mobileDayIndex]);
+                                    setDrawerMode('add');
+                                }}
+                                onCardClick={(meal, pmId) => setSelectedMeal({ mealId: meal.id, pmId })}
+                            />
+                        </div>
+
+                        {/* -- DESKTOP: full 7-col kanban grid -- */}
+                        <div className="hidden lg:grid lg:grid-cols-7 gap-4">
                             {Array.from({ length: 7 }, (_, i) => (
                                 <DayColumn
                                     key={i}
@@ -1009,6 +1081,7 @@ export default function PlannerPage() {
                                 />
                             ))}
                         </div>
+                    </>
                 )}
             </div>
 
