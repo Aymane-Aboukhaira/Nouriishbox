@@ -50,7 +50,7 @@ export default function DashboardPage() {
     const dayOfWeek = now.getDay();
     const isSundayEvening = dayOfWeek === 0 && hours >= 17;
 
-    const firstName = profile.name ? profile.name.split(" ")[0] : "Welcome";
+    const firstName = profile.name ? profile.name.split(" ")[0] : "Bienvenue";
     const targets = { kcal: profile.targets?.kcal || 2000, protein_g: profile.targets?.protein_g || 150, carbs_g: profile.targets?.carbs_g || 200, fats_g: profile.targets?.fats_g || 65 };
 
     // Derived helpers
@@ -83,35 +83,35 @@ export default function DashboardPage() {
     const emptyDays = getEmptyPlannerDays();
 
     // Feature 1: Greeting
-    let timeGreeting = "Good afternoon";
-    if (hours >= 5 && hours < 12) timeGreeting = "Good morning";
-    else if (hours >= 17 && hours < 22) timeGreeting = "Good evening";
-    else if (hours >= 22 || hours < 5) timeGreeting = "Still up,";
+    let timeGreeting = "Bon après-midi";
+    if (hours >= 5 && hours < 12) timeGreeting = "Bonjour";
+    else if (hours >= 17 && hours < 22) timeGreeting = "Bonsoir";
+    else if (hours >= 22 || hours < 5) timeGreeting = "Encore debout,";
 
-    let contextSubline = "Here's your nutrition picture for today.";
+    let contextSubline = "Voici votre bilan nutritionnel pour aujourd'hui.";
     const hasNext3DaysEmpty = emptyDays.some(d => d <= 3);
     const isWednesdayAfter18 = dayOfWeek === 3 && hours >= 18; // 3 is Wednesday
 
     if (hasNext3DaysEmpty && isWednesdayAfter18) {
-        contextSubline = "Thursday cutoff is in a few hours — you have empty slots.";
+        contextSubline = "La limite de jeudi est dans quelques heures — vous avez des créneaux vides.";
     } else if (plan.planned_meals.length === 0) {
-        contextSubline = "Your week isn't planned yet. Let's build it — takes 2 minutes.";
+        contextSubline = "Votre semaine n'est pas encore planifiée. Construisons-la — cela prend 2 minutes.";
     } else if (consumed.kcal === 0 && hours > 9) {
-        contextSubline = "You haven't logged a meal yet today. Your first meal is waiting.";
+        contextSubline = "Vous n'avez pas encore enregistré de repas aujourd'hui. Votre premier repas vous attend.";
     } else if (consumed.protein_g < targets.protein_g * 0.3 && hours > 14) {
         const gap = Math.round(targets.protein_g - consumed.protein_g);
-        contextSubline = `You're ${gap}g behind on protein — a quick high-protein snack would fix it.`;
+        contextSubline = `Il vous manque ${gap}g de protéines — une collation riche en protéines réglerait cela.`;
     } else if (points.streak > 0) {
-        contextSubline = `Day ${points.streak} of your streak — keep it going.`;
+        contextSubline = `Jour ${points.streak} de votre série — continuez.`;
     }
 
     // Goal Chip
     let goalChip = null;
     switch(profile.goal) {
-        case "weight_loss": goalChip = { text: "Cutting", icon: TrendingDown, color: "#FFA07A" }; break;
-        case "muscle_gain": goalChip = { text: "Bulking", icon: TrendingUp, color: "#6BC4A0" }; break;
-        case "maintenance": goalChip = { text: "Maintaining", icon: Minus, color: "#B09AE0" }; break;
-        default: goalChip = { text: "Clean eating", icon: Leaf, color: "#6BC4A0" }; break;
+        case "weight_loss": goalChip = { text: "Brûler les graisses", icon: TrendingDown, color: "#FFA07A" }; break;
+        case "muscle_gain": goalChip = { text: "Prendre de la masse", icon: TrendingUp, color: "#6BC4A0" }; break;
+        case "maintenance": goalChip = { text: "Maintien", icon: Minus, color: "#B09AE0" }; break;
+        default: goalChip = { text: "Alimentation saine", icon: Leaf, color: "#6BC4A0" }; break;
     }
 
     // Feature 2: Insight Strip
@@ -119,33 +119,33 @@ export default function DashboardPage() {
     if ((targets.protein_g - consumed.protein_g) > 20) {
         insights.push({
             id: 'protein', color: '#B09AE0', icon: Dumbbell,
-            title: `${Math.round(targets.protein_g - consumed.protein_g)}g protein to go`,
-            sub: 'Add a high-protein meal to close the gap',
-            cta: { label: 'Find meals', href: '/client/menu?filter=high-protein' }
+            title: `${Math.round(targets.protein_g - consumed.protein_g)}g de protéines restantes`,
+            sub: "Ajoutez un repas riche en protéines pour combler l'écart",
+            cta: { label: 'Trouver des repas', href: '/client/menu?filter=high-protein' }
         });
     }
     if (points.streak > 2 && consumed.kcal === 0 && hours > 16) {
         insights.push({
             id: 'streak', color: '#FFA07A', icon: Flame,
-            title: `${points.streak}-day streak at risk`,
-            sub: 'Log a meal before midnight to keep it alive',
-            cta: { label: 'Log now', action: 'scroll' }
+            title: `Série de ${points.streak} jours en danger`,
+            sub: 'Enregistrez un repas avant minuit pour la maintenir',
+            cta: { label: 'Enregistrer', action: 'scroll' }
         });
     }
     if (emptyDays.length > 0) {
         insights.push({
             id: 'empty', color: '#6BC4A0', icon: Calendar,
-            title: `${emptyDays.length} day${emptyDays.length > 1 ? 's' : ''} unplanned this week`,
-            sub: emptyDays.length === 1 ? 'A day has no meals attached' : 'Some days are still empty',
-            cta: { label: 'Open planner', href: '/client/planner' }
+            title: `${emptyDays.length} jour${emptyDays.length > 1 ? 's' : ''} non planifié${emptyDays.length > 1 ? 's' : ''} cette semaine`,
+            sub: emptyDays.length === 1 ? "Un jour n'a pas de repas" : 'Certains jours sont encore vides',
+            cta: { label: 'Ouvrir le planificateur', href: '/client/planner' }
         });
     }
     const pctCal = consumed.kcal / targets.kcal;
     if (pctCal >= 0.85 && pctCal <= 1.05) {
         insights.push({
             id: 'ontrack', color: '#F59E0B', icon: Trophy,
-            title: 'On track today',
-            sub: `${Math.round(pctCal * 100)}% of your calorie target reached`,
+            title: "En bonne voie aujourd'hui",
+            sub: `${Math.round(pctCal * 100)}% de votre objectif calorique atteint`,
             cta: null
         });
     }
@@ -154,8 +154,8 @@ export default function DashboardPage() {
     if (topInsights.length === 0) {
         topInsights.push({
             id: 'perfect', color: '#F59E0B', icon: Trophy,
-            title: "You're nailing it today",
-            sub: "All targets on track. Keep going.",
+            title: "Vous assurez aujourd'hui",
+            sub: "Tous les objectifs sont en bonne voie. Continuez.",
             cta: null
         });
     }
@@ -179,7 +179,7 @@ export default function DashboardPage() {
     const isCutoffUrgent = emptyDays.length > 0 && msUntilCutoff < 86400000;
     const isDeliveryTomorrow = msUntilCutoff < 172800000 && msUntilCutoff > 86400000 && emptyDays.length === 0;
 
-    const deliveryDateName = new Intl.DateTimeFormat('en-GB', { weekday: 'long' }).format(deliveryDate);
+    const deliveryDateName = new Intl.DateTimeFormat('fr-FR', { weekday: 'long' }).format(deliveryDate);
 
     // Feature 7: Summary
     const daysPlannedCount = 7 - emptyDays.length;
@@ -198,7 +198,7 @@ export default function DashboardPage() {
         // Show +10 animation toast
         toast.custom((t) => (
             <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex items-center gap-2 bg-[#F59E0B] text-white px-4 py-2 rounded-xl shadow-lg border-2 border-[#D97706] font-bold">
-                <Star size={18} className="fill-white" /> +10 Points Earned!
+                <Star size={18} className="fill-white" /> +10 Points Gagnés !
             </motion.div>
         ));
     };
@@ -281,12 +281,12 @@ export default function DashboardPage() {
                                 <Truck size={20} className={isCutoffUrgent ? "text-[#FF6B6B] animate-pulse" : (isDeliveryTomorrow ? "text-[#FFA07A]" : "text-[#6BC4A0]")} />
                             </div>
                             <div>
-                                <h4 className="text-xs font-bold capitalize tracking-wide text-[#9C9C9C] mb-0.5">Next delivery</h4>
+                                <h4 className="text-xs font-bold capitalize tracking-wide text-[#9C9C9C] mb-0.5">Prochaine livraison</h4>
                                 {isCutoffUrgent ? (
-                                    <p className="font-semibold text-[#FF6B6B] text-sm"><Link href="/client/planner" className="underline hover:text-[#E05252]">{emptyDays.length} days unplanned — confirm before midnight →</Link></p>
+                                    <p className="font-semibold text-[#FF6B6B] text-sm"><Link href="/client/planner" className="underline hover:text-[#E05252]">{emptyDays.length} jours non planifiés — confirmez avant minuit →</Link></p>
                                 ) : (
                                     <p className={`font-semibold text-sm ${isDeliveryTomorrow ? 'text-[#FFA07A]' : 'text-[#2D2D2D]'}`}>
-                                        {isDeliveryTomorrow ? 'Arriving tomorrow — plan confirmed' : `${deliveryDateName}, 7am–12pm`}
+                                        {isDeliveryTomorrow ? 'Arrive demain — plan confirmé' : `${deliveryDateName}, 7h–12h`}
                                     </p>
                                 )}
                             </div>
@@ -295,7 +295,7 @@ export default function DashboardPage() {
                         <div className="flex items-center border border-[#E8E0D8]/50 bg-[#F8F5F2] rounded-xl overflow-hidden divide-x divide-[#E8E0D8]/50">
                             <div className="px-3 py-1.5 flex flex-col items-center min-w-[48px]">
                                 <span className="font-bold text-[#6B6B6B] font-mono leading-none">{String(hoursLeft).padStart(2, '0')}</span>
-                                <span className="text-[9px] text-[#9C9C9C] capitalize font-bold mt-0.5">Hrs</span>
+                                <span className="text-[9px] text-[#9C9C9C] capitalize font-bold mt-0.5">Heures</span>
                             </div>
                             <div className="px-3 py-1.5 flex flex-col items-center min-w-[48px]">
                                 <span className="font-bold text-[#6B6B6B] font-mono leading-none">{String(minutesLeft).padStart(2, '0')}</span>
@@ -394,17 +394,17 @@ export default function DashboardPage() {
                                     <path d="M40 20C40 20 44 16 44 12C44 8 40 4 40 4" stroke="#6BC4A0" strokeWidth="3" strokeLinecap="round"/>
                                 </svg>
                                 <h3 className="font-serif text-2xl text-[#2D2D2D] mb-1">
-                                    {profile.goal === 'weight_loss' ? "Your calorie budget is still open today" :
-                                     profile.goal === 'muscle_gain' ? "Fuel your muscles — nothing planned yet" :
-                                     profile.goal === 'maintenance' ? "A clean slate — what are you eating today?" :
-                                     "Fresh start — let's fill today with good food"}
+                                    {profile.goal === 'weight_loss' ? "Votre budget calorique est encore ouvert aujourd'hui" :
+                                     profile.goal === 'muscle_gain' ? "Nourrissez vos muscles — rien de prévu pour le moment" :
+                                     profile.goal === 'maintenance' ? "Une ardoise vierge — que mangez-vous aujourd'hui ?" :
+                                     "Nouveau départ — remplissons cette journée de bons plats"}
                                 </h3>
                                 <p className="text-[#6B6B6B] text-sm mb-6">
-                                    We'll suggest meals matched to your {profile.goal === 'muscle_gain' ? 'protein' : profile.goal === 'weight_loss' ? 'calories' : 'balanced'} target.
+                                    Nous suggérerons des repas adaptés à votre cible de {profile.goal === 'muscle_gain' ? 'protéines' : profile.goal === 'weight_loss' ? 'calories' : 'macros équilibrés'}.
                                 </p>
                                 <Link href="/client/menu?filter=today-match">
                                     <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="bg-[#6BC4A0] px-6 py-2.5 rounded-full text-white font-bold text-sm shadow-[0_4px_16px_rgba(107,196,160,0.3)]">
-                                        Find meals for today →
+                                        Trouver des repas pour aujourd'hui →
                                     </motion.button>
                                 </Link>
                             </div>
@@ -438,10 +438,10 @@ export default function DashboardPage() {
                                                     onClick={() => mappedPlanner && handleEatMeal(meal, mappedPlanner.id)}
                                                     className="opacity-0 group-hover:opacity-100 text-xs font-semibold text-[#6BC4A0] border border-[#A8E6CF] px-4 py-2 rounded-xl transition-all hover:bg-[#F1FAF4]"
                                                 >
-                                                    Eat
+                                                    Manger
                                                 </button>
                                             ) : (
-                                                <div className="text-xs font-bold text-[#9C9C9C] px-3">Eaten ✓</div>
+                                                <div className="text-xs font-bold text-[#9C9C9C] px-3">Mangé ✓</div>
                                             )}
                                         </motion.div>
                                     );
@@ -508,25 +508,25 @@ export default function DashboardPage() {
                             className="w-full bg-[#B09AE0]/5 border border-[#B09AE0]/20 rounded-[20px] p-6 md:p-8 relative"
                         >
                             <button onClick={() => setHideWeeklySummary(true)} className="absolute top-6 right-6 p-1 text-[#9C9C9C] hover:text-[#2D2D2D] transition-colors"><X size={16} /></button>
-                            <h2 className="font-serif text-2xl text-[#2D2D2D] mb-6">Your week in review</h2>
+                            <h2 className="font-serif text-2xl text-[#2D2D2D] mb-6">Votre semaine en revue</h2>
                             
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                                 <div className="bg-white rounded-xl p-4 shadow-sm">
-                                    <p className="text-xs font-bold text-[#9C9C9C] capitalize tracking-wide mb-1">Planning</p>
-                                    <p className="text-2xl font-bold text-[#2D2D2D]">{daysPlannedCount}<span className="text-[#9C9C9C] text-lg font-medium">/7 days</span></p>
+                                    <p className="text-xs font-bold text-[#9C9C9C] capitalize tracking-wide mb-1">Planification</p>
+                                    <p className="text-2xl font-bold text-[#2D2D2D]">{daysPlannedCount}<span className="text-[#9C9C9C] text-lg font-medium">/7 jours</span></p>
                                 </div>
                                 <div className="bg-white rounded-xl p-4 shadow-sm">
-                                    <p className="text-xs font-bold text-[#9C9C9C] capitalize tracking-wide mb-1">Calories Hit</p>
+                                    <p className="text-xs font-bold text-[#9C9C9C] capitalize tracking-wide mb-1">Calories Atteintes</p>
                                     <p className="text-2xl font-bold text-[#2D2D2D]">{Math.round((avgCal / targets.kcal) * 100)}%</p>
                                     <p className="text-xs text-[#9C9C9C] font-mono mt-0.5">({avgCal}/{targets.kcal})</p>
                                 </div>
                                 <div className="bg-white rounded-xl p-4 shadow-sm">
-                                    <p className="text-xs font-bold text-[#9C9C9C] capitalize tracking-wide mb-1">Best Streak</p>
-                                    <p className="text-2xl font-bold text-[#2D2D2D]">{points.streak} <span className="text-[#9C9C9C] text-lg font-medium">days</span></p>
+                                    <p className="text-xs font-bold text-[#9C9C9C] capitalize tracking-wide mb-1">Meilleure Série</p>
+                                    <p className="text-2xl font-bold text-[#2D2D2D]">{points.streak} <span className="text-[#9C9C9C] text-lg font-medium">jours</span></p>
                                 </div>
                             </div>
                             <p className="text-[#6B6B6B] italic text-sm font-sans">
-                                New week starts tomorrow — your next box is being prepared.
+                                Une nouvelle semaine commence demain — votre prochaine box est en cours de préparation.
                             </p>
                         </motion.section>
                     )}
@@ -550,7 +550,7 @@ export default function DashboardPage() {
                             >
                                 <X size={20} />
                             </button>
-                            <p className="text-xs font-semibold text-[#9C9C9C] text-center mb-4 capitalize tracking-wider mt-2">How was {ratingMeal.meal.name}?</p>
+                            <p className="text-xs font-semibold text-[#9C9C9C] text-center mb-4 capitalize tracking-wider mt-2">Comment était {ratingMeal.meal.name} ?</p>
                             
                             <div className="flex justify-center gap-2 mb-6">
                                 {[1, 2, 3, 4, 5].map((star, i) => (
@@ -566,7 +566,7 @@ export default function DashboardPage() {
                             </div>
 
                             <div className="flex justify-center gap-3 mb-8">
-                                {["😋 Delicious", "😊 Satisfied", "😐 Still hungry"].map((r, i) => (
+                                {["😋 Délicieux", "😊 Satisfait", "😐 Encore faim"].map((r, i) => (
                                     <button key={i} className="px-4 py-2 rounded-full border border-[#E8E0D8] text-sm font-bold text-[#2D2D2D] hover:border-[#6BC4A0] hover:bg-[#F1FAF4] hover:text-[#2F8B60] transition-colors focus:ring-2 focus:ring-[#6BC4A0]/20">
                                         {r}
                                     </button>
@@ -575,14 +575,14 @@ export default function DashboardPage() {
 
                             <div className="flex items-center justify-between gap-4">
                                 <button onClick={() => setShowRatingSheet(false)} className="text-sm font-bold text-[#9C9C9C] hover:text-[#2D2D2D] px-4 py-3 underline underline-offset-4">
-                                    Skip this survey
+                                    Ignorer ce sondage
                                 </button>
                                 <motion.button 
                                     whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                                     onClick={handleRatingSubmit} 
                                     className="bg-[#6BC4A0] px-8 py-3 rounded-full text-white font-bold shadow-[0_4px_16px_rgba(107,196,160,0.3)] relative overflow-hidden"
                                 >
-                                    Done +10 pts →
+                                    Terminé +10 pts →
                                 </motion.button>
                             </div>
                         </motion.div>

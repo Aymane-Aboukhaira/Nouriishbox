@@ -63,7 +63,7 @@ function DraggableOrderCard({ order }: { order: Order }) {
             {/* Meal info */}
             <div className="mb-2">
                 <p className="text-sm font-semibold text-[#2D2D2D] mb-1">
-                    {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                    {order.items.length} {order.items.length === 1 ? 'article' : 'articles'}
                 </p>
                 <div className="text-[10px] text-text-muted truncate max-w-[180px]">
                     {order.items.map(i => `${i.quantity}x ${i.meal_name}`).join(', ')}
@@ -234,7 +234,7 @@ export default function AdminOrdersPage() {
                                     </div>
                                     <span className="text-[11px] font-bold text-[#9C9C9C]">#{activeOrder.id.split('-').pop()?.toUpperCase()}</span>
                                 </div>
-                                <p className="text-sm font-semibold text-[#2D2D2D]">{activeOrder.items.length} Items</p>
+                                <p className="text-sm font-semibold text-[#2D2D2D]">{activeOrder.items.length} Articles</p>
                                 <p className="text-xs text-[#6B6B6B]">{activeOrder.user_name}</p>
                             </div>
                         )}

@@ -1,97 +1,107 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { motion, useInView, useAnimation } from "framer-motion";
-import { ArrowRight, Truck } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { motion, useInView, useMotionValue, useTransform, animate } from "framer-motion";
+import { Truck, ArrowRight } from "lucide-react";
 
-interface StepProps {
-    number: string;
-    title: string;
-    description: string;
-    index: number;
-}
-
-function PricingStep({ number, title, description, index }: StepProps) {
+function PricingStep({ number, title, desc, index }: { number: string; title: string; desc: string; index: number }) {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: "-100px" });
 
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="group relative py-12 lg:py-16"
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 1, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="group relative py-12 overflow-hidden w-full"
         >
-            <div className="flex flex-col md:flex-row md:items-start gap-8 lg:gap-16">
-                {/* Clean Solid Terracotta Step Number */}
-                <span className="font-serif text-7xl lg:text-8xl text-accent font-bold leading-none select-none">
-                    {number}
-                </span>
-
-                <div className="flex-1 space-y-4">
-                    <h3 className="font-serif text-3xl lg:text-4xl text-text-primary font-semibold italic">
-                        {title}
-                    </h3>
-                    <p className="font-sans text-text-muted text-lg lg:text-xl max-w-lg leading-relaxed">
-                        {description}
-                    </p>
-                </div>
-            </div>
-
-            {/* Animated Divider line */}
+            {/* The absolute horizontal separator line for the step */}
             <motion.div 
                 initial={{ scaleX: 0 }}
                 animate={isInView ? { scaleX: 1 } : {}}
-                transition={{ duration: 1.5, delay: 0.3 + index * 0.1, ease: "easeInOut" }}
-                className="absolute bottom-0 left-0 w-full h-[1px] bg-border origin-left"
+                transition={{ duration: 1.5, delay: 0.3 + index * 0.15, ease: "easeInOut" }}
+                className="absolute bottom-0 left-0 w-full h-[1px] bg-border origin-left rtl:origin-right"
             />
+
+            <div className="flex flex-col md:flex-row md:items-start gap-4 lg:gap-10 w-full relative z-10 items-start">
+                
+                {/* HUGE Terracotta Number */}
+                <span 
+                    className="font-serif text-accent font-bold leading-none select-none shrink-0 tracking-tighter"
+                    style={{ fontSize: '150px', marginTop: '-15px' }}
+                >
+                    {number}
+                </span>
+
+                <div className="flex-1 space-y-2 mt-2">
+                    <h3 
+                        className="font-serif text-text-primary font-bold tracking-tight"
+                        style={{ fontSize: '36px' }}
+                    >
+                        {title}
+                    </h3>
+                    <p 
+                        className="font-sans text-text-muted leading-relaxed"
+                        style={{ fontSize: '18px' }}
+                    >
+                        {desc}
+                    </p>
+                </div>
+            </div>
         </motion.div>
     );
 }
 
 function DiscountRow({ label, discount, delay }: { label: string, discount: string, delay: number }) {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true });
+    const isInView = useInView(ref, { once: true, margin: "-50px" });
 
     return (
         <motion.div 
             ref={ref}
-            initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.4 + delay, duration: 0.8 }}
-            className="flex items-center justify-between gap-6 py-5"
+            initial={{ opacity: 0, x: -20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ delay: 0.4 + delay, duration: 0.8, ease: "easeOut" }}
+            className="flex items-center justify-between py-1.5 w-full"
         >
-            <span className="font-sans text-base lg:text-lg tracking-widest text-[#F5F0E8]/80 uppercase font-bold">
+            <span 
+                className="font-sans uppercase font-medium whitespace-nowrap tracking-widest"
+                style={{ fontSize: '15px', color: '#F5F0E8', opacity: 0.8 }}
+            >
                 {label}
             </span>
             
             {/* Dashed Line Animation */}
-            <div className="flex-1 h-[1px] relative overflow-hidden">
-                <svg width="100%" height="1" className="absolute inset-0">
-                    <motion.line 
-                        x1="0" y1="0.5" x2="100%" y2="0.5"
+            <div className="flex-1 mx-4 lg:mx-6 flex items-center h-[2px]">
+                <motion.svg 
+                    width="100%" 
+                    height="2" 
+                    initial={{ clipPath: "inset(0 100% 0 0)" }}
+                    animate={isInView ? { clipPath: "inset(0 0% 0 0)" } : {}}
+                    transition={{ duration: 1.2, delay: 0.6 + delay, ease: [0.22, 1, 0.36, 1] }}
+                >
+                    <line 
+                        x1="0" y1="1" x2="100%" y2="1"
                         stroke="#F5F0E8"
-                        strokeWidth="1.5"
-                        strokeDasharray="6 6"
-                        strokeOpacity="0.3"
-                        initial={{ pathLength: 0 }}
-                        animate={isInView ? { pathLength: 1 } : { pathLength: 0 }}
-                        transition={{ duration: 1.2, delay: 0.6 + delay }}
+                        strokeWidth="2"
+                        strokeDasharray="4 6"
+                        strokeOpacity="0.4"
                     />
-                </svg>
+                </motion.svg>
             </div>
 
             <motion.span 
-                initial={{ scale: 0 }}
-                animate={isInView ? { scale: 1 } : {}}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={isInView ? { scale: 1, opacity: 1 } : {}}
                 transition={{ 
                     type: "spring", 
-                    stiffness: 260, 
-                    damping: 20, 
+                    stiffness: 350, 
+                    damping: 25, 
                     delay: 0.8 + delay 
                 }}
-                className="bg-accent text-[#F5F0E8] px-5 py-2 rounded-full text-xs lg:text-sm font-black tracking-[0.1em]"
+                className="bg-accent rounded-full font-bold tracking-widest tabular-nums shrink-0"
+                style={{ fontSize: '14px', color: '#FFFFFF', padding: '6px 14px' }}
             >
                 {discount}
             </motion.span>
@@ -106,154 +116,186 @@ export function PricingSection() {
     const cardRef = useRef(null);
     const isCardInView = useInView(cardRef, { once: true, margin: "-100px" });
 
-    const [price, setPrice] = useState(0);
+    const count = useMotionValue(0);
+    const rounded = useTransform(count, Math.round);
 
     useEffect(() => {
         if (isCardInView) {
-            let start = 0;
-            const target = 55;
-            const duration = 1500;
-            const increment = target / (duration / 16);
-            
-            const timer = setInterval(() => {
-                start += increment;
-                if (start >= target) {
-                    setPrice(target);
-                    clearInterval(timer);
-                } else {
-                    setPrice(Math.floor(start));
-                }
-            }, 16);
-            return () => clearInterval(timer);
+            const controls = animate(count, 55, { duration: 2, ease: "easeOut", delay: 0.2 });
+            return controls.stop;
         }
-    }, [isCardInView]);
+    }, [isCardInView, count]);
 
-    const titleWords = "Simple et Transparent.".split(" ");
+    const titleWords = 'Simple et Transparent.'.split(" ");
 
     return (
-        <section id="pricing" className="py-32 lg:py-48 px-6 bg-[#F5F0E8] border-y border-border overflow-hidden">
-            <div className="max-w-7xl mx-auto">
+        <section id="pricing" className="py-24 lg:py-40 px-6 border-y border-border overflow-hidden relative" style={{ backgroundColor: '#F5F0E8' }}>
+            <div className="max-w-7xl mx-auto relative z-10">
                 
                 {/* Heading Area */}
-                <div ref={headingRef} className="mb-24 lg:mb-32">
-                    <motion.span 
-                        initial={{ opacity: 0, y: 10 }}
+                <div ref={headingRef} className="mb-20 lg:mb-28 w-full">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 15 }}
                         animate={isHeadingInView ? { opacity: 1, y: 0 } : {}}
-                        className="inline-block text-[10px] font-black text-accent uppercase tracking-[0.4em] mb-4"
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="inline-block mb-6"
                     >
-                        Tarification
-                    </motion.span>
-                    <h2 className="font-serif text-5xl lg:text-8xl text-text-primary mb-8 tracking-tight leading-[0.9]">
+                        <span className="text-sm font-bold text-accent uppercase tracking-[0.2em]">
+                            TARIFICATION
+                        </span>
+                    </motion.div>
+                    
+                    <h2 
+                        className="font-serif text-text-primary mb-6 tracking-tighter leading-[0.95] font-black w-full"
+                        style={{ fontSize: 'clamp(4rem, 8vw, 8.5rem)' }}
+                    >
                         {titleWords.map((word, i) => (
-                            <motion.span
-                                key={i}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={isHeadingInView ? { opacity: 1, y: 0 } : {}}
-                                transition={{ delay: i * 0.1, duration: 0.8 }}
-                                className="inline-block mr-4 lg:mr-8"
-                            >
-                                {word}
-                            </motion.span>
+                            <span key={i}>
+                                <motion.span
+                                    initial={{ opacity: 0, y: 40 }}
+                                    animate={isHeadingInView ? { opacity: 1, y: 0 } : {}}
+                                    transition={{ delay: i * 0.08, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                                    className="inline-block"
+                                >
+                                    {word}
+                                </motion.span>
+                                {i < titleWords.length - 1 && <span>&nbsp;</span>}
+                            </span>
                         ))}
                     </h2>
+                    
                     <motion.p 
                         initial={{ opacity: 0 }}
                         animate={isHeadingInView ? { opacity: 1 } : {}}
                         transition={{ delay: 0.4, duration: 1 }}
-                        className="text-xl lg:text-2xl text-text-muted font-sans max-w-2xl leading-relaxed"
+                        className="text-lg lg:text-2xl text-text-muted font-sans max-w-2xl leading-relaxed font-medium"
                     >
                         Payez uniquement ce que vous choisissez. Aucun abonnement fixe. Aucune surprise.
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-start">
-                    
-                    {/* LEFT COLUMN: Steps */}
-                    <div className="space-y-0">
+                <div style={{ overflowX: 'hidden', paddingBottom: '40px' }}>
+                    <div 
+                        className="w-full"
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'flex-start',
+                            gap: '80px',
+                            flexWrap: 'wrap'
+                        }}
+                    >
+                        
+                        {/* LEFT COLUMN: Steps */}
+                        <div 
+                            className="relative flex flex-col"
+                            style={{ flex: '1.5', minWidth: '320px' }}
+                        >
                         <PricingStep 
                             number="01" 
                             title="Choisissez vos repas" 
-                            description="Chaque repas a son propre prix, comme dans un restaurant."
+                            desc="Sélectionnez parmi notre menu de plats frais et de saison. Pas de menu imposé, vous avez le contrôle total."
                             index={0}
                         />
                         <PricingStep 
                             number="02" 
-                            title="Choisissez vos jours" 
-                            description="De 3 à 7 livraisons par semaine, selon votre rythme."
+                            title="Préparation & Macro" 
+                            desc="Nos chefs préparent chaque repas en fonction de l'équilibre parfait de macros pour votre journée."
                             index={1}
                         />
                         <PricingStep 
                             number="03" 
-                            title="Choisissez vos personnes" 
-                            description="Les réductions s'appliquent automatiquement dès 2 personnes."
+                            title="Livraison" 
+                            desc="Livraison fraîche et gratuite à Casablanca. Des emballages éco-responsables directement à votre porte."
                             index={2}
                         />
                     </div>
 
                     {/* RIGHT COLUMN: Price Card */}
-                    <motion.div
-                        ref={cardRef}
-                        initial={{ opacity: 0, scale: 0.95, y: 40 }}
-                        animate={isCardInView ? { opacity: 1, scale: 1, y: 0 } : {}}
-                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                        className="bg-[#2C3E2D] rounded-[40px] p-10 lg:p-16 shadow-[0_40px_100px_-20px_rgba(44,62,45,0.4)] relative"
+                    <div 
+                        className="relative"
+                        style={{ flex: '1', minWidth: '380px' }}
                     >
-                        {/* Top: Price */}
-                        <div className="mb-12">
-                            <span className="block text-sm font-bold text-[#F5F0E8]/70 uppercase tracking-[0.4em] mb-6">
-                                À PARTIR DE
-                            </span>
-                            <div className="flex items-baseline gap-6">
-                                <span className="font-serif text-[110px] lg:text-[160px] text-[#F5F0E8] leading-none tracking-tight">
-                                    {price}
-                                </span>
-                                <div className="pb-6 lg:pb-10">
-                                    <span className="block text-xl lg:text-3xl font-sans text-[#F5F0E8]/80 font-bold">
-                                        MAD / repas
+                        <motion.div
+                            ref={cardRef}
+                            initial={{ opacity: 0, scale: 0.95, x: 30 }}
+                            animate={isCardInView ? { opacity: 1, scale: 1, x: 0 } : {}}
+                            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                            className="rounded-[24px] lg:rounded-[32px] p-8 lg:p-12 relative overflow-hidden w-full"
+                            style={{ backgroundColor: '#2C3E2D', boxShadow: '0 40px 100px -20px rgba(44,62,45,0.4)' }}
+                        >
+                            <div className="relative z-10 w-full flex flex-col">
+                                {/* Top: Label */}
+                                <div className="mb-4">
+                                    <span 
+                                        className="block font-semibold uppercase tracking-[0.25em] font-sans"
+                                        style={{ fontSize: '13px', color: '#F5F0E8', opacity: 0.7 }}
+                                    >
+                                        À PARTIR DE
                                     </span>
                                 </div>
-                            </div>
-                        </div>
-
-                        {/* Divider */}
-                        <div className="w-full h-[2px] bg-accent/40 mb-16" />
-
-                        {/* Middle: Discounts */}
-                        <div className="space-y-10 mb-20">
-                            <span className="block text-sm font-bold text-[#F5F0E8]/60 uppercase tracking-[0.4em] mb-10">
-                                RÉDUCTIONS GROUPE
-                            </span>
-                            <div className="space-y-4">
-                                <DiscountRow label="2 personnes" discount="-8%" delay={0.1} />
-                                <DiscountRow label="3 personnes" discount="-12%" delay={0.2} />
-                                <DiscountRow label="4+ personnes" discount="-15%" delay={0.3} />
-                            </div>
-                        </div>
-
-                        {/* Bottom: Truck & CTA */}
-                        <div className="space-y-12">
-                            <div className="flex items-center gap-5 text-[#F5F0E8] font-sans font-bold">
-                                <div className="p-3 bg-[#F5F0E8]/10 rounded-xl">
-                                    <Truck size={28} className="text-[#F5F0E8]" />
+                                
+                                {/* Price Enormous Number */}
+                                <div className="flex items-baseline gap-4 mb-10 w-full rtl:flex-row-reverse rtl:justify-end">
+                                    <motion.span 
+                                        className="font-serif font-bold leading-none tracking-tighter"
+                                        style={{ fontSize: '140px', color: '#F5F0E8' }}
+                                    >
+                                        {rounded}
+                                    </motion.span>
+                                    <div className="pb-4">
+                                        <span 
+                                            className="block font-sans font-medium whitespace-nowrap"
+                                            style={{ fontSize: '18px', color: '#F5F0E8', opacity: 0.8 }}
+                                        >
+                                            MAD / repas
+                                        </span>
+                                    </div>
                                 </div>
-                                <span className="text-xl lg:text-2xl tracking-wide">Livraison offerte</span>
+
+                                {/* Divider line in card */}
+                                <div className="w-full h-[1px] bg-accent/50 mb-10" />
+
+                                {/* Middle: Discounts */}
+                                <div className="space-y-6 lg:space-y-8 mb-12 w-full">
+                                    <span 
+                                        className="block font-semibold uppercase tracking-[0.25em] font-sans mb-4"
+                                        style={{ fontSize: '13px', color: '#F5F0E8', opacity: 0.6 }}
+                                    >
+                                        RÉDUCTIONS QUANTITÉ
+                                    </span>
+                                    <div className="space-y-3 lg:space-y-4 w-full">
+                                        <DiscountRow label="6 à 9 repas" discount="-8%" delay={0.1} />
+                                        <DiscountRow label="10 à 14 repas" discount="-12%" delay={0.2} />
+                                        <DiscountRow label="15+ repas" discount="-15%" delay={0.3} />
+                                    </div>
+                                </div>
+
+                                {/* Bottom: Truck & CTA */}
+                                <div className="space-y-8 pt-2 w-full">
+                                    <div className="flex items-center gap-4 font-sans font-medium">
+                                        <Truck size={22} style={{ color: '#F5F0E8' }} />
+                                        <span className="tracking-wide" style={{ fontSize: '18px', color: '#F5F0E8' }}>
+                                            Livraison Gratuite Incluse
+                                        </span>
+                                    </div>
+
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        className="w-full py-5 lg:py-6 hover:bg-accent rounded-3xl font-sans font-semibold uppercase tracking-[0.15em] transition-colors duration-300 flex items-center justify-center gap-4 group"
+                                        style={{ backgroundColor: '#384A39', color: '#F5F0E8', fontSize: '16px' }}
+                                        onClick={() => window.location.href = "/onboarding"}
+                                    >
+                                        <span>CRÉER MA BOX</span>
+                                        <ArrowRight size={20} className="rtl:rotate-180 group-hover:translate-x-1.5 transition-transform duration-300 rtl:group-hover:-translate-x-1.5" />
+                                    </motion.button>
+                                </div>
                             </div>
+                        </motion.div>
+                    </div>
 
-                            <motion.button
-                                whileHover={{ scale: 1.02, backgroundColor: "#C4602A", color: "#F5F0E8" }}
-                                whileTap={{ scale: 0.98 }}
-                                className="w-full py-8 bg-[#3D523E] text-[#F5F0E8] rounded-[32px] font-sans font-bold text-xl lg:text-2xl uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-4 group shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)]"
-                                onClick={() => window.location.href = "/onboarding"}
-                            >
-                                <span>Construire mon plan</span>
-                                <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
-                            </motion.button>
-                        </div>
-                        
-                        {/* Decorative bloom */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-                    </motion.div>
-
+                </div>
                 </div>
             </div>
         </section>

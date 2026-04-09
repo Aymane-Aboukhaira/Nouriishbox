@@ -6,7 +6,6 @@ import {
   useInView,
   useScroll,
   useMotionValueEvent,
-  AnimatePresence,
 } from "framer-motion";
 
 // ─── Particle field ───────────────────────────────────────────────────────────
@@ -159,22 +158,21 @@ function OdometerNumber({ value }: { value: number }) {
 }
 
 // ─── Typewriter bullet ────────────────────────────────────────────────────────
-const BULLETS = [
-  {
-    title: "Algorithm",
-    desc: "Our advanced calculation engine uses clinically validated equations to identify your optimal daily macronutrient needs based strictly on your personal metrics.",
-  },
-  {
-    title: "Personalized",
-    desc: "Your menu is instantly tailored to these exact requirements. No more generic diets—only what your body actually needs to thrive.",
-  },
-  {
-    title: "Data-Driven",
-    desc: "We adjust your macronutrient distribution dynamically week by week as you progress towards your stated goal, ensuring constant adaptation.",
-  },
-];
-
 function TypewriterBullets({ active }: { active: boolean }) {
+  const BULLETS = [
+    {
+      title: "Algorithme",
+      desc: "Notre moteur de calcul utilise des équations validées cliniquement pour identifier vos besoins macronutritionnels quotidiens optimaux basés strictement sur vos métriques personnelles.",
+    },
+    {
+      title: "Personnalisé",
+      desc: "Votre menu est instantanément adapté à ces exigences exactes. Fini les régimes génériques—uniquement ce dont votre corps a réellement besoin.",
+    },
+    {
+      title: "Misé sur les données",
+      desc: "Nous ajustons votre distribution de macronutriments dynamiquement semaine après semaine pour garantir une adaptation constante.",
+    },
+  ];
   const [revealed, setRevealed] = useState(0); // how many bullets are fully typed
   const [charIdx, setCharIdx] = useState(0);   // char position in current bullet
   const [showCursor, setShowCursor] = useState(true);
@@ -219,7 +217,7 @@ function TypewriterBullets({ active }: { active: boolean }) {
         if (!isDone && !isActive) return null;
 
         return (
-          <div key={i} className="pl-6 border-l-2 border-[#C4602A]">
+          <div key={i} className="ps-6 border-s-2 border-[#C4602A]">
             {isDone ? (
               <>
                 <h3 className="font-serif font-semibold text-xl text-white mb-2">
@@ -247,13 +245,12 @@ function TypewriterBullets({ active }: { active: boolean }) {
 }
 
 // ─── Electric pulse flow ──────────────────────────────────────────────────────
-const STEPS = [
-  { label: "User Data", icon: "⬡" },
-  { label: "Algorithm", icon: "◈" },
-  { label: "Meal Prep",  icon: "◉" },
-];
-
 function ElectricFlow({ active }: { active: boolean }) {
+  const STEPS = [
+    { label: "Données", icon: "⬡" },
+    { label: "Algorithme", icon: "◈" },
+    { label: "Préparation",  icon: "◉" },
+  ];
   return (
     <div className="flex items-center justify-center gap-0 w-full mt-4">
       {STEPS.map((step, i) => (
@@ -334,7 +331,7 @@ export function ScienceSection() {
         <div className="mb-20">
           <h2 className="font-serif font-bold capitalize leading-[0.9] tracking-tight">
             <span className="text-[clamp(3.5rem,8vw,7rem)] text-white block">
-              Macros Made
+              Macros Rendues
             </span>
             {/* "Simple" — outlined only, no fill */}
             <span
@@ -344,11 +341,11 @@ export function ScienceSection() {
                 color: "transparent",
               }}
             >
-              Simple.
+              Simples.
             </span>
           </h2>
           <p className="mt-6 font-sans font-medium text-[#F5F0E8] text-xl max-w-md leading-[1.6]">
-            Precise Nutrition, Zero Guesswork.
+            Nutrition précise, Zéro supposition.
           </p>
         </div>
 
@@ -364,9 +361,9 @@ export function ScienceSection() {
           <div className="flex flex-col items-center gap-16">
             {/* Donut charts */}
             <div className="flex flex-wrap justify-center gap-10">
-              <NeonDonut value={50} color="#C4602A" label="Protein" delayIdx={0} />
-              <NeonDonut value={40} color="#F5F0E8" label="Fat"     delayIdx={1} />
-              <NeonDonut value={30} color="#6BC4A0" label="Carbs"   delayIdx={2} />
+              <NeonDonut value={50} color="#C4602A" label="Protéines" delayIdx={0} />
+              <NeonDonut value={40} color="#F5F0E8" label="Lipides"     delayIdx={1} />
+              <NeonDonut value={30} color="#6BC4A0" label="Glucides"   delayIdx={2} />
             </div>
 
             {/* Divider */}
@@ -375,7 +372,7 @@ export function ScienceSection() {
             {/* Electric process flow */}
             <div className="w-full">
               <p className="font-display text-xs tracking-[0.3em] text-white/30 capitalize mb-6 text-center">
-                Data pipeline
+                Pipeline de Données
               </p>
               <ElectricFlow active={inView} />
             </div>

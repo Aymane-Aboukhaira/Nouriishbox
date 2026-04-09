@@ -9,10 +9,10 @@ import { MagneticButton } from "@/components/ui/magnetic-button";
 import { SplitTextLink } from "@/components/ui/split-text-link";
 
 const NAV_LINKS = [
-  { label: "Menu",         href: "/#menu" },
-  { label: "How It Works", href: "/#how-it-works" },
-  { label: "About",        href: "/about" },
-  { label: "Community",    href: "/community" },
+  { label: "Le Menu",         href: "/#menu" },
+  { label: "Comment ça marche", href: "/#how-it-works" },
+  { label: "Notre Histoire",        href: "/about" },
+  { label: "Communauté",    href: "/community" },
 ];
 
 export function PublicNavbar() {
@@ -48,10 +48,7 @@ export function PublicNavbar() {
         <div className="relative z-10">
           {/* 1. ANNOUNCEMENT BAR */}
           <div className="bg-[#1A261B] text-background py-2 px-4 text-[11px] font-sans font-medium text-center w-full tracking-widest uppercase">
-            150+ personalized meals delivered · Certified professional local food ·{" "}
-            <a href="#" className="underline underline-offset-4 hover:text-accent transition-colors">
-              TDEE Calculator
-            </a>
+            <span dangerouslySetInnerHTML={{ __html: "NOUVEAU — LIVRAISON GRATUITE SUR TOUTES LES COMMANDES DE PLUS DE <span class='text-[#C4602A] font-bold'>500 MAD</span>" }} />
           </div>
 
           <div className={`transition-all duration-500 ${scrolled ? "py-3" : "py-5"}`}>
@@ -60,9 +57,7 @@ export function PublicNavbar() {
               {/* Logo */}
               <Link href="/" className="flex items-center flex-shrink-0 group">
                 <motion.div
-                  animate={{
-                    scale: scrolled ? 0.95 : 1,
-                  }}
+                  animate={{ scale: scrolled ? 0.95 : 1 }}
                   transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                   className="flex items-center font-serif tracking-tight text-2xl"
                 >
@@ -72,12 +67,12 @@ export function PublicNavbar() {
               </Link>
 
               {/* Desktop Nav */}
-              <nav className="hidden md:flex items-center gap-10">
+              <nav className="hidden md:flex items-center gap-8 lg:gap-10">
                 {NAV_LINKS.map((link) => (
                   <motion.div key={link.href} initial="rest" whileHover="hover" animate="rest">
                     <Link
                       href={link.href}
-                      className="text-xs font-sans font-bold uppercase tracking-widest text-primary hover:text-accent transition-colors duration-300"
+                      className="text-[11px] lg:text-xs font-sans font-bold uppercase tracking-widest text-primary hover:text-accent transition-colors duration-300"
                     >
                       <SplitTextLink>{link.label}</SplitTextLink>
                     </Link>
@@ -87,6 +82,7 @@ export function PublicNavbar() {
 
               {/* Desktop Actions */}
               <div className="hidden md:flex items-center gap-6">
+              
                 <Link
                   href="/client/dashboard"
                   className="text-primary hover:text-accent transition-colors duration-300"
@@ -100,7 +96,7 @@ export function PublicNavbar() {
                     onClick={() => router.push("/onboarding")}
                     className="h-11 px-8 rounded-full bg-primary text-background font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#1A1A1A] transition-all shadow-sm active:scale-95"
                   >
-                    Get Started
+                    COMMENCER
                   </button>
                 </MagneticButton>
               </div>
@@ -142,7 +138,7 @@ export function PublicNavbar() {
             />
 
             {/* Close button */}
-            <div className="flex items-center justify-between mb-16 relative z-10">
+            <div className="flex items-center justify-between mb-16 relative z-10 w-full">
               <span className="font-serif tracking-tight text-[#F5F0E8] text-2xl">
                 <span className="text-[#A8E6CF]">nourish</span><span className="text-[#C4602A]">box</span>
               </span>
@@ -162,7 +158,7 @@ export function PublicNavbar() {
               animate="show"
               variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } }}
             >
-              {NAV_LINKS.map((link, i) => (
+              {NAV_LINKS.map((link) => (
                 <motion.div
                   key={link.href}
                   variants={{
@@ -181,26 +177,29 @@ export function PublicNavbar() {
               ))}
             </motion.nav>
 
-            {/* Bottom row */}
+            {/* Bottom Menu Language & Actions */}
             <motion.div
-              className="relative z-10 flex flex-col gap-5 mt-auto"
+              className="relative z-10 flex flex-col gap-6 mt-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45, duration: 0.4 }}
             >
-              <div className="flex gap-6 text-[#F5F0E8]/60 text-sm font-bold tracking-widest capitalize">
+              
+              {/* Mobile Language Toggle removed */}
+
+              <div className="flex gap-6 text-[#F5F0E8]/60 text-sm font-bold tracking-widest capitalize mt-4">
                 <Link href="/search" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#C4602A] transition-colors flex items-center gap-2">
-                  <Search size={16} /> Search
+                  <Search size={16} /> Recherche
                 </Link>
                 <Link href="/client/dashboard" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#C4602A] transition-colors flex items-center gap-2">
-                  <User size={16} /> Profile
+                  <User size={16} /> Profil
                 </Link>
               </div>
               <button
                 onClick={() => { setMobileMenuOpen(false); router.push("/order"); }}
                 className="w-full bg-[#C4602A] text-[#F5F0E8] py-5 text-lg font-medium font-sans tracking-wide hover:bg-[#1A1A1A] transition-colors rounded-[100px] border border-[#C4602A] hover:border-[#1A1A1A]"
               >
-                Order À La Carte
+                Commander À La Carte
               </button>
             </motion.div>
           </motion.div>

@@ -14,7 +14,7 @@ export default function OnboardingForkPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-4 block"
                 >
-                    Getting Started
+                    Pour Commencer
                 </motion.span>
                 <motion.h1 
                     initial={{ opacity: 0, y: 10 }}
@@ -22,7 +22,7 @@ export default function OnboardingForkPage() {
                     transition={{ delay: 0.1 }}
                     className="font-serif text-4xl lg:text-5xl text-text-primary mb-4 leading-tight"
                 >
-                    Who are we cooking for?
+                    Pour qui cuisinons-nous ?
                 </motion.h1>
                 <motion.p 
                     initial={{ opacity: 0, y: 10 }}
@@ -30,7 +30,7 @@ export default function OnboardingForkPage() {
                     transition={{ delay: 0.2 }}
                     className="text-text-muted text-lg font-sans"
                 >
-                    Select the profile type that best fits your needs.
+                    Sélectionnez le type de profil qui correspond le mieux à vos besoins.
                 </motion.p>
             </div>
 
@@ -47,12 +47,12 @@ export default function OnboardingForkPage() {
                     <div className="w-16 h-16 bg-background rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-background transition-colors">
                         <User size={32} strokeWidth={1.5} />
                     </div>
-                    <h2 className="font-serif text-2xl lg:text-3xl text-text-primary mb-3">Just for me</h2>
+                    <h2 className="font-serif text-2xl lg:text-3xl text-text-primary mb-3">Juste pour moi</h2>
                     <p className="text-text-muted text-sm lg:text-base leading-relaxed mb-8">
-                        I want meals prepared exclusively for my own goals, macros, and dietary preferences.
+                        Je veux des repas préparés exclusivement pour mes propres objectifs, macros et préférences alimentaires.
                     </p>
                     <div className="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider group-hover:gap-4 transition-all">
-                        <span>Get Started</span>
+                        <span>Commencer</span>
                         <ArrowRight size={16} />
                     </div>
                 </motion.button>
@@ -69,12 +69,12 @@ export default function OnboardingForkPage() {
                     <div className="w-16 h-16 bg-background rounded-2xl flex items-center justify-center text-accent mb-8 group-hover:bg-accent group-hover:text-background transition-colors">
                         <Users size={32} strokeWidth={1.5} />
                     </div>
-                    <h2 className="font-serif text-2xl lg:text-3xl text-text-primary mb-3">For my family</h2>
+                    <h2 className="font-serif text-2xl lg:text-3xl text-text-primary mb-3">Pour ma famille</h2>
                     <p className="text-text-muted text-sm lg:text-base leading-relaxed mb-8">
-                        I want to feed a partner or kids, each with their own nutritional needs and delivery logistics.
+                        Je veux nourrir un conjoint ou des enfants, chacun avec ses propres besoins nutritionnels et logistiques de livraison.
                     </p>
                     <div className="flex items-center gap-2 text-accent font-bold text-sm uppercase tracking-wider group-hover:gap-4 transition-all">
-                        <span>Plan Together</span>
+                        <span>Planifier Ensemble</span>
                         <ArrowRight size={16} />
                     </div>
                 </motion.button>

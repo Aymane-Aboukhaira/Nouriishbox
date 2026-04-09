@@ -78,7 +78,7 @@ export default function GoalsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-4 block"
                 >
-                    Step 03
+                    Étape 03
                 </motion.span>
                 <motion.h1 
                     initial={{ opacity: 0, y: 10 }}
@@ -86,7 +86,7 @@ export default function GoalsPage() {
                     transition={{ delay: 0.1 }}
                     className="font-serif text-4xl lg:text-5xl text-text-primary mb-4"
                 >
-                    Activity & Goals
+                    Activité & Objectifs
                 </motion.h1>
                 <motion.p 
                     initial={{ opacity: 0, y: 10 }}
@@ -94,19 +94,19 @@ export default function GoalsPage() {
                     transition={{ delay: 0.2 }}
                     className="text-text-muted text-lg font-sans max-w-md mx-auto"
                 >
-                    Fine-tune your custom targets.
+                    Ajustez vos cibles personnalisées.
                 </motion.p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto items-start">
                 <div className="space-y-10">
                     <section>
-                        <h2 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-6 px-1 lg:text-left">How active are you?</h2>
+                        <h2 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-6 px-1 lg:text-left">Quel est votre niveau d'activité ?</h2>
                         <ActivityPills selected={activity} onChange={setActivity} />
                     </section>
 
                     <section>
-                        <h2 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-6 px-1 lg:text-left">What is your goal?</h2>
+                        <h2 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-6 px-1 lg:text-left">Quel est votre objectif ?</h2>
                         <GoalPills selected={goal} onChange={setGoal} />
                     </section>
                 </div>
@@ -120,30 +120,30 @@ export default function GoalsPage() {
                     >
                         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
                         
-                        <h2 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-8">Your Custom Targets</h2>
+                        <h2 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-8">Vos Cibles Personnalisées</h2>
                         
                         <div className="flex flex-col items-center mb-10">
                             <span className="text-7xl lg:text-8xl font-serif text-text-primary leading-none mb-2">{targets.kcal}</span>
-                            <span className="text-xs font-bold text-accent uppercase tracking-widest bg-accent/10 px-4 py-1.5 rounded-full">Daily Calories</span>
+                            <span className="text-xs font-bold text-accent uppercase tracking-widest bg-accent/10 px-4 py-1.5 rounded-full">Calories Quotidiennes</span>
                         </div>
 
                         <div className="grid grid-cols-3 gap-4 border-t border-border pt-10">
                             <div className="text-center">
                                 <span className="block text-2xl lg:text-3xl font-serif text-text-primary mb-1">{targets.protein}g</span>
-                                <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Protein</span>
+                                <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Protéines</span>
                             </div>
                             <div className="text-center border-x border-border">
                                 <span className="block text-2xl lg:text-3xl font-serif text-text-primary mb-1">{targets.carbs}g</span>
-                                <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Carbs</span>
+                                <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Glucides</span>
                             </div>
                             <div className="text-center">
                                 <span className="block text-2xl lg:text-3xl font-serif text-text-primary mb-1">{targets.fats}g</span>
-                                <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Fats</span>
+                                <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Lipides</span>
                             </div>
                         </div>
                         
                         <p className="text-[10px] text-text-muted/60 text-center mt-10 leading-relaxed max-w-[200px] mx-auto uppercase tracking-widest font-bold">
-                            Precision built for your body.
+                            Construit avec précision pour votre corps.
                         </p>
                     </motion.div>
                 </div>
@@ -157,7 +157,7 @@ export default function GoalsPage() {
                         onClick={handleNext}
                         className="w-full h-16 rounded-full bg-primary text-background font-sans font-bold flex items-center justify-center gap-3 text-lg shadow-[0_15px_30px_-10px_rgba(44,62,45,0.4)] hover:bg-primary/90 transition-all uppercase tracking-widest"
                     >
-                        Continue <ArrowRight size={20} />
+                        Continuer <ArrowRight size={20} />
                     </motion.button>
                 </div>
             </div>

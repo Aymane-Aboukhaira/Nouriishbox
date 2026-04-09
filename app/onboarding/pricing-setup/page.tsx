@@ -19,9 +19,9 @@ export default function PricingSetupPage() {
     };
 
     const getDiscount = (p: number) => {
-        if (p === 2) return "8% OFF";
-        if (p === 3) return "12% OFF";
-        if (p >= 4) return "15% OFF";
+        if (p === 2) return "-8%";
+        if (p === 3) return "-12%";
+        if (p >= 4) return "-15%";
         return null;
     };
 
@@ -33,7 +33,7 @@ export default function PricingSetupPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-4 block"
                 >
-                    Step 05
+                    Étape 05
                 </motion.span>
                 <motion.h1 
                     initial={{ opacity: 0, y: 10 }}
@@ -41,7 +41,7 @@ export default function PricingSetupPage() {
                     transition={{ delay: 0.1 }}
                     className="font-serif text-4xl lg:text-6xl text-text-primary mb-6"
                 >
-                    Build your week
+                    Construisez votre semaine
                 </motion.h1>
                 <motion.p 
                     initial={{ opacity: 0, y: 10 }}
@@ -49,8 +49,8 @@ export default function PricingSetupPage() {
                     transition={{ delay: 0.2 }}
                     className="text-text-muted text-lg font-sans max-w-lg mx-auto"
                 >
-                    Customize your delivery frequency and household size. 
-                    Discounts apply automatically for larger orders.
+                    Personnalisez votre fréquence de livraison et la taille de votre foyer. 
+                    Les réductions s'appliquent automatiquement pour les commandes plus importantes.
                 </motion.p>
             </div>
 
@@ -61,7 +61,7 @@ export default function PricingSetupPage() {
                         <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
                             <Users size={20} />
                         </div>
-                        <h2 className="font-serif text-2xl text-text-primary italic">How many people are we feeding?</h2>
+                        <h2 className="font-serif text-2xl text-text-primary italic">Combien de personnes nourrissons-nous ?</h2>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                         {[1, 2, 3, 4, 5].map((p) => (
@@ -75,7 +75,7 @@ export default function PricingSetupPage() {
                                 }`}
                             >
                                 <span className="font-serif text-2xl">{p === 5 ? "5+" : p}</span>
-                                <span className="text-[9px] font-bold uppercase tracking-widest">{p === 1 ? "Person" : "People"}</span>
+                                <span className="text-[9px] font-bold uppercase tracking-widest">{p === 1 ? "Personne" : "Personnes"}</span>
                                 {getDiscount(p) && (
                                     <div className="absolute top-0 right-0 p-1 bg-accent text-white text-[7px] font-bold uppercase rounded-bl-lg">
                                         {getDiscount(p)}
@@ -93,7 +93,7 @@ export default function PricingSetupPage() {
                         <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
                             <Calendar size={20} />
                         </div>
-                        <h2 className="font-serif text-2xl text-text-primary italic">How many days per week?</h2>
+                        <h2 className="font-serif text-2xl text-text-primary italic">Combien de jours par semaine ?</h2>
                     </div>
                     <div className="grid grid-cols-5 gap-3">
                         {[3, 4, 5, 6, 7].map((d) => (
@@ -107,7 +107,7 @@ export default function PricingSetupPage() {
                                 }`}
                             >
                                 <span className="font-serif text-xl">{d}</span>
-                                <span className="text-[8px] font-bold uppercase tracking-widest">Days</span>
+                                <span className="text-[8px] font-bold uppercase tracking-widest">Jours</span>
                                 {days === d && <Check size={12} className="absolute bottom-2 right-2 text-primary" />}
                             </button>
                         ))}
@@ -120,7 +120,7 @@ export default function PricingSetupPage() {
                         <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
                             <Utensils size={20} />
                         </div>
-                        <h2 className="font-serif text-2xl text-text-primary italic">Meals per day, per person?</h2>
+                        <h2 className="font-serif text-2xl text-text-primary italic">Repas par jour, par personne ?</h2>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                         {[1, 2, 3].map((m) => (
@@ -134,9 +134,9 @@ export default function PricingSetupPage() {
                                 }`}
                             >
                                 <span className="font-serif text-2xl">{m}</span>
-                                <span className="text-[9px] font-bold uppercase tracking-widest">{m === 1 ? "Meal" : "Meals"}</span>
+                                <span className="text-[9px] font-bold uppercase tracking-widest">Repas</span>
                                 <span className="text-[9px] font-sans italic text-text-muted opacity-60">
-                                    {m === 1 ? "Lunch" : m === 2 ? "Lunch + Dinner" : "All meals"}
+                                    {m === 1 ? "Déjeuner" : m === 2 ? "Déjeuner + Dîner" : "Tous les repas"}
                                 </span>
                                 {meals === m && <Check size={14} className="absolute bottom-3 right-3 text-primary" />}
                             </button>
@@ -153,7 +153,7 @@ export default function PricingSetupPage() {
                         onClick={handleNext}
                         className="w-full h-16 rounded-full bg-primary text-background font-sans font-bold flex items-center justify-center gap-3 text-lg shadow-[0_15px_30px_-10px_rgba(44,62,45,0.4)] hover:bg-primary/90 transition-all uppercase tracking-widest group"
                     >
-                        <span>Choose your meals</span>
+                        <span>Choisir vos repas</span>
                         <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                     </motion.button>
                 </div>

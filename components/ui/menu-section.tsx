@@ -166,7 +166,7 @@ function MealCard({
             onClick={() => onAddToPlate(meal.name)}
             className="w-full h-10 bg-[#3D5C4E] hover:bg-[#1A1A1A] text-[#F5F0E8] font-sans font-medium text-sm capitalize tracking-wide transition-colors duration-200 rounded-[100px] shadow-[0_4px_12px_rgba(26,26,26,0.3)] pointer-events-auto shrink-0 border border-[#F5F0E8]/10"
           >
-            Add to Plate
+            Ajouter
           </button>
         </div>
       </motion.div>
@@ -278,7 +278,7 @@ export function MenuSection({
 
         {/* ── Section header ── */}
         <div className="text-center mb-16 flex flex-col items-center gap-10">
-          <SplitHeading text="This Week's À La Carte Featured Entrées" />
+          <SplitHeading text="Les Plats Stars de Cette Semaine" />
 
           {/* Filter pills */}
           <motion.div
@@ -299,7 +299,7 @@ export function MenuSection({
                     : "bg-transparent border-[#2C3E2D]/20 text-[#1A1A1A] hover:bg-[#2C3E2D]/5"
                 }`}
               >
-                {filter}
+                {filter === "Featured" ? "Sélection" : filter === "Keto" ? "Céto" : filter === "Vegan" ? "Végétalien" : filter === "Protein" ? "Protéiné" : filter}
               </motion.button>
             ))}
           </motion.div>
@@ -345,7 +345,7 @@ export function MenuSection({
             onClick={onNavigate}
             className="bg-transparent border border-[#C4602A] hover:bg-[#1A1A1A] hover:text-[#F5F0E8] hover:border-[#1A1A1A] px-12 py-5 text-sm capitalize tracking-wide font-bold font-sans transition-all duration-300 rounded-full"
           >
-            Explore All 40+ Meals
+            Explorer tous nos repas
           </button>
         </div>
       </div>

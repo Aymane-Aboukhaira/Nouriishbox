@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, DM_Sans } from "next/font/google";
+import { Fraunces, DM_Sans, Cairo } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { CustomCursor } from "@/components/ui/custom-cursor";
@@ -20,6 +20,13 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+const cairo = Cairo({
+  subsets: ["arabic"],
+  variable: "--font-arabic",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Nourishbox — Nutrition Premium",
   description:
@@ -32,26 +39,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${fraunces.variable} ${dmSans.variable}`}>
+    <html lang="fr" className={`${fraunces.variable} ${dmSans.variable} ${cairo.variable}`}>
       <body className="bg-background text-text-primary font-sans antialiased min-h-screen leading-relaxed">
-        <ScrollProgress />
-        <CustomCursor />
-        <AmbientSound />
-        {children}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: "var(--color-surface)",
-              border: "1px solid var(--color-border)",
-              borderRadius: "var(--radius-card)",
-              fontFamily: "var(--font-dm-sans)",
-              fontSize: "16px",
-              color: "var(--color-text-primary)",
-              boxShadow: "var(--shadow-card)",
-            },
-          }}
-        />
+          <ScrollProgress />
+          <CustomCursor />
+          <AmbientSound />
+          {children}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-border)",
+                borderRadius: "var(--radius-card)",
+                fontFamily: "var(--font-dm-sans)",
+                fontSize: "16px",
+                color: "var(--color-text-primary)",
+                boxShadow: "var(--shadow-card)",
+              },
+            }}
+          />
       </body>
     </html>
   );

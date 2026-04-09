@@ -10,22 +10,19 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 
-// ─── Feature data ─────────────────────────────────────────────────────────────
 const FEATURES = [
   {
     index: "01",
-    title: "Your Personalized Macro Plan",
-    desc:
-      "We assign you a custom macro profile that perfectly aligns with your individual health goals — calculated using clinically validated equations, not guesswork.",
+    title: "Composer son menu",
+    desc: "Chaque semaine, choisissez parmi une sélection de plats pensés par nos chefs et adaptés à vos macros.",
     photo: "#3D5C4E",
     image: "/OpenedBox.png",
     photoLabel: "Product Photo — Open Kraft Containers",
   },
   {
     index: "02",
-    title: "Zero-Waste Sunday Lock",
-    desc:
-      "Lock your meals by Sunday for a zero-waste, sustainable delivery schedule the following week. Zero overproduction, zero compromise.",
+    title: "Validation",
+    desc: "Vos choix sont validés et préparés le dimanche pour une livraison optimale toute la semaine.",
     photo: "#C4602A",
     image: "/stackedboxes.png",
     photoLabel: "Photo — Sunday Prep Layout",
@@ -64,13 +61,13 @@ function TracedIcon({ path, active }: { path: string; active: boolean }) {
 }
 
 // ─── Single feature strip ─────────────────────────────────────────────────────
-function FeatureStrip({
+function FeatureRow({
   feature,
   iconPath,
   index,
   onEnter,
 }: {
-  feature: (typeof FEATURES)[0];
+  feature: typeof FEATURES[0];
   iconPath: string;
   index: number;
   onEnter: (i: number) => void;
@@ -108,7 +105,7 @@ function FeatureStrip({
       <div className="relative rounded-[100px] transition-colors duration-400 hover:bg-[#C4602A]/10 overflow-hidden">
         {/* Green curtain wipe — pulls left to reveal content */}
         <motion.div
-          className="absolute inset-0 bg-[#2C3E2D] z-10 origin-right"
+          className="absolute inset-0 bg-[#2C3E2D] z-10 origin-right rtl:origin-left"
           initial={{ scaleX: 1 }}
           animate={revealed ? { scaleX: 0 } : { scaleX: 1 }}
           transition={{ duration: 0.75, ease: [0.4, 0, 0.2, 1] }}
@@ -165,22 +162,22 @@ export function ExperienceSection() {
       className="relative bg-[#2C3E2D] overflow-hidden text-[#F5F0E8]"
     >
       {/* ── Vertical title running up the left edge ── */}
-      <div className="hidden lg:flex absolute left-0 top-0 bottom-0 w-16 z-20 items-center justify-center border-r border-[#3D5C4E]">
+      <div className="hidden lg:flex absolute left-0 rtl:left-auto rtl:right-0 top-0 bottom-0 w-16 z-20 items-center justify-center border-r rtl:border-r-0 rtl:border-l border-[#3D5C4E]">
         <span
           className="font-sans font-semibold text-[#F5F0E8] text-xs tracking-[0.35em] uppercase whitespace-nowrap select-none"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
         >
-          YOUR NOURISHBOX EXPERIENCE
+          L&apos;EXPÉRIENCE NOURISHBOX
         </span>
       </div>
 
       {/* ── Inner layout: strips left + sticky photo right ── */}
-      <div className="lg:pl-16 grid grid-cols-1 lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_480px]">
+      <div className="lg:px-16 grid grid-cols-1 lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_480px]">
 
         {/* LEFT — scrollable feature strips */}
         <div>
           {FEATURES.map((feature, i) => (
-            <FeatureStrip
+            <FeatureRow
               key={i}
               feature={feature}
               iconPath={ICON_PATHS[i]}
@@ -191,7 +188,7 @@ export function ExperienceSection() {
         </div>
 
         {/* RIGHT — sticky crossfading photo */}
-        <div className="hidden lg:flex sticky top-0 h-screen items-center justify-center overflow-hidden border-l border-[#3D5C4E]">
+        <div className="hidden lg:flex sticky top-0 h-screen items-center justify-center overflow-hidden lg:border-l rtl:border-r border-[#3D5C4E]">
           <motion.div
             className="relative w-full h-full"
             style={{ y: photoY }}

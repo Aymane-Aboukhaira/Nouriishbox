@@ -3,15 +3,6 @@
 import { useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
 
-const FAQs = [
-  { q: "Can I pause or cancel my subscription?", a: "Absolutely. You can pause or cancel your subscription at any time with zero hidden fees. Just do it before the weekly cutoff." },
-  { q: "How are my macros calculated?", a: "We use the clinically validated Mifflin-St Jeor equation, modified by your unique activity level and goals (fat loss, maintenance, or muscle gain)." },
-  { q: "Do you deliver outside Casablanca?", a: "Currently, we only operate within Casablanca to guarantee the absolute freshness of our daily deliveries." },
-  { q: "Can I choose specific meals or is it automatic?", a: "Both! We automatically generate a perfect menu based on your macros, but you can swap any meal easily in your weekly planner." },
-  { q: "Are meals suitable for the whole family?", a: "Yes. Our Family Plan lets you set individual profiles and portions for your partner and kids, delivered together." },
-  { q: "What if I have allergies?", a: "During onboarding, you can specify preferences like Vegan, Gluten-Free, or specific allergies, and we'll automatically filter your menu." }
-];
-
 function RollNumber({ value }: { value: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
@@ -20,7 +11,7 @@ function RollNumber({ value }: { value: number }) {
   const items = Array.from({ length: value + 1 }, (_, i) => String(i).padStart(2, '0'));
 
   return (
-    <div ref={ref} className="h-10 overflow-hidden relative font-serif font-light text-4xl lg:text-5xl text-[#1A1A1A]/20 mr-6 md:mr-10 w-12 md:w-16 shrink-0 flex flex-col justify-start select-none">
+    <div ref={ref} className="h-10 overflow-hidden relative font-serif font-light text-4xl lg:text-5xl text-[#1A1A1A]/20 mr-6 md:mr-10 rtl:mr-0 rtl:ml-6 rtl:md:ml-10 w-12 md:w-16 shrink-0 flex flex-col justify-start select-none">
       <motion.div
         initial={{ y: 0 }}
         animate={isInView ? { y: `-${value * 2.5}rem` } : { y: 0 }}
@@ -40,6 +31,14 @@ function RollNumber({ value }: { value: number }) {
 export function FaqSection() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const FAQs = [
+    { q: "Puis-je annuler ou mettre en pause mon abonnement ?", a: "Absolument. Vous pouvez mettre en pause ou annuler votre abonnement à tout moment sans frais cachés. Faites-le simplement avant la limite hebdomadaire." },
+    { q: "Comment calculez-vous mes macros ?", a: "Nous utilisons l'équation cliniquement validée de Mifflin-St Jeor, modifiée par votre niveau d'activité unique et vos objectifs (perte de gras, maintien, ou prise de masse)." },
+    { q: "Où livrez-vous vos repas ?", a: "Actuellement, nous opérons uniquement à Casablanca pour garantir la fraîcheur absolue de nos livraisons." },
+    { q: "Puis-je choisir mes propres repas ?", a: "Les deux ! Nous générons automatiquement un menu parfait basé sur vos macros, mais vous pouvez échanger n'importe quel repas facilement dans votre planificateur." },
+    { q: "Puis-je commander pour le reste de ma famille ?", a: "Oui. Notre plan familial vous permet de définir des profils et des portions individuels pour votre partenaire et vos enfants." },
+    { q: "Qu'en est-il des allergies ?", a: "Lors de votre inscription, vous pouvez spécifier des préférences (Végétalien, Sans Gluten) ou des allergies spécifiques, et nous filtrerons automatiquement votre menu." }
+  ];
   
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -75,7 +74,7 @@ export function FaqSection() {
       <div className="relative z-10 max-w-5xl mx-auto px-6">
         <div className="text-center mb-24">
           <h2 className="font-serif font-bold text-5xl md:text-7xl text-[#1A1A1A] capitalize tracking-tight">
-            Frequently Asked Questions
+            Questions Fréquentes
           </h2>
         </div>
 

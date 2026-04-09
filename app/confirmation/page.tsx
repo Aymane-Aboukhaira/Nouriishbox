@@ -13,9 +13,9 @@ import type { SubscriptionPlan } from "@/lib/types";
 
 // --- PRICING DATA ---
 const PLANS = {
-    solo: { name: 'Solo box', weekly: 320 },
-    couple: { name: 'Couple box', weekly: 590 },
-    family: { name: 'Family box', weekly: 890 },
+    solo: { name: 'Boîte Solo', weekly: 320 },
+    couple: { name: 'Boîte Couple', weekly: 590 },
+    family: { name: 'Boîte Famille', weekly: 890 },
 };
 const FIRST_WEEK_DISCOUNT = 0.10;
 
@@ -96,7 +96,7 @@ function ConfirmationContent() {
     if (!hasMounted) return null;
 
     // Derived Data
-    const firstName = profile.name ? profile.name.split(" ")[0] : "Welcome aboard";
+    const firstName = profile.name ? profile.name.split(" ")[0] : "Bienvenue";
     const finalOrderId = urlOrderId || subscription.id || "NB-00000";
     
     const weeklyPrice = selectedPlan.weekly;
@@ -107,7 +107,7 @@ function ConfirmationContent() {
     // Dates Calculation
     const nextBillingDate = new Date(startDate);
     nextBillingDate.setDate(nextBillingDate.getDate() + 7);
-    const nextBillingStr = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }).format(nextBillingDate);
+    const nextBillingStr = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(nextBillingDate);
 
     let deliveryDaysDelta = 1; // Tomorrow
     const dayOfWeek = startDate.getDay(); // 0 is Sunday, 5 is Friday, 6 is Saturday
@@ -120,10 +120,10 @@ function ConfirmationContent() {
     
     let deliveryLabel = "";
     if (deliveryDaysDelta === 1) {
-        deliveryLabel = "Tomorrow, 7am–12pm";
+        deliveryLabel = "Demain, 7h–12h";
     } else {
-        const dayName = new Intl.DateTimeFormat('en-GB', { weekday: 'long' }).format(deliveryDate);
-        deliveryLabel = `${dayName}, 7am–12pm`;
+        const dayName = new Intl.DateTimeFormat('fr-FR', { weekday: 'long' }).format(deliveryDate);
+        deliveryLabel = `${dayName}, 7h–12h`;
     }
 
     return (
@@ -133,7 +133,7 @@ function ConfirmationContent() {
             {/* Minimal Header */}
             <header className="w-full h-24 flex flex-col items-center justify-center bg-[#FFF8F4] z-10 sticky top-0">
                 <span className="font-serif text-2xl text-[#6BC4A0]">nourishbox</span>
-                <span className="text-xs text-[#9C9C9C] font-semibold mt-1">Order confirmed</span>
+                <span className="text-xs text-[#9C9C9C] font-semibold mt-1">Commande confirmée</span>
             </header>
 
             <main className="w-full max-w-2xl mx-auto px-6 pt-10 pb-24 flex flex-col items-center">
@@ -161,7 +161,7 @@ function ConfirmationContent() {
                         transition={{ duration: 0.5, delay: 0.8 }}
                         className="font-serif text-4xl md:text-5xl text-[#2D2D2D] leading-tight mb-4"
                     >
-                        {profile.name ? `You're officially nourished, ${firstName}.` : firstName + "."}
+                        {profile.name ? `Bienvenue chez Nourishbox, ${firstName}.` : firstName + "."}
                     </motion.h1>
                     
                     <motion.p
@@ -170,7 +170,7 @@ function ConfirmationContent() {
                         transition={{ duration: 0.5, delay: 0.9 }}
                         className="text-[#6B6B6B] font-sans md:text-lg"
                     >
-                        Order <span className="font-bold text-[#2D2D2D]">{finalOrderId}</span> is confirmed. Your first box is being prepared.
+                        La commande <span className="font-bold text-[#2D2D2D]">{finalOrderId}</span> est confirmée. Votre première boîte est en préparation.
                     </motion.p>
                 </div>
 
@@ -183,20 +183,20 @@ function ConfirmationContent() {
                 >
                     <div className="space-y-4 text-sm md:text-base font-semibold">
                         <div className="flex justify-between">
-                            <span className="text-[#9C9C9C]">Order</span>
+                            <span className="text-[#9C9C9C]">Commande</span>
                             <span className="text-[#6BC4A0] font-mono font-bold tracking-tight">{finalOrderId}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-[#9C9C9C]">Plan</span>
+                            <span className="text-[#9C9C9C]">Forfait</span>
                             <span className="text-[#2D2D2D]">{selectedPlan.name}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-[#9C9C9C]">Charged today</span>
+                            <span className="text-[#9C9C9C]">Facturé aujourd'hui</span>
                             <span className="text-[#2D2D2D]">{chargedToday} MAD</span>
                         </div>
                         <div className="flex justify-between pt-1">
-                            <span className="text-[#9C9C9C]">Next billing</span>
-                            <span className="text-[#2D2D2D] text-right">{weeklyPrice} MAD on {nextBillingStr}</span>
+                            <span className="text-[#9C9C9C]">Prochaine facturation</span>
+                            <span className="text-[#2D2D2D] text-right">{weeklyPrice} MAD le {nextBillingStr}</span>
                         </div>
                     </div>
                     
@@ -204,13 +204,13 @@ function ConfirmationContent() {
                     
                     <div className="flex justify-center items-center gap-1.5 w-full">
                         <Star size={14} className="text-[#F59E0B] fill-[#F59E0B]" />
-                        <span className="text-[#F59E0B] text-xs font-bold capitalize tracking-wide">+100 NourishPoints added to your account</span>
+                        <span className="text-[#F59E0B] text-xs font-bold capitalize tracking-wide">+100 NourishPoints ajoutés à votre compte</span>
                     </div>
                 </motion.div>
 
                 {/* Section 3 — Delivery timeline */}
                 <div className="w-full mb-10 pl-2">
-                    <h2 className="font-serif text-2xl text-[#2D2D2D] mb-6">What happens next</h2>
+                    <h2 className="font-serif text-2xl text-[#2D2D2D] mb-6">Et ensuite ?</h2>
                     
                     <div className="flex flex-col relative">
                         {/* Connecting Line */}
@@ -219,10 +219,10 @@ function ConfirmationContent() {
                         />
 
                         {[
-                            { active: true, title: "Payment confirmed", time: "Just now" },
-                            { active: true, title: "Kitchen notified", time: "Today, within the hour" },
-                            { active: false, title: "Meals being prepared", time: "Today before 6pm" },
-                            { active: false, title: "Out for delivery", time: deliveryLabel },
+                            { active: true, title: "Paiement confirmé", time: "À l'instant" },
+                            { active: true, title: "Cuisine notifiée", time: "Aujourd'hui, dans l'heure" },
+                            { active: false, title: "Repas en préparation", time: "Aujourd'hui avant 18h" },
+                            { active: false, title: "En cours de livraison", time: deliveryLabel },
                         ].map((step, i) => (
                             <motion.div
                                 key={i}
@@ -262,22 +262,22 @@ function ConfirmationContent() {
                         <Sparkles size={24} className="text-[#F59E0B]" />
                     </div>
                     <div>
-                        <p className="font-bold text-[#2D2D2D]">100 welcome points added</p>
-                        <p className="text-sm text-[#9C9C9C]">Current balance: {points.balance.toLocaleString()} NourishPoints</p>
+                        <p className="font-bold text-[#2D2D2D]">100 points de bienvenue ajoutés</p>
+                        <p className="text-sm text-[#9C9C9C]">Solde actuel : {points.balance.toLocaleString()} NourishPoints</p>
                     </div>
                 </motion.div>
 
                 {/* Section 5 — App Prompt */}
                 <div className="w-full bg-white border border-[#F0EBE3] rounded-2xl p-6 mb-10 shadow-sm text-center">
-                    <h3 className="font-serif text-xl text-[#2D2D2D] mb-2">Manage your plan on the go</h3>
+                    <h3 className="font-serif text-xl text-[#2D2D2D] mb-2">Gérez votre plan où que vous soyez</h3>
                     <p className="text-[#6B6B6B] text-sm mb-6 max-w-sm mx-auto">
-                        Track macros, swap meals, and pause your subscription from your phone.
+                        Suivez vos macros, échangez vos repas et mettez votre abonnement en pause depuis votre téléphone.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-3">
-                        <button onClick={() => toast("App coming soon — stay tuned!")} className="h-11 px-6 rounded-xl border border-[#E8E0D8] text-sm font-bold text-[#2D2D2D] hover:border-[#6BC4A0] hover:text-[#6BC4A0] transition-colors flex items-center justify-center gap-2">
+                        <button onClick={() => toast("L'application arrive bientôt — restez à l'écoute !")} className="h-11 px-6 rounded-xl border border-[#E8E0D8] text-sm font-bold text-[#2D2D2D] hover:border-[#6BC4A0] hover:text-[#6BC4A0] transition-colors flex items-center justify-center gap-2">
                             <Smartphone size={16} /> App Store
                         </button>
-                        <button onClick={() => toast("App coming soon — stay tuned!")} className="h-11 px-6 rounded-xl border border-[#E8E0D8] text-sm font-bold text-[#2D2D2D] hover:border-[#6BC4A0] hover:text-[#6BC4A0] transition-colors flex items-center justify-center gap-2">
+                        <button onClick={() => toast("L'application arrive bientôt — restez à l'écoute !")} className="h-11 px-6 rounded-xl border border-[#E8E0D8] text-sm font-bold text-[#2D2D2D] hover:border-[#6BC4A0] hover:text-[#6BC4A0] transition-colors flex items-center justify-center gap-2">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3.568 1.48C3.155 1.892 2.923 2.522 2.923 3.32v17.38c0 .798.232 1.428.645 1.84L3.6 22.51l9.904-9.923v-.178l-9.904-9.924-.032-.102z"/><path d="m13.484 12.38 3.295 3.298-9.06 5.148c-2.458 1.411-2.458 1.411-4.148-.28L13.484 12.38z" fill="#000"/><path d="m16.897 8.355-3.415 3.414.002.613 3.42 3.42 4.093-2.32c1.173-.664 1.173-1.764 0-2.433l-4.1-2.694z" fill="#000"/><path d="M13.504 12.41 3.57 2.454C5.26.764 5.26.764 7.718 2.175l9.06 5.25-3.274 4.985z" fill="#000"/></svg> 
                             Google Play
                         </button>
@@ -288,14 +288,14 @@ function ConfirmationContent() {
                 <div className="w-full text-center">
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                         <Link href="/client/dashboard" className="flex items-center justify-center w-full h-14 bg-[#6BC4A0] hover:bg-[#5BB38F] text-white font-bold text-lg rounded-full shadow-[0_8px_32px_rgba(107,196,160,0.35)] transition-colors mb-6">
-                            Go to my dashboard →
+                            Aller à mon tableau de bord →
                         </Link>
                     </motion.div>
                     
                     <div className="flex items-center justify-center gap-3 text-sm font-bold text-[#9C9C9C] mb-16">
-                        <Link href="/client/planner" className="hover:text-[#6BC4A0] transition-colors">View your plan</Link>
+                        <Link href="/client/planner" className="hover:text-[#6BC4A0] transition-colors">Voir votre plan</Link>
                         <span>·</span>
-                        <Link href="/client/menu" className="hover:text-[#6BC4A0] transition-colors">Explore the menu</Link>
+                        <Link href="/client/menu" className="hover:text-[#6BC4A0] transition-colors">Explorer le menu</Link>
                     </div>
                 </div>
 
@@ -303,15 +303,15 @@ function ConfirmationContent() {
                 <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 pt-10 border-t border-[#F0EBE3] w-full max-w-lg">
                     <div className="flex items-center gap-2 text-xs font-semibold text-[#9C9C9C]">
                         <Mail size={14} className="text-[#6BC4A0]" />
-                        <span>Confirmation sent to your email</span>
+                        <span>Confirmation envoyée par email</span>
                     </div>
                     <a href="#" className="flex items-center gap-2 text-xs font-semibold text-[#9C9C9C] hover:text-[#6BC4A0] transition-colors">
                         <Phone size={14} className="text-[#6BC4A0]" />
-                        <span>Need help? WhatsApp us</span>
+                        <span>Besoin d'aide ? Contactez-nous sur WhatsApp</span>
                     </a>
                     <div className="flex items-center gap-2 text-xs font-semibold text-[#9C9C9C]">
                         <ShieldCheck size={14} className="text-[#6BC4A0]" />
-                        <span>30-day freshness guarantee</span>
+                        <span>Garantie fraîcheur 30 jours</span>
                     </div>
                 </div>
 

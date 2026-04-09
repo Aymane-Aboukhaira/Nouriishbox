@@ -17,14 +17,14 @@ import { useAuthStore, useSubscriptionStore, usePointsStore, useOnboardingStore,
 
 // --- SCHEMA ---
 const paymentSchema = z.object({
-    fullName: z.string().min(2, "Full name required"),
-    phone: z.string().min(10, "Valid phone required"),
-    addressLine: z.string().min(5, "Delivery address required"),
-    city: z.string().min(2, "City required"),
-    cardName: z.string().min(2, "Name on card required"),
-    cardNumber: z.string().regex(/^\d{4} \d{4} \d{4} \d{4}$/, "Enter a valid 16-digit card number"),
-    expiry: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Enter valid expiry (MM/YY)"),
-    cvv: z.string().regex(/^\d{3,4}$/, "Enter 3 or 4 digits"),
+    fullName: z.string().min(2, "Nom complet requis"),
+    phone: z.string().min(10, "Téléphone valide requis"),
+    addressLine: z.string().min(5, "Adresse de livraison requise"),
+    city: z.string().min(2, "Ville requise"),
+    cardName: z.string().min(2, "Nom sur la carte requis"),
+    cardNumber: z.string().regex(/^\d{4} \d{4} \d{4} \d{4}$/, "Entrez un numéro de carte valide à 16 chiffres"),
+    expiry: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Entrez une expiration valide (MM/AA)"),
+    cvv: z.string().regex(/^\d{3,4}$/, "Entrez 3 ou 4 chiffres"),
 });
 type PaymentForm = z.infer<typeof paymentSchema>;
 
@@ -135,7 +135,7 @@ function CheckoutContent() {
 
     const onSubmit = async (data: PaymentForm) => {
         if (method === "paypal") {
-            setFormError("PayPal checkout is currently in maintenance. Please use a credit card.");
+            setFormError("Le paiement PayPal est actuellement en maintenance. Veuillez utiliser une carte de crédit.");
             return;
         }
 
@@ -173,7 +173,7 @@ function CheckoutContent() {
                 </Link>
                 <div className="flex items-center gap-3 text-primary/40">
                     <Lock size={16} />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Secure Checkout</span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em]">Paiement sécurisé</span>
                 </div>
             </header>
 
@@ -186,9 +186,9 @@ function CheckoutContent() {
                     className="bg-white rounded-[40px] p-8 lg:p-12 shadow-[0_30px_60px_-15px_rgba(44,62,45,0.06)] border-[1.5px] border-border"
                 >
                     <div className="flex items-center justify-between mb-10 pb-6 border-b border-border">
-                        <h2 className="font-serif text-4xl text-text-primary italic">Your Personalized Week</h2>
+                        <h2 className="font-serif text-4xl text-text-primary italic">Votre semaine personnalisée</h2>
                         <Link href="/onboarding/pricing-setup" className="text-[10px] font-bold text-accent uppercase tracking-widest hover:tracking-[0.2em] transition-all">
-                            Modify Setup
+                            Modifier la configuration
                         </Link>
                     </div>
 
@@ -196,21 +196,21 @@ function CheckoutContent() {
                     <div className="grid grid-cols-3 gap-4 mb-10">
                         <div className="bg-background rounded-3xl p-4 flex flex-col items-center gap-1">
                             <Users size={16} className="text-primary/50" />
-                            <span className="text-xs font-bold text-text-primary">{selections.peopleCount} {selections.peopleCount === 1 ? 'Person' : 'People'}</span>
+                            <span className="text-xs font-bold text-text-primary">{selections.peopleCount} {selections.peopleCount === 1 ? 'Personne' : 'Personnes'}</span>
                         </div>
                         <div className="bg-background rounded-3xl p-4 flex flex-col items-center gap-1">
                             <Calendar size={16} className="text-primary/50" />
-                            <span className="text-xs font-bold text-text-primary">{selections.daysPerWeek} Days</span>
+                            <span className="text-xs font-bold text-text-primary">{selections.daysPerWeek} Jours</span>
                         </div>
                         <div className="bg-background rounded-3xl p-4 flex flex-col items-center gap-1">
                             <Utensils size={16} className="text-primary/50" />
-                            <span className="text-xs font-bold text-text-primary">{selections.mealsPerDay} {selections.mealsPerDay === 1 ? 'Meal' : 'Meals'} / Day</span>
+                            <span className="text-xs font-bold text-text-primary">{selections.mealsPerDay} {selections.mealsPerDay === 1 ? 'Repas' : 'Repas'} / Jour</span>
                         </div>
                     </div>
 
                     {/* Itemized Meal List */}
                     <div className="space-y-6 mb-12">
-                        <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.3em] mb-4">Itemized Menu</h3>
+                        <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.3em] mb-4">Détail du menu</h3>
                         <div className="max-h-[400px] overflow-y-auto pr-4 space-y-4 custom-scrollbar">
                             {selectedMealsData.map((meal: any, i) => (
                                 <div key={i} className="flex items-center gap-4 group">
@@ -236,31 +236,31 @@ function CheckoutContent() {
                     {/* Pricing Breakdown */}
                     <div className="bg-[#FAF9F6] rounded-3xl p-8 space-y-4">
                         <div className="flex justify-between items-center text-sm">
-                            <span className="text-text-muted font-medium uppercase tracking-wider">Subtotal</span>
+                            <span className="text-text-muted font-medium uppercase tracking-wider">Sous-total</span>
                             <span className="font-bold text-text-primary">{subtotal} MAD</span>
                         </div>
                         {discountPercent > 0 && (
                             <div className="flex justify-between items-center text-sm text-[#D48166]">
-                                <span className="font-medium uppercase tracking-wider">Multi-Person Discount ({discountPercent}%)</span>
+                                <span className="font-medium uppercase tracking-wider">Remise multi-personnes ({discountPercent}%)</span>
                                 <span className="font-bold">-{discountAmount} MAD</span>
                             </div>
                         )}
                         <div className="flex justify-between items-center text-sm text-primary">
-                            <span className="font-medium uppercase tracking-wider">Early Adopter Bonus</span>
+                            <span className="font-medium uppercase tracking-wider">Bonus premier client</span>
                             <span className="font-bold">-{firstOrderBonus} MAD</span>
                         </div>
                         <div className="flex justify-between items-center text-sm text-primary">
-                            <span className="font-medium uppercase tracking-wider">Eco-Delivery</span>
-                            <span className="font-bold tracking-widest">FREE</span>
+                            <span className="font-medium uppercase tracking-wider">Livraison éco</span>
+                            <span className="font-bold tracking-widest">GRATUIT</span>
                         </div>
                         
                         <div className="pt-6 mt-2 border-t border-border flex justify-between items-end">
                             <div className="flex flex-col">
-                                <span className="text-[9px] font-bold text-text-muted uppercase tracking-[0.3em] mb-1">Total Weekly Investment</span>
+                                <span className="text-[9px] font-bold text-text-muted uppercase tracking-[0.3em] mb-1">Investissement hebdomadaire total</span>
                                 <span className="font-serif text-5xl text-text-primary leading-none">{totalToday} <span className="text-lg">MAD</span></span>
                             </div>
                             <div className="flex flex-col items-end">
-                                <span className="text-[9px] font-bold text-[#D48166] uppercase tracking-widest mb-1">Weekly Savings</span>
+                                <span className="text-[9px] font-bold text-[#D48166] uppercase tracking-widest mb-1">Économies hebdomadaires</span>
                                 <span className="font-bold text-text-primary">{(discountAmount + firstOrderBonus)} MAD</span>
                             </div>
                         </div>
@@ -277,12 +277,12 @@ function CheckoutContent() {
                     <div className="bg-white rounded-[40px] p-8 lg:p-10 shadow-[0_30px_60px_-15px_rgba(44,62,45,0.06)] border-[1.5px] border-border">
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                             <div className="space-y-6">
-                                <h2 className="font-serif text-2xl text-text-primary italic">Checkout Details</h2>
+                                <h2 className="font-serif text-2xl text-text-primary italic">Détails de facturation</h2>
                                 <div className="space-y-4">
                                     <div className="space-y-1">
                                         <input
                                             {...register("fullName")}
-                                            placeholder="Full Name"
+                                            placeholder="Nom complet"
                                             className="w-full h-14 px-6 rounded-full border border-border bg-background focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-text-muted text-sm font-sans"
                                         />
                                         {errors.fullName && <FieldError msg={errors.fullName.message!} />}
@@ -291,7 +291,7 @@ function CheckoutContent() {
                                         <div className="space-y-1">
                                             <input
                                                 {...register("phone")}
-                                                placeholder="Phone"
+                                                placeholder="Téléphone"
                                                 className="w-full h-14 px-6 rounded-full border border-border bg-background outline-none transition-all placeholder:text-text-muted text-sm font-sans"
                                             />
                                             {errors.phone && <FieldError msg={errors.phone.message!} />}
@@ -299,7 +299,7 @@ function CheckoutContent() {
                                         <div className="space-y-1">
                                             <input
                                                 {...register("city")}
-                                                placeholder="City"
+                                                placeholder="Ville"
                                                 className="w-full h-14 px-6 rounded-full border border-border bg-background outline-none transition-all placeholder:text-text-muted text-sm font-sans"
                                             />
                                             {errors.city && <FieldError msg={errors.city.message!} />}
@@ -308,7 +308,7 @@ function CheckoutContent() {
                                     <div className="space-y-1">
                                         <input
                                             {...register("addressLine")}
-                                            placeholder="Delivery Address"
+                                            placeholder="Adresse de livraison"
                                             className="w-full h-14 px-6 rounded-full border border-border bg-background outline-none transition-all placeholder:text-text-muted text-sm font-sans"
                                         />
                                         {errors.addressLine && <FieldError msg={errors.addressLine.message!} />}
@@ -317,11 +317,11 @@ function CheckoutContent() {
                             </div>
 
                             <div className="space-y-4">
-                                <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Card Details</h3>
+                                <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Détails de la carte</h3>
                                 <div className="space-y-4">
                                     <input
                                         {...register("cardName")}
-                                        placeholder="Name on Card"
+                                        placeholder="Nom sur la carte"
                                         className="w-full h-14 px-6 rounded-full border border-border bg-background outline-none text-sm font-sans"
                                     />
                                     <input
@@ -334,7 +334,7 @@ function CheckoutContent() {
                                         <input
                                             {...register("expiry")}
                                             onChange={handleExpiryChange}
-                                            placeholder="MM/YY"
+                                            placeholder="MM/AA"
                                             className="w-full h-14 px-6 rounded-full border border-border bg-background outline-none text-sm font-sans"
                                         />
                                         <input
@@ -365,7 +365,7 @@ function CheckoutContent() {
                                     <Loader2 size={24} className="animate-spin" />
                                 ) : (
                                     <>
-                                        <span>Confirm Order</span>
+                                        <span>Confirmer la commande</span>
                                         <ChevronRight size={20} />
                                     </>
                                 )}
@@ -380,7 +380,7 @@ function CheckoutContent() {
                             <RotateCcw size={20} />
                         </div>
                         <p className="text-[8px] font-bold uppercase tracking-widest text-center">
-                            Secure 256-bit SSL • PCI Compliant • Cancel Anytime
+                            SSL 256 bits sécurisé • Conforme PCI • Annulez à tout moment
                         </p>
                     </div>
                 </motion.div>

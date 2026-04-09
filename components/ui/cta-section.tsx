@@ -114,9 +114,7 @@ export function CtaSection() {
           style={{ scale: textScale }}
           className="font-serif font-bold text-[clamp(2.5rem,7vw,8rem)] leading-[0.9] text-[#F5F0E8] capitalize tracking-tight w-full mb-16 origin-center"
         >
-          Ready to Eat<br />
-          Like Your Body Was<br />
-          <span className="text-[#C4602A]">Designed To?</span>
+          <span dangerouslySetInnerHTML={{ __html: "VOTRE CORPS, <br/> VOS <span class='text-[#C4602A]'>RÈGLES.</span>" }} />
         </motion.h2>
 
         {/* Animations Container: Truck & Calculator */}
@@ -156,9 +154,7 @@ export function CtaSection() {
               <div className="font-display text-5xl leading-none font-bold tabular-nums tracking-tighter">
                 {counter}%
               </div>
-              <div className="text-xs font-bold tracking-widest mt-3 capitalize text-center text-[#2C3E2D]">
-                BETTER<br />RESULTS
-              </div>
+              <div className="text-xs font-bold tracking-widest mt-3 capitalize text-center text-[#2C3E2D]" dangerouslySetInnerHTML={{ __html: "Gains en<br/>Temps & Énergie" }} />
             </motion.div>
           </div>
 
@@ -174,7 +170,7 @@ export function CtaSection() {
               onClick={() => router.push("/onboarding")}
               className="relative bg-[#F5F0E8] text-[#2C3E2D] px-14 md:px-24 py-6 md:py-8 rounded-[100px] text-lg md:text-2xl font-bold font-sans transition-all overflow-hidden capitalize tracking-widest z-10 group-hover:scale-105 active:scale-95 shadow-xl"
             >
-              Calculate Your Macros
+              COMMENCER L&apos;EXPÉRIENCE
             </button>
           </div>
 
@@ -186,7 +182,7 @@ export function CtaSection() {
             transition={{ delay: 0.6 }}
             className="mt-8 bg-[#1B281C] text-[#F5F0E8] px-6 py-2 rounded-[100px] border border-[#2C3E2D] text-[10px] font-sans font-bold tracking-[0.2em] uppercase"
           >
-            Powered by CookBook
+            PROPULSÉ PAR LA SCIENCE NUTRITIONNELLE
           </motion.div>
         </div>
 

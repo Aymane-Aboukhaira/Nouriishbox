@@ -28,7 +28,7 @@ export default function LocationsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-4 block"
                 >
-                    Step 04
+                    Étape 04
                 </motion.span>
                 <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <MapPin size={32} strokeWidth={1.5} />
@@ -39,7 +39,7 @@ export default function LocationsPage() {
                     transition={{ delay: 0.1 }}
                     className="font-serif text-4xl lg:text-5xl text-text-primary mb-4"
                 >
-                    Where do we deliver?
+                    Où livrons-nous ?
                 </motion.h1>
                 <motion.p 
                     initial={{ opacity: 0, y: 10 }}
@@ -47,7 +47,7 @@ export default function LocationsPage() {
                     transition={{ delay: 0.2 }}
                     className="text-text-muted text-lg font-sans max-w-md mx-auto"
                 >
-                    Add the places you spend the most time so we can drop your meals precisely.
+                    Ajoutez les endroits où vous passez le plus de temps pour que nous puissions livrer vos repas avec précision.
                 </motion.p>
             </div>
 
@@ -75,7 +75,7 @@ export default function LocationsPage() {
                                 : "bg-border text-text-muted cursor-not-allowed opacity-50"
                         }`}
                     >
-                        <span>Review Profile</span>
+                        <span>Vérifier Profil</span>
                         <ArrowRight size={20} />
                     </motion.button>
                 </div>

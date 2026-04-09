@@ -46,7 +46,7 @@ function AppBadge({ text }: { text: string }) {
 }
 
 function CopyrightText() {
-  const text = "© 2026 NOURISHBOX. ALL RIGHTS RESERVED.";
+  const text = "© 2026 NOURISHBOX. TOUS DROITS RÉSERVÉS.";
   return (
     <motion.div 
       initial="hidden" 
@@ -55,7 +55,7 @@ function CopyrightText() {
       transition={{ staggerChildren: 0.03, delayChildren: 0.5 }}
       className="flex flex-wrap items-center justify-center md:justify-start"
     >
-      <p className="font-sans text-xs font-normal text-[#F5F0E8]/40 flex flex-wrap uppercase tracking-widest">
+      <p className="font-sans text-xs font-normal text-[#F5F0E8]/40 flex flex-wrap uppercase tracking-widest leading-[1.6]">
         {text.split("").map((char, index) => (
           <motion.span 
             key={index} 
@@ -108,13 +108,12 @@ export function PublicFooter() {
                                 transition={{ duration: 2.5, ease: "easeInOut" }}
                               />
                               <text x="10" y="75" className="font-serif text-3xl lowercase fill-[#C4602A] stroke-none">
-                                  nourish<tspan className="fill-[#F5F0E8]">box</tspan>
-                              </text>
+                        </text>
                           </svg>
                       </div>
                       
                       <p className="font-sans font-normal text-[#F5F0E8]/70 mb-10 leading-[1.7] max-w-sm">
-                          We deliver fresh, macro-balanced meals directly to your door, making wellness effortless, vibrant, and delicious. Est. 2026.
+                          Nous livrons des repas frais et équilibrés directement à votre porte, rendant le bien-être simple, vibrant et délicieux. Créé en 2026.
                       </p>
                     </div>
 
@@ -141,12 +140,12 @@ export function PublicFooter() {
                 </div>
 
                 {/* Middle - Links */}
-                <div className="w-full lg:w-[45%] grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16">
+                <div className="w-full lg:w-[45%] grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16 rtl:text-right">
                     {[
-                        { title: "Product", links: ["Menu", "Pricing", "Features"] },
-                        { title: "Company", links: ["About", "Careers", "Press"] },
-                        { title: "Legal", links: ["Terms", "Privacy"] },
-                        { title: "Support", links: ["Help Center", "Contact"] }
+                        { title: "Produit", links: ["Menu", "Tarifs", "Fonctionnalités"] },
+                        { title: "Entreprise", links: ["À Propos", "Carrières", "Presse"] },
+                        { title: "Légal", links: ["Conditions", "Confidentialité"] },
+                        { title: "Support", links: ["Aide", "Contact"] }
                     ].map((col, idx) => (
                         <motion.div 
                           initial={{ opacity: 0, filter: "blur(10px)" }}

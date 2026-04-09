@@ -39,7 +39,7 @@ export default function BodyMetricsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-4 block"
                 >
-                    Step 02
+                    Étape 02
                 </motion.span>
                 <motion.h1 
                     initial={{ opacity: 0, y: 10 }}
@@ -47,7 +47,7 @@ export default function BodyMetricsPage() {
                     transition={{ delay: 0.1 }}
                     className="font-serif text-4xl lg:text-5xl text-text-primary mb-4"
                 >
-                    Let's build your profile
+                    Construisons votre profil
                 </motion.h1>
                 <motion.p 
                     initial={{ opacity: 0, y: 10 }}
@@ -55,7 +55,7 @@ export default function BodyMetricsPage() {
                     transition={{ delay: 0.2 }}
                     className="text-text-muted text-lg font-sans max-w-md mx-auto"
                 >
-                    We use this to calculate your exact caloric needs.
+                    Nous utilisons ceci pour calculer vos besoins caloriques exacts.
                 </motion.p>
             </div>
 
@@ -69,7 +69,7 @@ export default function BodyMetricsPage() {
                                 : "bg-white border-border text-text-muted hover:border-primary/30"
                         }`}
                     >
-                        <span>Female</span>
+                        <span>Femme</span>
                         {gender === "female" && <Check size={18} />}
                     </button>
                     <button
@@ -80,15 +80,15 @@ export default function BodyMetricsPage() {
                                 : "bg-white border-border text-text-muted hover:border-primary/30"
                         }`}
                     >
-                        <span>Male</span>
+                        <span>Homme</span>
                         {gender === "male" && <Check size={18} />}
                     </button>
                 </div>
 
                 <div className="space-y-6">
-                    <BodySlider label="Age" unit="years" min={16} max={99} value={age} onChange={setAge} />
-                    <BodySlider label="Height" unit="cm" min={140} max={220} value={height} onChange={setHeight} />
-                    <BodySlider label="Weight" unit="kg" min={40} max={150} value={weight} onChange={setWeight} />
+                    <BodySlider label="Âge" unit="ans" min={16} max={99} value={age} onChange={setAge} />
+                    <BodySlider label="Taille" unit="cm" min={140} max={220} value={height} onChange={setHeight} />
+                    <BodySlider label="Poids" unit="kg" min={40} max={150} value={weight} onChange={setWeight} />
                 </div>
                 
                 <motion.div 
@@ -97,12 +97,12 @@ export default function BodyMetricsPage() {
                     transition={{ delay: 0.4 }}
                     className="bg-white p-8 rounded-[24px] border-[1.5px] border-border text-center mt-12 shadow-[0_10px_40px_-10px_rgba(44,62,45,0.05)]"
                 >
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-3">Baseline TDEE</p>
+                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-3">TDEE de base</p>
                     <div className="flex flex-col items-center">
                         <div className="text-6xl font-serif text-text-primary leading-none mb-2">
                             {tdee}
                         </div>
-                        <span className="text-xs font-bold text-accent uppercase tracking-widest">kcal per day</span>
+                        <span className="text-xs font-bold text-accent uppercase tracking-widest">kcal par jour</span>
                     </div>
                 </motion.div>
             </div>
@@ -115,7 +115,7 @@ export default function BodyMetricsPage() {
                         onClick={handleNext}
                         className="w-full h-16 rounded-full bg-primary text-background font-sans font-bold flex items-center justify-center gap-3 text-lg shadow-[0_15px_30px_-10px_rgba(44,62,45,0.4)] hover:bg-primary/90 transition-all uppercase tracking-widest"
                     >
-                        Continue to goals <ArrowRight size={20} />
+                        Continuer vers objectifs <ArrowRight size={20} />
                     </motion.button>
                 </div>
             </div>

@@ -5,32 +5,17 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Leaf, Flame, Truck, PauseCircle } from "lucide-react";
 
-// ─── Headline words with "YOU" highlighted ────────────────────────────────────
-const WORDS: { text: string; accent?: boolean }[] = [
-  { text: "Nutrition" },
-  { text: "Built" },
-  { text: "For" },
-  { text: "You,", accent: true },
-  { text: "Delivered" },
-  { text: "To" },
-  { text: "Your" },
-  { text: "Door." },
-];
-
 // ─── Marquee content (duplicated so it truly loops seamlessly) ────────────────
 const TICKER =
-  "Personalized Nutrition · Delivered Casablanca · Zero Guesswork · Macro Matched · Chef Prepared · 150K+ Meals · ";
+  "Nutrition Personnalisée · Livré à Casablanca · Zéro Devins · Macros Calculées · Préparé par un Chef · +150K Repas · ";
 
 // ─── Feature pills ────────────────────────────────────────────────────────────
 const FEATURES = [
-  { Icon: Leaf, label: "Ala Carte" },
-  { Icon: Flame, label: "Fresh Daily" },
-  { Icon: PauseCircle, label: "Pause Anytime" },
-  { Icon: Truck, label: "Free Delivery" },
+  { Icon: Leaf, label: "À la Carte" },
+  { Icon: Flame, label: "Frais Chaque Jour" },
+  { Icon: PauseCircle, label: "Pause Arbitraire" },
+  { Icon: Truck, label: "Livraison Gratuite" },
 ];
-
-// ─── SVG blob clip-path (organic shape) ───────────────────────────────────────
-const BLOB_CLIP = `M420,295Q390,340,350,370Q310,400,255,413Q200,425,150,398Q100,370,68,322Q36,275,40,215Q44,155,82,108Q120,60,175,42Q230,24,285,40Q340,56,380,92Q420,128,435,190Q450,255,420,295Z`;
 
 interface HeroSectionProps {
   onStart: () => void;
@@ -38,6 +23,13 @@ interface HeroSectionProps {
 
 export function HeroSection({ onStart }: HeroSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
+
+  // Dynamic Headline generation to preserve staggered animations and highlight
+  const rawTitle = "La Nutrition Pensée Pour Vous, Livrée Directement Chez Vous.";
+  const WORDS = rawTitle.split(" ").map(text => ({
+    text,
+    accent: /you|vous|لك/i.test(text)
+  }));
 
   // Parallax: photo scales up as you scroll down
   const { scrollYProgress } = useScroll({
@@ -76,7 +68,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
             animate="show"
             variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
             className="font-serif font-bold leading-[1.1] tracking-tight text-[clamp(48px,6vw,80px)] flex flex-wrap gap-x-[0.2em]"
-            aria-label="Nutrition built for you, delivered to your door"
+            aria-label={rawTitle}
           >
             {WORDS.map(({ text, accent }, i) => (
               <motion.span
@@ -108,7 +100,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
             transition={{ delay: 1.0, duration: 0.55 }}
             className="mt-8 text-[18px] text-[#1A1A1A] max-w-md leading-[1.7] font-sans"
           >
-            150K+ meals matched to your exact macros. Chef-prepared, delivered to your door in Casablanca.
+            Nous utilisons des algorithmes cliniques et des chefs experts pour adapter vos repas exactement aux besoins de votre corps.
           </motion.p>
 
           {/* ── CTA Button ── */}
@@ -122,9 +114,9 @@ export function HeroSection({ onStart }: HeroSectionProps) {
               onClick={onStart}
               className="relative overflow-hidden w-full sm:w-auto bg-[#2C3E2D] text-[#F5F0E8] px-12 py-5 text-base font-medium tracking-wide flex items-center justify-center gap-4 border border-[#2C3E2D] hover:border-[#1A1A1A] transition-colors duration-300 rounded-[100px]"
             >
-              <span className="relative z-10">Start Assessment</span>
+              <span className="relative z-10">COMMENCER</span>
               <motion.span
-                className="relative z-10 inline-flex"
+                className="relative z-10 inline-flex rtl:rotate-180"
                 initial={{ x: 0 }}
                 whileHover={{ x: 6 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}

@@ -251,14 +251,14 @@ function DrawerDraggableMeal({ meal, score, onAdd }: { meal: Meal; score: number
             <p className="text-[11px] font-semibold text-[#2D2D2D] line-clamp-2 h-8 leading-tight mb-1">{meal.name}</p>
             <p className="text-[10px] text-[#9C9C9C] mb-2">{meal.macros.kcal} kcal</p>
             <div className={`text-[9px] font-bold px-1.5 py-0.5 rounded w-full mb-3 ${score >= 80 ? 'bg-[#E1F5EE] text-[#085041]' : score >= 60 ? 'bg-[#FAEEDA] text-[#633806]' : 'bg-[#E8E8E8] text-[#9C9C9C]'}`}>
-                {score >= 80 ? 'Excellent' : score >= 60 ? 'Good match' : 'Decent'} ({score}%)
+                {score >= 80 ? 'Excellent' : score >= 60 ? 'Bon match' : 'Correct'} ({score}%)
             </div>
             <button 
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={(e) => { e.stopPropagation(); onAdd?.(); }}
                 className="w-full bg-[#F1EFE8] text-[#2D2D2D] hover:bg-[#E8E0D8] py-1.5 rounded-xl text-xs font-bold mt-auto transition-colors shadow-sm"
             >
-                + Add
+                + Ajouter
             </button>
         </div>
     );
@@ -275,7 +275,7 @@ function DrawerDraggablePreviouslyUsed({ meal, dayLabel, onAdd }: { meal: Meal; 
                 <span className="text-lg">{meal.emoji}</span>
                 <div className="min-w-0">
                     <p className="text-[11px] font-semibold truncate w-24 text-[#2D2D2D]">{meal.name}</p>
-                    <p className="text-[9px] text-[#9C9C9C]">on {dayLabel}</p>
+                    <p className="text-[9px] text-[#9C9C9C]">le {dayLabel}</p>
                 </div>
             </div>
             <button 
@@ -283,7 +283,7 @@ function DrawerDraggablePreviouslyUsed({ meal, dayLabel, onAdd }: { meal: Meal; 
                 onClick={(e) => { e.stopPropagation(); onAdd?.(); }}
                 className="text-[10px] font-bold text-[#6BC4A0] bg-[#E1F5EE] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[#bbf0da]"
             >
-                + Add
+                + Ajouter
             </button>
         </div>
     );
@@ -400,12 +400,12 @@ function DayColumn({
             >
                 {isEmptyWarning && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F59E0B] text-white text-[9px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap z-10">
-                        Cutoff approaching
+                        Limite imminente
                     </div>
                 )}
                 {isEmptyUrgent && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#FFA07A] text-white text-[9px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap z-10 shadow-sm">
-                        Confirm today
+                        Confirmez aujourd'hui
                     </div>
                 )}
                 
@@ -415,7 +415,7 @@ function DayColumn({
                         <div className="h-[3px] w-full bg-[#E8E8E8] rounded-full mx-2 mb-2 relative overflow-hidden">
                             <div className="absolute inset-0 bg-[#D4C9BE] skew-x-[-45deg] bg-[length:10px_10px]" style={{backgroundImage: 'linear-gradient(-45deg, transparent 25%, rgba(0,0,0,0.1) 25%, rgba(0,0,0,0.1) 50%, transparent 50%, transparent 75%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.1) 100%)'}} />
                         </div>
-                        <p className="text-[10px] text-center font-bold capitalize tracking-wider line-through">Paused</p>
+                        <p className="text-[10px] text-center font-bold capitalize tracking-wider line-through">En pause</p>
                     </div>
                 ) : (
                     <AnimatePresence>
@@ -443,7 +443,7 @@ function DayColumn({
                                 <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center mb-1 ${isEmptyUrgent ? 'border-[#FFA07A]' : isEmptyWarning ? 'border-[#F59E0B]/50' : 'border-[#F0E4D8]'}`}>
                                     <Plus size={16} className={isEmptyUrgent ? "text-[#FFA07A]" : isEmptyWarning ? "text-[#F59E0B] animate-[pulse_4s_ease-in-out_infinite]" : "text-[#D4C9BE]"} />
                                 </div>
-                                <p className={`text-[10px] font-bold capitalize tracking-wider ${isEmptyUrgent ? 'text-[#FFA07A]' : 'text-[#D4C9BE]'}`}>Add meal</p>
+                                <p className={`text-[10px] font-bold capitalize tracking-wider ${isEmptyUrgent ? 'text-[#FFA07A]' : 'text-[#D4C9BE]'}`}>Ajouter un repas</p>
                             </div>
                         )}
                     </AnimatePresence>
@@ -619,7 +619,7 @@ export default function PlannerPage() {
     const executeConfirm = () => {
         setShowIncompleteWarning(false);
         if (subscription.status !== 'active') {
-            const subPlan = useSubscriptionStore.getState().subscription.plan ?? 'solo';
+            const subPlan = (useSubscriptionStore.getState().subscription as any).plan ?? 'solo';
             router.push(`/checkout?plan=${subPlan}`);
             return;
         }
@@ -656,7 +656,7 @@ export default function PlannerPage() {
         });
         const projScore = activeDaysCount ? Math.round((totalScore / activeDaysCount) * 100) : 0;
         
-        toast.success(`Week rebuilt — ${projScore}/100 nutrition score 🌿`);
+        toast.success(`Semaine reconstruite — Score nutritionnel proj. ${projScore}/100 🌿`);
         setShowReplanModal(false);
     };
 
@@ -664,7 +664,7 @@ export default function PlannerPage() {
         const day = dayKey ?? activeDrawerDayRef.current;
         if (!day) return;
         assignMeal(day, meal.id, activeMemberId);
-        toast.success(`Added to ${capitalize(day)}`);
+        toast.success(`Ajouté à ${capitalize(day)}`);
     };
 
     const openDeliverySheet = (meal: Meal) => {
@@ -709,11 +709,11 @@ export default function PlannerPage() {
             if (dragData?.type === 'drawer-meal') {
                 const meal = dragData.meal as Meal;
                 if (plan.paused_days.includes(newDayIndex)) {
-                    toast.error("Day paused.");
+                    toast.error("Jour en pause.");
                     return;
                 }
                 assignMeal(DAY_KEYS[newDayIndex], meal.id, activeMemberId);
-                toast.success(`Dropped ${meal.name} onto ${DAY_LABELS[newDayIndex]}`);
+                toast.success(`${meal.name} ajouté à ${DAY_LABELS[newDayIndex]}`);
                 return;
             }
 
@@ -725,7 +725,7 @@ export default function PlannerPage() {
                 if (!pm) return;
                 
                 if (plan.paused_days.includes(newDayIndex)) {
-                    toast.error("Day paused.");
+                    toast.error("Jour en pause.");
                     return;
                 }
                 
@@ -793,14 +793,14 @@ export default function PlannerPage() {
     return (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
             <div className="min-h-screen relative overflow-x-hidden flex flex-col">
-                <Header title="Smart Week Builder" subtitle={isSunday ? "Week confirmed — deliveries start Monday" : plan.confirmed ? "Your meals are locked and in prep." : "Design your nutrition for the week"} />
+                <Header title="Mon Planificateur" subtitle={isSunday ? "Semaine confirmée — les livraisons commencent lundi" : plan.confirmed ? "Vos repas sont verrouillés et en préparation." : "Planifiez votre nutrition de la semaine"} />
 
                 {/* ── Feature 3: Sticky volume discount header ── */}
                 {totalMeals > 0 && (
                     <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-sm border-b border-[#F0E4D8] px-6 py-2.5">
                         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap">
                             <div className="flex items-center gap-2 text-sm">
-                                <span className="font-bold text-[#2D2D2D]">{totalMeals} meal{totalMeals !== 1 ? 's' : ''}</span>
+                                <span className="font-bold text-[#2D2D2D]">{totalMeals} repas</span>
                                 <span className="text-[#9C9C9C]">·</span>
                                 <span className="text-[#9C9C9C] line-through text-xs">{subtotal} MAD</span>
                                 <span className="font-black text-[#2F8B60] text-base">{discountedTotal} MAD</span>
@@ -825,8 +825,8 @@ export default function PlannerPage() {
                             <div className="flex items-center gap-3">
                                 <Lock size={18} className="text-[#6BC4A0] flex-shrink-0" />
                                 <div>
-                                    <p className="font-bold text-sm">Week confirmed — deliveries start Monday 🚀</p>
-                                    <p className="text-[#9C9C9C] text-xs mt-0.5">The planner is read-only today. Changes resume Monday.</p>
+                                    <p className="font-bold text-sm">Semaine confirmée — les livraisons commencent lundi 🚀</p>
+                                    <p className="text-[#9C9C9C] text-xs mt-0.5">Le planificateur est en lecture seule aujourd'hui. Les modifications reprennent lundi.</p>
                                 </div>
                             </div>
                             {beforeNineAM && (
@@ -836,7 +836,7 @@ export default function PlannerPage() {
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5e] text-white text-xs font-bold px-3 py-2 rounded-full transition-colors whitespace-nowrap"
                                 >
-                                    <MessageCircle size={13} /> WhatsApp emergency
+                                    <MessageCircle size={13} /> Urgence WhatsApp
                                 </a>
                             )}
                         </motion.div>
@@ -855,10 +855,10 @@ export default function PlannerPage() {
                             <div className="flex items-center gap-3">
                                 <AlertTriangle className="text-[#FFA07A]" size={20} />
                                 <p className="text-[#2D2D2D] font-medium text-sm">
-                                    Thursday cutoff in <span className="font-bold text-[#FFA07A]">{Math.floor(urgencyHours)}h</span> — {nonPausedLayoutCount - activeLayoutCount} day(s) still empty.
+                                    Limite de jeudi dans <span className="font-bold text-[#FFA07A]">{Math.floor(urgencyHours)}h</span> — {nonPausedLayoutCount - activeLayoutCount} jour(s) encore vide(s).
                                 </p>
                             </div>
-                            <button onClick={() => setShowReplanModal(true)} className="text-[#FFA07A] text-sm font-bold underline hover:text-[#E05252]">Replan week →</button>
+                            <button onClick={() => setShowReplanModal(true)} className="text-[#FFA07A] text-sm font-bold underline hover:text-[#E05252]">Replanifier la semaine →</button>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -880,7 +880,7 @@ export default function PlannerPage() {
                                         <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white" style={{ backgroundColor: activeMemberId === member.id ? 'rgba(255,255,255,0.3)' : member.avatar_color }}>
                                             {member.name.charAt(0).toUpperCase()}
                                         </div>
-                                        {member.id === 'f1' || member.id === 'u1' ? 'Me' : member.name}
+                                        {member.id === 'f1' || member.id === 'u1' ? 'Moi' : member.name}
                                     </span>
                                 </button>
                             ))}
@@ -898,12 +898,12 @@ export default function PlannerPage() {
                             <AnimatePresence>
                                 {displayScore >= 90 && (
                                     <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="bg-[#F59E0B]/10 text-[#F59E0B] px-3 py-1 rounded-full border border-[#F59E0B]/20 flex items-center gap-1 shadow-sm relative bottom-1">
-                                        ✦ <span className="text-xs font-bold capitalize tracking-wide">Excellent week</span>
+                                        ✦ <span className="text-xs font-bold capitalize tracking-wide">Excellente semaine</span>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
                         </div>
-                        <p className="text-[#9C9C9C] text-sm mt-1">{activeLayoutCount} of {nonPausedLayoutCount} days planned</p>
+                        <p className="text-[#9C9C9C] text-sm mt-1">{activeLayoutCount} sur {nonPausedLayoutCount} jours planifiés</p>
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-center gap-3 relative flex-wrap sm:flex-nowrap">
@@ -915,13 +915,13 @@ export default function PlannerPage() {
                                 onClick={() => setShowReplanModal(true)}
                                 className="flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold bg-white text-[#6BC4A0] border-2 border-[#6BC4A0] transition-colors order-last sm:order-none w-full sm:w-auto mt-4 sm:mt-0"
                             >
-                                <Wand2 size={16} /> Replan week
+                                <Wand2 size={16} /> Replanifier la semaine
                             </motion.button>
                         )}
                         
                     {plan.confirmed && (
-                            <button onClick={() => { setConfirmed(false); toast("Plan unlocked — edit and re-confirm", { icon: "🔓" }); }} className="text-[#9C9C9C] text-sm font-bold underline hover:text-[#2D2D2D] mr-2">
-                                Edit plan
+                            <button onClick={() => { setConfirmed(false); toast("Plan déverrouillé — modifiez et reconfirmez", { icon: "🔓" }); }} className="text-[#9C9C9C] text-sm font-bold underline hover:text-[#2D2D2D] mr-2">
+                                Modifier le plan
                             </button>
                         )}
                         {/* ── Feature 5/6: Confirm button or locked state ── */}
@@ -934,9 +934,9 @@ export default function PlannerPage() {
                             onClick={plan.confirmed ? undefined : handleConfirm}
                             className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all min-w-[220px] ${plan.confirmed ? 'bg-white border-2 border-[#6BC4A0] text-[#6BC4A0] cursor-default' : (subscription.status !== 'active' ? 'bg-[#2D2D2D] text-white' : (hasEmptyGaps ? 'bg-[#F59E0B] text-white shadow-lg' : 'bg-[#6BC4A0] text-white shadow-[0_8px_24px_rgba(107,196,160,0.4)]'))}`}
                         >
-                            {plan.confirmed ? <><CheckCircle size={18} /> Week confirmed ✓</> : 
-                             (subscription.status !== 'active' ? 'Subscribe to confirm →' :
-                             (hasEmptyGaps ? 'Confirm week (incomplete)' : 'Confirm & Review →'))}
+                            {plan.confirmed ? <><CheckCircle size={18} /> Semaine confirmée ✓</> : 
+                             (subscription.status !== 'active' ? "S'abonner pour confirmer →" :
+                             (hasEmptyGaps ? 'Confirmer (incomplet)' : 'Confirmer et réviser →'))}
                         </motion.button>
                         )}
                     </div>
@@ -958,13 +958,13 @@ export default function PlannerPage() {
                             </g>
                         </svg>
                         <h2 className="font-serif text-3xl text-[#2D2D2D] mb-3">
-                            {profile.goal === 'weight_loss' ? "Plan your deficit week" : profile.goal === 'muscle_gain' ? "Build your gains week" : "Your week is a blank canvas"}
+                            {profile.goal === 'weight_loss' ? "Planifiez votre semaine de déficit" : profile.goal === 'muscle_gain' ? "Construisez votre semaine de gains" : "Votre semaine est une page blanche"}
                         </h2>
                         <p className="text-[#6B6B6B] text-sm max-w-md mx-auto mb-8">
-                            Add meals to each day and we'll track your nutrition score in real time. We can also pre-fill the week to match your macros.
+                            Ajoutez des repas à chaque jour et nous suivrons votre score nutritionnel en temps réel. Nous pouvons également pré-remplir la semaine.
                         </p>
                         <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setShowReplanModal(true)} className="bg-[#6BC4A0] text-white px-8 py-3 rounded-full font-bold shadow-[0_8px_24px_rgba(107,196,160,0.3)]">
-                            Start with our top picks →
+                            Commencer avec nos favoris →
                         </motion.button>
                     </motion.div>
                 ) : (
@@ -1014,8 +1014,8 @@ export default function PlannerPage() {
                         return (
                             <div className="flex items-center justify-between bg-white rounded-2xl px-5 py-3 border border-[#F0E4D8] shadow-sm">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-sm font-bold text-[#2D2D2D]">Week total</span>
-                                    <span className="text-[11px] text-[#9C9C9C] font-medium">{mealCount} meal{mealCount !== 1 ? 's' : ''}</span>
+                                    <span className="text-sm font-bold text-[#2D2D2D]">Total de la semaine</span>
+                                    <span className="text-[11px] text-[#9C9C9C] font-medium">{mealCount} repas</span>
                                 </div>
                                 <span className="text-base font-black text-[#2F8B60]">{total} MAD</span>
                             </div>
@@ -1042,7 +1042,7 @@ export default function PlannerPage() {
                     {drawerMode === 'closed' ? (
                         <div className="h-12 w-full flex items-center justify-center relative cursor-pointer hover:bg-[#F9F4F0] transition-colors"
                              onClick={() => { setActiveDrawerDay(DAY_KEYS[0]); setDrawerMode('add'); }}>
-                            <div className="absolute left-6 text-[#9C9C9C] text-xs font-semibold">+ Quick add meal</div>
+                            <div className="absolute left-6 text-[#9C9C9C] text-xs font-semibold">+ Ajout rapide</div>
                             <div className="w-6 h-[3px] bg-[#D4C9BE] rounded-full" />
                         </div>
                     ) : (
@@ -1050,24 +1050,24 @@ export default function PlannerPage() {
                             {/* Header */}
                             <div className="flex items-center justify-between mb-4">
                                 <h3 className="font-serif text-xl text-[#2D2D2D]">
-                                    {drawerMode === 'duplicate' && duplicateMeal ? `Duplicate: ${duplicateMeal.name}` :
-                                     drawerMode === 'add' && activeDrawerDay !== null ? `Adding to ${capitalize(activeDrawerDay)}` :
-                                     "Quick Add Meal"}
+                                    {drawerMode === 'duplicate' && duplicateMeal ? `Dupliquer : ${duplicateMeal.name}` :
+                                     drawerMode === 'add' && activeDrawerDay !== null ? `Ajout à ${capitalize(activeDrawerDay)}` :
+                                     "Ajout rapide de repas"}
                                 </h3>
                                 <button onClick={() => setDrawerMode('closed')} className="px-4 py-1.5 rounded-full border border-[#E8E0D8] text-xs font-bold text-[#6B6B6B] hover:text-[#2D2D2D] hover:border-[#D4C9BE]">
-                                    Done
+                                    Terminé
                                 </button>
                             </div>
 
                             {/* Content */}
                             {drawerMode === 'duplicate' && duplicateMeal ? (
                                 <div>
-                                    <p className="text-xs text-[#9C9C9C] capitalize font-bold tracking-wider mb-3">Copy to which day?</p>
+                                    <p className="text-xs text-[#9C9C9C] capitalize font-bold tracking-wider mb-3">Copier vers quel jour ?</p>
                                     <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-2 -mx-6 px-6">
                                         {DAY_LABELS.map((label, i) => (
                                             <button
                                                 key={i}
-                                                onClick={() => { assignMeal(DAY_KEYS[i], duplicateMeal.id, activeMemberId); toast.success(`Copied to ${label}`); }}
+                                                onClick={() => { assignMeal(DAY_KEYS[i], duplicateMeal.id, activeMemberId); toast.success(`Copié vers ${label}`); }}
                                                 className="bg-[#F1FAF4] hover:bg-[#6BC4A0] hover:text-white text-[#6BC4A0] px-4 py-2.5 rounded-xl text-sm font-bold transition-colors whitespace-nowrap shadow-sm border border-[#A8E6CF]"
                                             >
                                                 + {label}
@@ -1082,7 +1082,7 @@ export default function PlannerPage() {
                                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9C9C9C]" size={16} />
                                         <input
                                             type="text"
-                                            placeholder="Search meals..."
+                                            placeholder="Rechercher des repas..."
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
                                             className="w-full bg-[#FFF8F4] border-none rounded-xl pl-9 pr-4 py-2.5 text-sm focus:ring-2 focus:ring-[#6BC4A0] outline-none text-[#2D2D2D] placeholder-[#9C9C9C]"
@@ -1090,7 +1090,7 @@ export default function PlannerPage() {
                                     </div>
                                     
                                     {/* Best Matches Row */}
-                                    <p className="text-[10px] text-[#9C9C9C] capitalize font-bold mb-2 tracking-wider">Best matches for your macros</p>
+                                    <p className="text-[10px] text-[#9C9C9C] capitalize font-bold mb-2 tracking-wider">Meilleurs matchs pour vos macros</p>
                                     <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-4 -mx-6 px-6">
                                     {drawerSuggestions.map((s, i) => (
                                             <DrawerDraggableMeal
@@ -1105,7 +1105,7 @@ export default function PlannerPage() {
                                     {/* Previously Used Row */}
                                     {alreadyUsedMeals.length > 0 && (
                                         <>
-                                            <p className="text-[10px] text-[#9C9C9C] capitalize font-bold mb-2 tracking-wider mt-2">Already in your week - use again</p>
+                                            <p className="text-[10px] text-[#9C9C9C] capitalize font-bold mb-2 tracking-wider mt-2">Déjà dans votre semaine - réutiliser</p>
                                             <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-4 -mx-6 px-6">
                                                 {alreadyUsedMeals.map((m, i) => {
                                                     const assignedDay = plan.planned_meals.find(pm => pm.meal_id === m.id)?.day_index || 0;
@@ -1118,7 +1118,7 @@ export default function PlannerPage() {
                                     )}
 
                                     <div className="mt-2 text-center">
-                                        <button onClick={() => router.push('/client/menu')} className="text-[11px] font-bold text-[#6BC4A0]/80 hover:text-[#6BC4A0]">Browse full menu →</button>
+                                        <button onClick={() => router.push('/client/menu')} className="text-[11px] font-bold text-[#6BC4A0]/80 hover:text-[#6BC4A0]">Parcourir le menu complet →</button>
                                     </div>
                                 </div>
                             )}
@@ -1133,14 +1133,14 @@ export default function PlannerPage() {
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#2D2D2D]/40 backdrop-blur-sm text-[#F5F0E8]" onClick={() => setShowIncompleteWarning(false)} />
                         <motion.div initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }} className="bg-white rounded-[20px] p-8 max-w-md w-full relative z-10 shadow-[0_24px_48px_rgba(45,45,45,0.2)]">
-                            <h3 className="font-serif text-2xl text-[#2D2D2D] mb-2">Your week has gaps</h3>
-                            <p className="text-[#6B6B6B] mb-8">{nonPausedLayoutCount - activeLayoutCount} day(s) are still empty. You can confirm now or fill the gaps for a better nutrition score.</p>
+                            <h3 className="font-serif text-2xl text-[#2D2D2D] mb-2">Votre semaine a des trous</h3>
+                            <p className="text-[#6B6B6B] mb-8">{nonPausedLayoutCount - activeLayoutCount} jour(s) sont encore vides. Vous pouvez confirmer maintenant ou remplir les trous pour un meilleur score nutritionnel.</p>
                             <div className="flex flex-col gap-3">
                                 <button onClick={() => setShowIncompleteWarning(false)} className="w-full bg-[#6BC4A0] hover:bg-[#5BB48F] text-white font-bold py-3.5 rounded-2xl transition-colors">
-                                    Wait, I'll fill the gaps
+                                    Attendez, je vais remplir les trous
                                 </button>
                                 <button onClick={executeConfirm} className="w-full bg-white border-2 border-[#E8E0D8] hover:border-[#D4C9BE] text-[#6B6B6B] font-bold py-3.5 rounded-full transition-colors">
-                                    Confirm anyway
+                                    Confirmer quand même
                                 </button>
                             </div>
                         </motion.div>
@@ -1163,17 +1163,17 @@ export default function PlannerPage() {
                                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#F1FAF4] mb-3">
                                     <Wand2 className="text-[#6BC4A0]" size={24} />
                                 </div>
-                                <h3 className="font-serif text-2xl text-[#2D2D2D]">Rebuild your week</h3>
-                                <p className="text-[#6B6B6B] mt-2 text-sm px-2">We'll fill all 7 days with meals that best match your macro targets. Your current plan will be replaced.</p>
+                                <h3 className="font-serif text-2xl text-[#2D2D2D]">Reconstruire votre semaine</h3>
+                                <p className="text-[#6B6B6B] mt-2 text-sm px-2">Nous remplirons les 7 jours avec des repas qui correspondent le mieux à vos cibles macro. Votre plan actuel sera remplacé.</p>
                             </div>
 
                             {/* Strategy Selector */}
                             <div className="flex flex-col gap-2 mb-6">
                                 {(
                                     [
-                                        { id: 'balanced', label: 'Balanced macros', desc: 'Best protein/carbs/fats match per day' },
-                                        { id: 'variety', label: 'Maximum variety', desc: '7 different meals, all well-matched' },
-                                        { id: 'repeat', label: 'Repeat favourites', desc: 'Your best meals, repeated as needed' }
+                                        { id: 'balanced', label: 'Macros équilibrés', desc: 'Meilleur match protéines/glucides/lipides par jour' },
+                                        { id: 'variety', label: 'Variété maximale', desc: '7 repas différents, tous bien adaptés' },
+                                        { id: 'repeat', label: 'Répéter les favoris', desc: 'Vos meilleurs repas, répétés au besoin' }
                                     ] as const
                                 ).map((st) => (
                                     <button
@@ -1194,7 +1194,7 @@ export default function PlannerPage() {
 
                             {/* Preview Grid */}
                             <div className="bg-[#FFF8F4] rounded-2xl p-4 mb-4 border border-[#F0E4D8]">
-                                <h4 className="text-[10px] text-[#9C9C9C] capitalize font-bold tracking-wider mb-3">Live Preview</h4>
+                                <h4 className="text-[10px] text-[#9C9C9C] capitalize font-bold tracking-wider mb-3">Aperçu en direct</h4>
                                 <div className="flex flex-col gap-2">
                                     {DAY_KEYS.map((dayKey, i) => {
                                         const isPaused = plan.paused_days.includes(i);
@@ -1212,11 +1212,11 @@ export default function PlannerPage() {
                                                         {DAY_LABELS[i].substring(0, 3)}
                                                     </span>
                                                     {isPaused ? (
-                                                        <span className="text-xs text-[#C4C4C4] italic">Paused</span>
+                                                        <span className="text-xs text-[#C4C4C4] italic">En pause</span>
                                                     ) : meal ? (
                                                         <span className="text-xs font-semibold text-[#2D2D2D] truncate max-w-[140px]">{meal.name}</span>
                                                     ) : (
-                                                        <span className="text-xs text-[#C4C4C4]">Empty</span>
+                                                        <span className="text-xs text-[#C4C4C4]">Vide</span>
                                                     )}
                                                 </div>
                                                 {!isPaused && meal && (
@@ -1232,7 +1232,7 @@ export default function PlannerPage() {
                             </div>
 
                             <div className="flex items-center justify-between mb-6 px-1">
-                                <p className="text-sm font-bold text-[#6BC4A0]">Projected score: {
+                                <p className="text-sm font-bold text-[#6BC4A0]">Score projeté : {
                                     (() => {
                                         let totalSc = 0;
                                         let activeDaysCount = 0;
@@ -1250,17 +1250,17 @@ export default function PlannerPage() {
                                     })()
                                 }/100</p>
                                 <button onClick={handleGenerateMockPlan} className="text-xs font-bold text-[#9C9C9C] hover:text-[#2D2D2D] flex items-center gap-1 transition-colors rounded-full">
-                                    Regenerate <span className="text-[10px]">↺</span>
+                                    Régénérer <span className="text-[10px]">↺</span>
                                 </button>
                             </div>
 
                             {/* Footer */}
                             <div className="flex flex-col gap-2">
                                 <button onClick={handleApplyProposedPlan} className="w-full bg-[#6BC4A0] hover:bg-[#5BB48F] text-white font-bold py-3.5 rounded-full transition-colors">
-                                    Apply plan
+                                    Appliquer le plan
                                 </button>
                                 <button onClick={() => setShowReplanModal(false)} className="w-full bg-white text-[#9C9C9C] hover:text-[#6B6B6B] font-bold py-2 rounded-full transition-colors text-sm">
-                                    Cancel
+                                    Annuler
                                 </button>
                             </div>
 
@@ -1329,7 +1329,7 @@ export default function PlannerPage() {
                                                 liveMeal.tier === 'kids' ? 'bg-[#FFF0E5]/90 text-[#E07050]' :
                                                 'bg-white/90 text-[#6B6B6B]'
                                             }`}>
-                                                {liveMeal.tier === 'premium' ? '👑 Premium' : liveMeal.tier === 'standard' ? '⭐ Standard' : liveMeal.tier === 'kids' ? '🧒 Kids' : '💚 Budget'}
+                                                {liveMeal.tier === 'premium' ? '👑 Premium' : liveMeal.tier === 'standard' ? '⭐ Standard' : liveMeal.tier === 'kids' ? '🧒 Enfants' : '💚 Budget'}
                                             </span>
                                         </div>
                                         
@@ -1347,7 +1347,7 @@ export default function PlannerPage() {
                                         <div className="flex items-center gap-3 mt-1.5">
                                             <p className="text-[#9C9C9C] text-sm font-medium">{liveMeal.macros.kcal} calories</p>
                                             <div className="w-1 h-1 rounded-full bg-[#D4C9BE]" />
-                                            <p className="text-[#9C9C9C] text-sm font-medium">{liveMeal.prep_time_min} min prep</p>
+                                            <p className="text-[#9C9C9C] text-sm font-medium">{liveMeal.prep_time_min} min de prép</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-col items-end gap-2 shrink-0">
@@ -1361,7 +1361,7 @@ export default function PlannerPage() {
                                 <div className="grid grid-cols-2 gap-3 mb-6">
                                     <div className="bg-[#FFF8F4] p-3 rounded-2xl border border-[#F0E4D8]">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-xs font-bold text-[#6B6B6B]">Protein</span>
+                                            <span className="text-xs font-bold text-[#6B6B6B]">Protéines</span>
                                             <span className="text-[10px] font-black text-[#B09AE0]">{liveMeal.macros.protein_g}g</span>
                                         </div>
                                         <div className="w-full h-[3px] bg-[#F0EBE3] rounded-full overflow-hidden">
@@ -1370,7 +1370,7 @@ export default function PlannerPage() {
                                     </div>
                                     <div className="bg-[#FFF8F4] p-3 rounded-2xl border border-[#F0E4D8]">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-xs font-bold text-[#6B6B6B]">Carbs</span>
+                                            <span className="text-xs font-bold text-[#6B6B6B]">Glucides</span>
                                             <span className="text-[10px] font-black text-[#F59E0B]">{liveMeal.macros.carbs_g}g</span>
                                         </div>
                                         <div className="w-full h-[3px] bg-[#F0EBE3] rounded-full overflow-hidden">
@@ -1379,7 +1379,7 @@ export default function PlannerPage() {
                                     </div>
                                     <div className="bg-[#FFF8F4] p-3 rounded-2xl border border-[#F0E4D8]">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-xs font-bold text-[#6B6B6B]">Fats</span>
+                                            <span className="text-xs font-bold text-[#6B6B6B]">Lipides</span>
                                             <span className="text-[10px] font-black text-[#FFA07A]">{liveMeal.macros.fats_g}g</span>
                                         </div>
                                         <div className="w-full h-[3px] bg-[#F0EBE3] rounded-full overflow-hidden">
@@ -1399,16 +1399,16 @@ export default function PlannerPage() {
 
                                 {/* Ingredients & Allergens */}
                                 <div className="mb-6">
-                                    <h4 className="text-xs font-bold text-[#2D2D2D] mb-2">Ingredients</h4>
+                                    <h4 className="text-xs font-bold text-[#2D2D2D] mb-2">Ingrédients</h4>
                                     <div className="flex flex-wrap gap-2">
                                         {(liveMeal as any).ingredients?.map((ing: string, i: number) => (
                                             <span key={i} className="px-3 py-1 bg-[#F5F0EA] text-[#6B6B6B] rounded-full text-[11px] font-medium">{ing}</span>
-                                        )) || <span className="text-[11px] text-[#9C9C9C]">Ingredients perfectly crafted by our chefs.</span>}
+                                        )) || <span className="text-[11px] text-[#9C9C9C]">Ingrédients parfaitement préparés par nos chefs.</span>}
                                     </div>
                                 </div>
                                 
                                 <div className="mb-8">
-                                    <h4 className="text-xs font-bold text-[#2D2D2D] mb-2">Contains</h4>
+                                    <h4 className="text-xs font-bold text-[#2D2D2D] mb-2">Contient</h4>
                                     <div className="flex flex-wrap gap-2">
                                         {liveMeal.allergens.length > 0 ? (
                                             liveMeal.allergens.map((alg, i) => (
@@ -1416,7 +1416,7 @@ export default function PlannerPage() {
                                             ))
                                         ) : (
                                             <div className="flex items-center gap-1.5 text-[#6BC4A0] text-[11px] font-bold">
-                                                <ShieldCheck size={14} /> No allergens
+                                                <ShieldCheck size={14} /> Sans allergènes
                                             </div>
                                         )}
                                     </div>
@@ -1426,12 +1426,12 @@ export default function PlannerPage() {
                                 {!isReadOnly && (
                                     <div className="mb-6 bg-[#FFF8F4] rounded-2xl p-4 border border-[#F0E4D8]">
                                         <h4 className="text-xs font-bold text-[#2D2D2D] mb-3 flex items-center gap-1.5">
-                                            <MapPin size={12} className="text-[#6BC4A0]" /> Delivery for this meal
+                                            <MapPin size={12} className="text-[#6BC4A0]" /> Livraison pour ce repas
                                         </h4>
                                         <div className="grid grid-cols-2 gap-2 mb-3">
                                             {/* Time slot selector */}
                                             <div>
-                                                <p className="text-[10px] text-[#9C9C9C] mb-1 font-bold capitalize">Time</p>
+                                                <p className="text-[10px] text-[#9C9C9C] mb-1 font-bold capitalize">Heure</p>
                                                 <div className="flex flex-col gap-1">
                                                     {(['07:00', '12:30', '18:00', '21:00'] as DeliveryTimeSlot[]).map(slot => {
                                                         const current = deliveryAssignments[selectedMeal.pmId];
@@ -1455,7 +1455,7 @@ export default function PlannerPage() {
                                             </div>
                                             {/* Location selector */}
                                             <div>
-                                                <p className="text-[10px] text-[#9C9C9C] mb-1 font-bold capitalize">Location</p>
+                                                <p className="text-[10px] text-[#9C9C9C] mb-1 font-bold capitalize">Lieu</p>
                                                 <div className="flex flex-col gap-1">
                                                     {(['home', 'office', 'campus', 'gym', 'school'] as DeliveryLocation[]).map(loc => {
                                                         const current = deliveryAssignments[selectedMeal.pmId];
@@ -1488,14 +1488,14 @@ export default function PlannerPage() {
                                         {pendingAddress && pendingAddress.pmId === selectedMeal.pmId && (
                                             <div className="mt-2 p-3 bg-[#FFF0E5] rounded-xl border border-[#FFA07A]/30">
                                                 <p className="text-[11px] text-[#9A3412] font-bold mb-2">
-                                                    No address saved for <span className="capitalize">{pendingAddress.location}</span>. Add one:
+                                                    Aucune adresse pour <span className="capitalize">{pendingAddress.location}</span>. Ajoutez-en une :
                                                 </p>
                                                 <div className="flex gap-2">
                                                     <input
                                                         type="text"
                                                         value={pendingAddress.value}
                                                         onChange={e => setPendingAddress(p => p ? { ...p, value: e.target.value } : null)}
-                                                        placeholder="e.g. 12 Rue Hassan II, Casablanca"
+                                                        placeholder="ex: 12 Rue Hassan II, Casablanca"
                                                         className="flex-1 text-xs px-3 py-2 rounded-2xl border border-[#F0E4D8] bg-white outline-none focus:ring-1 focus:ring-[#6BC4A0]"
                                                     />
                                                     <button
@@ -1512,14 +1512,14 @@ export default function PlannerPage() {
                                                         }}
                                                         className="bg-[#6BC4A0] text-white text-xs font-bold px-3 py-2 rounded-2xl transition-colors hover:bg-[#5BB48F]"
                                                     >
-                                                        Save
+                                                        Enregistrer
                                                     </button>
                                                 </div>
                                             </div>
                                         )}
                                         {deliveryAssignments[selectedMeal.pmId] && (
                                             <p className="text-[10px] text-[#6BC4A0] font-bold mt-2">
-                                                ✓ {deliveryAssignments[selectedMeal.pmId].timeSlot} · {deliveryAssignments[selectedMeal.pmId].location} ({profile.savedAddresses?.[deliveryAssignments[selectedMeal.pmId].location] ?? 'address pending'})
+                                                ✓ {deliveryAssignments[selectedMeal.pmId].timeSlot} · {deliveryAssignments[selectedMeal.pmId].location} ({profile.savedAddresses?.[deliveryAssignments[selectedMeal.pmId].location] ?? 'adresse en attente'})
                                             </p>
                                         )}
                                     </div>
@@ -1532,11 +1532,11 @@ export default function PlannerPage() {
                                             onClick={() => {
                                                 removeMealFromDay(selectedMeal.pmId);
                                                 setSelectedMeal(null);
-                                                toast.info("Meal removed");
+                                                toast.info("Repas retiré");
                                             }} 
                                             className="flex-1 bg-white border-2 border-[#E05252]/20 hover:bg-[#E05252]/5 text-[#E05252] font-bold py-3.5 rounded-full transition-colors flex items-center justify-center gap-2"
                                         >
-                                            <Trash2 size={18} /> Remove from plan
+                                            <Trash2 size={18} /> Retirer du plan
                                         </button>
                                     </div>
                                 )}
@@ -1578,7 +1578,7 @@ export default function PlannerPage() {
                                 </div>
 
                                 {/* ── Day selector (at the top) ── */}
-                                <p className="text-[10px] text-[#9C9C9C] capitalize font-bold mb-2 tracking-wider">Day</p>
+                                <p className="text-[10px] text-[#9C9C9C] capitalize font-bold mb-2 tracking-wider">Jour</p>
                                 <div className="flex flex-wrap gap-1.5 mb-4">
                                     {DAY_KEYS.map((key, i) => (
                                         <button
@@ -1661,7 +1661,7 @@ export default function PlannerPage() {
                                                 }}
                                                 className="bg-[#6BC4A0] text-white text-xs font-bold px-3 py-2 rounded-2xl hover:bg-[#5BB48F] transition-colors"
                                             >
-                                                Save
+                                                Enregistrer
                                             </button>
                                         </div>
                                     </div>
@@ -1710,7 +1710,7 @@ export default function PlannerPage() {
                         >
                             <div className="p-6">
                                 <div className="flex items-center justify-between mb-6">
-                                    <h2 className="font-serif text-2xl text-[#2D2D2D]">Review & Confirm</h2>
+                                    <h2 className="font-serif text-2xl text-[#2D2D2D]">Réviser et Confirmer</h2>
                                     <button onClick={() => setShowConfirmModal(false)} className="p-2 bg-[#F1EFE8] rounded-full text-[#5F5E5A] hover:bg-[#E8E0D8]"><X size={16} /></button>
                                 </div>
 
@@ -1736,7 +1736,7 @@ export default function PlannerPage() {
                                                 </div>
                                                 <div className="flex flex-col items-end shrink-0 ml-2">
                                                     <span className="text-xs font-black text-[#2F8B60]">{m.price_mad} MAD</span>
-                                                    {!assign && <span className="text-[9px] text-[#FFA07A] font-bold">⚠ No delivery set</span>}
+                                                    {!assign && <span className="text-[9px] text-[#FFA07A] font-bold">⚠ Pas de livraison définie</span>}
                                                 </div>
                                             </div>
                                         );
@@ -1748,12 +1748,12 @@ export default function PlannerPage() {
                                 {/* Pricing breakdown */}
                                 <div className="space-y-2 mb-6">
                                     <div className="flex justify-between text-sm text-[#6B6B6B]">
-                                        <span>Subtotal ({totalMeals} meals)</span>
+                                        <span>Sous-total ({totalMeals} repas)</span>
                                         <span>{subtotal} MAD</span>
                                     </div>
                                     {discountPct > 0 && (
                                         <div className="flex justify-between text-sm text-[#6BC4A0] font-semibold">
-                                            <span>Volume discount (-{discountPct}%)</span>
+                                            <span>Remise de volume (-{discountPct}%)</span>
                                             <span>-{subtotal - discountedTotal} MAD</span>
                                         </div>
                                     )}
@@ -1761,14 +1761,14 @@ export default function PlannerPage() {
                                         <span>Total</span>
                                         <span className="text-[#2F8B60]">{discountedTotal} MAD</span>
                                     </div>
-                                    <p className="text-[10px] text-[#9C9C9C] text-right">Charged this Saturday</p>
+                                    <p className="text-[10px] text-[#9C9C9C] text-right">Facturé ce samedi</p>
                                 </div>
 
                                 {/* Missing delivery warning */}
                                 {plan.planned_meals.some(pm => !deliveryAssignments[pm.id]) && (
                                     <div className="bg-[#FFF0E5] border border-[#FFA07A]/30 rounded-xl p-3 mb-4">
                                         <p className="text-[11px] text-[#9A3412] font-semibold">
-                                            ⚠️ Some meals have no delivery time/location assigned. Open each meal to set it, or confirm anyway.
+                                            ⚠️ Certains repas n'ont pas d'heure/lieu de livraison. Ouvrez chaque repas pour le définir, ou confirmez quand même.
                                         </p>
                                     </div>
                                 )}
@@ -1780,11 +1780,11 @@ export default function PlannerPage() {
                                         setConfirmed(true);
                                         addPoints(25);
                                         setShowConfirmModal(false);
-                                        toast.success('🎉 Week confirmed! Deliveries scheduled.', { duration: 4000 });
+                                        toast.success('🎉 Semaine confirmée ! Livraisons planifiées.', { duration: 4000 });
                                     }}
                                     className="w-full bg-[#6BC4A0] hover:bg-[#5BB48F] text-white font-bold py-4 rounded-2xl shadow-[0_8px_24px_rgba(107,196,160,0.3)] transition-colors"
                                 >
-                                    Confirm & Schedule →
+                                    Confirmer et planifier →
                                 </motion.button>
                             </div>
                         </motion.div>

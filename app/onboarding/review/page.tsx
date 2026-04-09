@@ -24,7 +24,7 @@ export default function ReviewPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-4 block"
                 >
-                    Step 05
+                    Étape 05
                 </motion.span>
                 <div className="flex justify-center mb-6">
                     <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center">
@@ -37,7 +37,7 @@ export default function ReviewPage() {
                     transition={{ delay: 0.1 }}
                     className="font-serif text-4xl lg:text-5xl text-text-primary mb-4"
                 >
-                    Profile Complete
+                    Profil Complet
                 </motion.h1>
                 <motion.p 
                     initial={{ opacity: 0, y: 10 }}
@@ -45,7 +45,7 @@ export default function ReviewPage() {
                     transition={{ delay: 0.2 }}
                     className="text-text-muted text-lg font-sans max-w-md mx-auto"
                 >
-                    Review your targets before we build your week.
+                    Vérifiez vos cibles avant que nous préparions votre semaine.
                 </motion.p>
             </div>
 
@@ -59,7 +59,7 @@ export default function ReviewPage() {
                 >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
                     
-                    <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-6 border-b border-border pb-3">Your Daily Targets</h3>
+                    <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-6 border-b border-border pb-3">Vos Cibles Quotidiennes</h3>
                     <div className="flex justify-between items-center">
                         <div>
                             <span className="text-6xl font-serif text-text-primary leading-none">{profile.targets?.kcal || 0}</span>
@@ -68,15 +68,15 @@ export default function ReviewPage() {
                         <div className="flex gap-6">
                             <div className="text-center">
                                 <span className="block text-xl font-serif text-primary">{profile.targets?.protein_g || 0}g</span>
-                                <span className="text-[9px] text-text-muted uppercase font-bold tracking-tighter">Protein</span>
+                                <span className="text-[9px] text-text-muted uppercase font-bold tracking-tighter">Protéines</span>
                             </div>
                             <div className="text-center">
                                 <span className="block text-xl font-serif text-primary">{profile.targets?.carbs_g || 0}g</span>
-                                <span className="text-[9px] text-text-muted uppercase font-bold tracking-tighter">Carbs</span>
+                                <span className="text-[9px] text-text-muted uppercase font-bold tracking-tighter">Glucides</span>
                             </div>
                             <div className="text-center">
                                 <span className="block text-xl font-serif text-primary">{profile.targets?.fats_g || 0}g</span>
-                                <span className="text-[9px] text-text-muted uppercase font-bold tracking-tighter">Fats</span>
+                                <span className="text-[9px] text-text-muted uppercase font-bold tracking-tighter">Lipides</span>
                             </div>
                         </div>
                     </div>
@@ -87,14 +87,14 @@ export default function ReviewPage() {
                     <div className="bg-white p-6 rounded-[24px] border-[1.5px] border-border flex flex-col gap-2 shadow-sm">
                         <Activity size={20} strokeWidth={1.5} className="text-primary" />
                         <div>
-                            <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block">Activity</span>
+                            <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block">Activité</span>
                             <p className="font-serif text-lg text-text-primary capitalize">{profile.activity_level?.replace("_", " ")}</p>
                         </div>
                     </div>
                     <div className="bg-white p-6 rounded-[24px] border-[1.5px] border-border flex flex-col gap-2 shadow-sm">
                         <Target size={20} strokeWidth={1.5} className="text-primary" />
                         <div>
-                            <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block">Goal</span>
+                            <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block">Objectif</span>
                             <p className="font-serif text-lg text-text-primary capitalize">{profile.goal?.replace("_", " ")}</p>
                         </div>
                     </div>
@@ -108,18 +108,18 @@ export default function ReviewPage() {
                                 <Users size={24} strokeWidth={1.5} />
                             </div>
                             <div>
-                                <h4 className="font-serif text-lg text-text-primary leading-tight">Family Mode</h4>
-                                <p className="text-xs text-text-muted">{secondaryMembers.length} additional members</p>
+                                <h4 className="font-serif text-lg text-text-primary leading-tight">Mode Famille</h4>
+                                <p className="text-xs text-text-muted">{secondaryMembers.length} membres supplémentaires</p>
                             </div>
                         </div>
-                        <div className="px-3 py-1 bg-accent/10 text-accent text-[9px] font-bold uppercase tracking-widest rounded-full">Active</div>
+                        <div className="px-3 py-1 bg-accent/10 text-accent text-[9px] font-bold uppercase tracking-widest rounded-full">Actif</div>
                     </div>
                 )}
 
                 {/* Location Details */}
                 {savedLocs.length > 0 && (
                     <div className="bg-white p-8 rounded-[32px] border-[1.5px] border-border shadow-sm">
-                        <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-6 border-b border-border pb-3">Delivery Locations</h3>
+                        <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-6 border-b border-border pb-3">Lieux de Livraison</h3>
                         <div className="space-y-5">
                             {savedLocs.map((loc, i) => (
                                 <div key={i} className="flex items-start gap-4">
@@ -145,7 +145,7 @@ export default function ReviewPage() {
                         onClick={() => router.push("/onboarding/pricing-setup")}
                         className="w-full h-16 rounded-full bg-primary text-background font-sans font-bold flex items-center justify-center gap-3 text-lg shadow-[0_15px_30px_-10px_rgba(44,62,45,0.4)] hover:bg-primary/90 transition-all uppercase tracking-widest"
                     >
-                        <span>Build my week</span>
+                        <span>Préparer ma semaine</span>
                         <ArrowRight size={20} />
                     </motion.button>
                 </div>

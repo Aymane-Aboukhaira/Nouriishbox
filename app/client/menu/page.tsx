@@ -20,7 +20,7 @@ const CATEGORIES: { value: "all" | MealCategory; label: string; emoji: string }[
 ];
 
 const DAY_KEYS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"];
-const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const DAY_LABELS = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 
 // ── Pure Functions ───────────────────────────────────────────
 
@@ -85,7 +85,7 @@ function MenuMealCard({
 
     if (isTomorrow) {
         pillStyle = "bg-[#F3EEFA] text-[#B09AE0]";
-        pillLabel = "Tomorrow?";
+        pillLabel = "Demain ?";
     } else if (matchScore >= 80) {
         pillStyle = "bg-[#E1F5EE] text-[#085041]";
         pillLabel = `${matchScore}% Match`;
@@ -252,7 +252,7 @@ export default function MenuPage() {
         setActivePopoverMealId(null);
         setSelectedMealId(null);
         addPoints(5);
-        toast.success(`✨ ${meal.name} added to ${DAY_LABELS[dayIndex]}`);
+        toast.success(`✨ ${meal.name} ajouté à ${DAY_LABELS[dayIndex]}`);
     };
 
     const handleAssignToNextFreeDay = (meal: Meal) => {
@@ -265,7 +265,7 @@ export default function MenuPage() {
 
     return (
         <div className="min-h-screen relative pb-32">
-            <Header title="Explorer notre Menu" subtitle="Designed for your body's specific needs" />
+            <Header title="Explorer notre Menu" subtitle="Conçu pour les besoins spécifiques de votre corps" />
             
             <div className="p-6 md:p-8 max-w-7xl mx-auto w-full">
                 
@@ -273,8 +273,8 @@ export default function MenuPage() {
                 {!isLoading && search === "" && !fixMacrosActive && activeCategory === "all" && (
                     <div className="mb-10 w-full full-width-scroll overflow-hidden">
                         <div className="flex items-end justify-between mb-4">
-                            <h2 className="font-serif text-2xl text-[#2D2D2D]">Built for you today</h2>
-                            <p className="text-xs text-[#9C9C9C] font-semibold">Updated {new Date().toLocaleTimeString('fr-MA', { hour: '2-digit', minute: '2-digit' })}</p>
+                            <h2 className="font-serif text-2xl text-[#2D2D2D]">Conçu pour vous aujourd'hui</h2>
+                            <p className="text-xs text-[#9C9C9C] font-semibold">Mis à jour à {new Date().toLocaleTimeString('fr-MA', { hour: '2-digit', minute: '2-digit' })}</p>
                         </div>
 
                         {targetMet ? (
@@ -282,13 +282,13 @@ export default function MenuPage() {
                                 <div className="w-12 h-12 rounded-full bg-[#F59E0B]/20 flex items-center justify-center mb-3">
                                     <span className="text-2xl">🏆</span>
                                 </div>
-                                <h3 className="font-serif text-xl text-[#633806] mb-1">You've hit your targets for today</h3>
-                                <p className="text-[#92620A] text-sm">Come back tomorrow — or browse for tomorrow's meals below.</p>
+                                <h3 className="font-serif text-xl text-[#633806] mb-1">Vous avez atteint vos objectifs pour aujourd'hui</h3>
+                                <p className="text-[#92620A] text-sm">Revenez demain — ou parcourez nos repas pour demain.</p>
                             </div>
                         ) : (
                             <>
                                 {loggedNothing && (
-                                    <p className="text-xs text-[#9C9C9C] italic mb-4">Nothing logged yet — here's a great start for today.</p>
+                                    <p className="text-xs text-[#9C9C9C] italic mb-4">Rien d'enregistré encore — voici un excellent point de départ pour aujourd'hui.</p>
                                 )}
                                 <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar -mx-6 px-6 lg:mx-0 lg:px-0">
                                     {top4Today.map(({ meal, score }, i) => (
@@ -320,7 +320,7 @@ export default function MenuPage() {
                                             {/* Score Badge */}
                                             <div className="mb-4">
                                                 <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${score >= 80 ? 'bg-[#E1F5EE] text-[#085041]' : score >= 60 ? 'bg-[#FAEEDA] text-[#633806]' : 'bg-[#F1EFE8] text-[#5F5E5A]'}`}>
-                                                    {score >= 80 ? "Perfect for now" : score >= 60 ? "Great match" : "Good option"}
+                                                    {score >= 80 ? "Parfait pour le moment" : score >= 60 ? "Excellent match" : "Bonne option"}
                                                 </span>
                                             </div>
 
@@ -328,7 +328,7 @@ export default function MenuPage() {
                                                 onClick={(e) => { e.stopPropagation(); handleAddClick(meal, e.currentTarget.getBoundingClientRect()); }}
                                                 className="w-full bg-[#6BC4A0] hover:bg-[#5BB48F] text-white py-2 rounded-xl text-xs font-bold transition-colors mt-auto"
                                             >
-                                                + Add
+                                                + Ajouter
                                             </button>
                                         </motion.div>
                                     ))}
@@ -363,7 +363,7 @@ export default function MenuPage() {
                             className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold whitespace-nowrap transition-all shadow-sm flex-shrink-0 ${fixMacrosActive ? 'bg-[#6BC4A0] text-white outline outline-2 outline-offset-2 outline-[#6BC4A0]' : 'bg-[#FFF8F4] text-[#6BC4A0] border-2 border-[#6BC4A0]'}`}
                         >
                             <Zap size={14} className={fixMacrosActive ? "text-white" : "text-[#6BC4A0]"} fill={fixMacrosActive ? "white" : "none"} />
-                            Fix my macros
+                            Corriger mes macros
                         </motion.button>
                         
                         <div className="w-px h-6 bg-[#F0E4D8] my-auto mx-1 flex-shrink-0" />
@@ -387,7 +387,7 @@ export default function MenuPage() {
                     </div>
                     {fixMacrosActive && (
                         <motion.p initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} className="text-xs text-[#6B6B6B] mt-2">
-                            Showing {filtered.length} meals · ranked by how well they close your macro gaps
+                            Affichage de {filtered.length} repas · triés selon leur correspondance à vos macros
                         </motion.p>
                     )}
                 </div>
@@ -403,22 +403,22 @@ export default function MenuPage() {
                             {fixMacrosActive ? (
                                 <>
                                     <CheckCircle className="text-[#6BC4A0] mb-4" size={56} />
-                                    <h3 className="font-serif text-2xl text-[#2D2D2D] mb-1">You're perfectly on track today!</h3>
-                                    <p className="text-[#6B6B6B] text-sm">No macro gaps to fill.</p>
+                                    <h3 className="font-serif text-2xl text-[#2D2D2D] mb-1">Vous êtes parfaitement sur la bonne voie aujourd'hui !</h3>
+                                    <p className="text-[#6B6B6B] text-sm">Aucun écart de macro à combler.</p>
                                 </>
                             ) : search !== "" ? (
                                 <>
                                     <Search className="text-[#D4C9BE] mb-4" size={56} />
-                                    <h3 className="font-serif text-2xl text-[#2D2D2D] mb-1">No meals found</h3>
-                                    <p className="text-[#6B6B6B] text-sm mb-4">Try a different search or clear your filters</p>
-                                    <button onClick={() => setSearch("")} className="px-6 py-2 border-2 border-[#F0E4D8] text-[#2D2D2D] font-bold rounded-full hover:border-[#D4C9BE]">Clear search</button>
+                                    <h3 className="font-serif text-2xl text-[#2D2D2D] mb-1">Aucun repas trouvé</h3>
+                                    <p className="text-[#6B6B6B] text-sm mb-4">Essayez une recherche différente ou effacez vos filtres</p>
+                                    <button onClick={() => setSearch("")} className="px-6 py-2 border-2 border-[#F0E4D8] text-[#2D2D2D] font-bold rounded-full hover:border-[#D4C9BE]">Effacer la recherche</button>
                                 </>
                             ) : (
                                 <>
                                     <Search className="text-[#D4C9BE] mb-4" size={56} />
-                                    <h3 className="font-serif text-2xl text-[#2D2D2D] mb-1">Nothing in {activeCategory} right now</h3>
-                                    <p className="text-[#6B6B6B] text-sm mb-4">Check back next week — our menu rotates seasonally</p>
-                                    <button onClick={() => setActiveCategory("all")} className="px-6 py-2 border-2 border-[#F0E4D8] text-[#2D2D2D] font-bold rounded-full hover:border-[#D4C9BE]">Show all meals</button>
+                                    <h3 className="font-serif text-2xl text-[#2D2D2D] mb-1">Rien dans {activeCategory} pour le moment</h3>
+                                    <p className="text-[#6B6B6B] text-sm mb-4">Revenez la semaine prochaine — notre menu change avec les saisons</p>
+                                    <button onClick={() => setActiveCategory("all")} className="px-6 py-2 border-2 border-[#F0E4D8] text-[#2D2D2D] font-bold rounded-full hover:border-[#D4C9BE]">Afficher tous les repas</button>
                                 </>
                             )}
                         </motion.div>
@@ -443,7 +443,7 @@ export default function MenuPage() {
                                         onRemoveClick={(m) => {
                                             const pm = plan.planned_meals.find(x => x.meal_id === m.id);
                                             if (pm) removeMealFromDay(pm.id);
-                                            toast.info(`${m.name} removed`);
+                                            toast.info(`${m.name} retiré`);
                                         }}
                                     />
                                 </motion.div>
@@ -472,7 +472,7 @@ export default function MenuPage() {
                             }}
                             className="bg-white rounded-2xl shadow-[0_12px_48px_rgba(45,45,45,0.15)] p-3 w-[320px] pointer-events-auto border border-[#E8E0D8] day-selector-popover"
                         >
-                            <h4 className="text-xs font-bold text-[#2D2D2D] mb-2 px-1">Add to which day?</h4>
+                            <h4 className="text-xs font-bold text-[#2D2D2D] mb-2 px-1">Ajouter à quel jour ?</h4>
                             <div className="flex items-center justify-between gap-1 mb-3">
                                 {DAY_LABELS.map((label, i) => {
                                     const isPaused = plan.paused_days.includes(i);
@@ -481,7 +481,7 @@ export default function MenuPage() {
                                     
                                     return (
                                         <div key={i} className="flex flex-col items-center gap-1">
-                                            {isToday && <span className="text-[8px] font-bold text-[#6BC4A0] absolute -top-3">Today</span>}
+                                            {isToday && <span className="text-[8px] font-bold text-[#6BC4A0] absolute -top-3">Aujourd'hui</span>}
                                             <button
                                                 disabled={isPaused}
                                                 onClick={() => assignToDay(i, meals.find(m => m.id === activePopoverMealId)!)}
@@ -495,7 +495,7 @@ export default function MenuPage() {
                                 })}
                             </div>
                             <button onClick={() => handleAssignToNextFreeDay(meals.find(m => m.id === activePopoverMealId)!)} className="text-[11px] text-[#6BC4A0] font-bold hover:underline w-full text-center mt-1">
-                                Or add to next empty day →
+                                Ou ajouter au prochain jour vide →
                             </button>
                         </motion.div>
                     </div>
@@ -547,7 +547,7 @@ export default function MenuPage() {
                                                 selectedMeal.tier === 'kids' ? 'bg-[#FFF0E5]/90 text-[#E07050]' :
                                                 'bg-white/90 text-[#6B6B6B]'
                                             }`}>
-                                                {selectedMeal.tier === 'premium' ? '👑 Premium' : selectedMeal.tier === 'standard' ? '⭐ Standard' : selectedMeal.tier === 'kids' ? '🧒 Kids' : '💚 Budget'}
+                                                {selectedMeal.tier === 'premium' ? '👑 Premium' : selectedMeal.tier === 'standard' ? '⭐ Standard' : selectedMeal.tier === 'kids' ? '🧒 Enfants' : '💚 Budget'}
                                             </span>
                                         </div>
                                         
@@ -565,7 +565,7 @@ export default function MenuPage() {
                                         <div className="flex items-center gap-3 mt-1.5">
                                             <p className="text-[#9C9C9C] text-sm font-medium">{selectedMeal.macros.kcal} calories</p>
                                             <div className="w-1 h-1 rounded-full bg-[#D4C9BE]" />
-                                            <p className="text-[#9C9C9C] text-sm font-medium">{selectedMeal.prep_time_min} min prep</p>
+                                            <p className="text-[#9C9C9C] text-sm font-medium">{selectedMeal.prep_time_min} min de prép</p>
                                         </div>
                                     </div>
                                     <div className="flex flex-col items-end gap-2 shrink-0">
@@ -579,33 +579,33 @@ export default function MenuPage() {
                                 <div className="grid grid-cols-2 gap-3 mb-6">
                                     <div className="bg-[#FFF8F4] p-3 rounded-2xl border border-[#F0E4D8]">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-xs font-bold text-[#6B6B6B]">Protein</span>
+                                            <span className="text-xs font-bold text-[#6B6B6B]">Protéines</span>
                                             <span className="text-xs font-black text-[#B09AE0]">{selectedMeal.macros.protein_g}g</span>
                                         </div>
                                         <div className="w-full h-1.5 bg-[#F0EBE3] rounded-full overflow-hidden">
                                             <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(selectedMeal.macros.protein_g / (profile.targets?.protein_g||150) * 100, 100)}%` }} transition={{ duration: 0.8 }} className="h-full bg-[#B09AE0]" />
                                         </div>
-                                        <p className="text-[9px] text-[#9C9C9C] mt-2">of {profile.targets?.protein_g||150}g daily target</p>
+                                        <p className="text-[9px] text-[#9C9C9C] mt-2">sur {profile.targets?.protein_g||150}g d'objectif quotidien</p>
                                     </div>
                                     <div className="bg-[#FFF8F4] p-3 rounded-2xl border border-[#F0E4D8]">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-xs font-bold text-[#6B6B6B]">Carbs</span>
+                                            <span className="text-xs font-bold text-[#6B6B6B]">Glucides</span>
                                             <span className="text-xs font-black text-[#F59E0B]">{selectedMeal.macros.carbs_g}g</span>
                                         </div>
                                         <div className="w-full h-1.5 bg-[#F0EBE3] rounded-full overflow-hidden">
                                             <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(selectedMeal.macros.carbs_g / (profile.targets?.carbs_g||200) * 100, 100)}%` }} transition={{ duration: 0.8 }} className="h-full bg-[#F59E0B]" />
                                         </div>
-                                        <p className="text-[9px] text-[#9C9C9C] mt-2">of {profile.targets?.carbs_g||200}g daily target</p>
+                                        <p className="text-[9px] text-[#9C9C9C] mt-2">sur {profile.targets?.carbs_g||200}g d'objectif quotidien</p>
                                     </div>
                                     <div className="bg-[#FFF8F4] p-3 rounded-2xl border border-[#F0E4D8]">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-xs font-bold text-[#6B6B6B]">Fats</span>
+                                            <span className="text-xs font-bold text-[#6B6B6B]">Lipides</span>
                                             <span className="text-xs font-black text-[#FFA07A]">{selectedMeal.macros.fats_g}g</span>
                                         </div>
                                         <div className="w-full h-1.5 bg-[#F0EBE3] rounded-full overflow-hidden">
                                             <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(selectedMeal.macros.fats_g / (profile.targets?.fats_g||65) * 100, 100)}%` }} transition={{ duration: 0.8 }} className="h-full bg-[#FFA07A]" />
                                         </div>
-                                        <p className="text-[9px] text-[#9C9C9C] mt-2">of {profile.targets?.fats_g||65}g daily target</p>
+                                        <p className="text-[9px] text-[#9C9C9C] mt-2">sur {profile.targets?.fats_g||65}g d'objectif quotidien</p>
                                     </div>
                                     <div className="bg-[#FFF8F4] p-3 rounded-2xl border border-[#F0E4D8]">
                                         <div className="flex items-center justify-between mb-2">
@@ -615,22 +615,22 @@ export default function MenuPage() {
                                         <div className="w-full h-1.5 bg-[#F0EBE3] rounded-full overflow-hidden">
                                             <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(selectedMeal.macros.kcal / (profile.targets?.kcal||2000) * 100, 100)}%` }} transition={{ duration: 0.8 }} className="h-full bg-[#6BC4A0]" />
                                         </div>
-                                        <p className="text-[9px] text-[#9C9C9C] mt-2">of {profile.targets?.kcal||2000} kcal limit</p>
+                                        <p className="text-[9px] text-[#9C9C9C] mt-2">sur une limite de {profile.targets?.kcal||2000} kcal</p>
                                     </div>
                                 </div>
 
                                 {/* Ingredients & Allergens */}
                                 <div className="mb-6">
-                                    <h4 className="text-xs font-bold text-[#2D2D2D] mb-2">Ingredients</h4>
+                                    <h4 className="text-xs font-bold text-[#2D2D2D] mb-2">Ingrédients</h4>
                                     <div className="flex flex-wrap gap-2">
                                         {(selectedMeal as any).ingredients?.map((ing: string, i: number) => (
                                             <span key={i} className="px-3 py-1 bg-[#F5F0EA] text-[#6B6B6B] rounded-full text-[11px] font-medium">{ing}</span>
-                                        )) || <span className="text-[11px] text-[#9C9C9C]">Ingredients list perfectly crafted by our chefs.</span>}
+                                        )) || <span className="text-[11px] text-[#9C9C9C]">Liste d'ingrédients parfaitement préparée par nos chefs.</span>}
                                     </div>
                                 </div>
                                 
                                 <div className="mb-6">
-                                    <h4 className="text-xs font-bold text-[#2D2D2D] mb-2">Contains</h4>
+                                    <h4 className="text-xs font-bold text-[#2D2D2D] mb-2">Contient</h4>
                                     <div className="flex flex-wrap gap-2">
                                         {selectedMeal.allergens.length > 0 ? (
                                             selectedMeal.allergens.map((alg, i) => (
@@ -638,7 +638,7 @@ export default function MenuPage() {
                                             ))
                                         ) : (
                                             <div className="flex items-center gap-1.5 text-[#6BC4A0] text-[11px] font-bold">
-                                                <ShieldCheck size={14} /> No common allergens
+                                                <ShieldCheck size={14} /> Aucun allergène courant
                                             </div>
                                         )}
                                     </div>
@@ -649,10 +649,10 @@ export default function MenuPage() {
                                     {(selectedMeal as any).rating ? (
                                         <div className="flex items-center gap-2">
                                             <div className="flex text-[#F59E0B]"><Star size={14} fill="#F59E0B" /><Star size={14} fill="#F59E0B" /><Star size={14} fill="#F59E0B" /></div>
-                                            <span className="text-xs font-bold text-[#633806]">You rated this {(selectedMeal as any).rating}★</span>
+                                            <span className="text-xs font-bold text-[#633806]">Vous avez noté ce repas {(selectedMeal as any).rating}★</span>
                                         </div>
                                     ) : (
-                                        <span className="text-xs text-[#9C9C9C] italic">First time trying this one</span>
+                                        <span className="text-xs text-[#9C9C9C] italic">Première fois que vous essayez celui-ci</span>
                                     )}
                                 </div>
 
@@ -670,7 +670,7 @@ export default function MenuPage() {
                                             }}
                                             className="w-full bg-white border-2 border-[#6BC4A0] text-[#6BC4A0] hover:bg-[#F1FAF4] font-bold py-4 rounded-full transition-colors flex justify-center items-center gap-2"
                                         >
-                                            Swap with another day →
+                                            Échanger avec un autre jour →
                                         </button>
                                     ) : (
                                         <button 
@@ -684,7 +684,7 @@ export default function MenuPage() {
                                             }}
                                             className="w-full bg-[#6BC4A0] text-white hover:bg-[#5BB48F] font-bold py-4 rounded-full shadow-[0_8px_24px_rgba(107,196,160,0.3)] transition-colors flex justify-center items-center gap-2"
                                         >
-                                            Add to plan →
+                                            Ajouter au plan →
                                         </button>
                                     )}
                                 </div>
