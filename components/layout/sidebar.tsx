@@ -41,7 +41,7 @@ export function Sidebar({ variant = "client" }: SidebarProps) {
     const isAdmin = variant === "admin";
 
     return (
-        <aside className="fixed left-0 top-0 h-full w-64 flex flex-col z-40 bg-primary text-background shadow-2xl border-r border-white/5">
+        <aside className="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col z-40 bg-primary text-background shadow-2xl border-r border-white/5">
             {/* Logo */}
             <div className="flex items-center gap-3 px-8 py-10">
                 <Link href="/" className="flex items-center font-serif tracking-tight text-2xl group">

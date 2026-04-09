@@ -75,12 +75,12 @@ export default function SettingsPage() {
 
     return (
         <div className="min-h-screen pb-32">
-            <div className="max-w-3xl mx-auto w-full pt-8 px-6 md:px-8">
-                <h1 className="font-serif text-4xl text-[#2D2D2D] mb-8">Paramètres</h1>
+            <div className="max-w-3xl mx-auto w-full pt-4 sm:pt-8 px-4 sm:px-6 md:px-8">
+                <h1 className="font-serif text-3xl sm:text-4xl text-[#2D2D2D] mb-6 sm:mb-8">Paramètres</h1>
 
                 {/* Tabs */}
                 <LayoutGroup>
-                    <div className="flex gap-6 border-b border-[#F0E4D8] mb-8 relative hide-scrollbar overflow-x-auto">
+                    <div className="flex gap-4 sm:gap-6 border-b border-[#F0E4D8] mb-6 sm:mb-8 relative hide-scrollbar overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
                         {(["profile", "subscription", "preferences", "taste"] as const).map((tab) => (
                             <button
                                 key={tab}

@@ -94,14 +94,14 @@ export default function RevealPage() {
 
     return (
         <div className="min-h-screen bg-primary text-background selection:bg-accent selection:text-white pb-32">
-            <main className="w-full max-w-6xl mx-auto px-6 py-20">
+            <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-20">
 
                 {/* header */}
                 <motion.section 
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="text-center mb-24"
+                    className="text-center mb-12 sm:mb-24"
                 >
                     <motion.div variants={itemVariants} className="flex justify-center mb-8">
                         <div className="bg-background/10 backdrop-blur-md border border-background/20 px-6 py-2 rounded-full flex items-center gap-2">
@@ -112,7 +112,7 @@ export default function RevealPage() {
 
                     <motion.h1 
                         variants={itemVariants}
-                        className="font-serif text-5xl lg:text-8xl text-background mb-8 leading-[0.9] tracking-tight"
+                        className="font-serif text-3xl sm:text-5xl lg:text-8xl text-background mb-6 sm:mb-8 leading-[0.9] tracking-tight"
                     >
                         Votre voyage <br /> vers la <span className="italic text-accent">précision</span> commence ici.
                     </motion.h1>
@@ -130,7 +130,7 @@ export default function RevealPage() {
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-32"
+                    className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-16 sm:mb-32"
                 >
                     {[
                         { label: "Calories Quotidiennes", value: kcal, unit: "kcal", icon: Flame, color: "text-accent" },
@@ -142,9 +142,9 @@ export default function RevealPage() {
                             key={i}
                             variants={itemVariants}
                             whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                            className="bg-background/5 backdrop-blur-xl border border-background/10 rounded-[32px] p-10 flex flex-col justify-between group h-full"
+                            className="bg-background/5 backdrop-blur-xl border border-background/10 rounded-[24px] sm:rounded-[32px] p-6 sm:p-10 flex flex-col justify-between group h-full"
                         >
-                            <div className="flex justify-between items-start mb-12">
+                            <div className="flex justify-between items-start mb-6 sm:mb-12">
                                 <div className="p-3 bg-background/10 rounded-2xl">
                                     <m.icon size={24} strokeWidth={1.5} className="text-background" />
                                 </div>
@@ -152,7 +152,7 @@ export default function RevealPage() {
                             </div>
                             <div>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-6xl font-serif text-background leading-none">{m.value}</span>
+                                    <span className="text-4xl sm:text-6xl font-serif text-background leading-none">{m.value}</span>
                                     <span className="text-lg font-serif text-background/40 italic">{m.unit}</span>
                                 </div>
                                 <div className="w-full bg-background/10 h-[2px] mt-6 relative overflow-hidden">
@@ -282,7 +282,7 @@ export default function RevealPage() {
                         <motion.button
                             whileHover={{ scale: 1.02, y: -4 }}
                             whileTap={{ scale: 0.98 }}
-                            onClick={() => router.push("/onboarding/pricing-setup")}
+                            onClick={() => router.push("/client/planner")}
                             className="w-full max-w-md h-24 bg-accent text-background rounded-full font-sans font-bold text-2xl transition-all flex items-center justify-center gap-4 uppercase tracking-[0.2em] shadow-[0_30px_60px_-15px_rgba(196,96,42,0.4)] group"
                         >
                             <span>Configurer ma semaine</span>

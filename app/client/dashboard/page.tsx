@@ -210,7 +210,7 @@ export default function DashboardPage() {
                 subtitle=""
             />
             
-            <div className="px-6 md:px-8 max-w-7xl mx-auto space-y-10 pt-2">
+            <div className="px-4 sm:px-6 md:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-10 pt-2">
                 
                 {/* Feature 1 — Smart greeting strip */}
                 <section>
@@ -218,7 +218,7 @@ export default function DashboardPage() {
                         <div className="max-w-xl">
                             <motion.h1 
                                 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.4 }}
-                                className="font-serif text-4xl md:text-5xl text-[#2D2D2D]"
+                                className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#2D2D2D]"
                             >
                                 {timeGreeting}{timeGreeting.endsWith(',') ? '' : ','} {firstName}.
                             </motion.h1>
@@ -436,7 +436,7 @@ export default function DashboardPage() {
                                             {!isConsumed ? (
                                                 <button
                                                     onClick={() => mappedPlanner && handleEatMeal(meal, mappedPlanner.id)}
-                                                    className="opacity-0 group-hover:opacity-100 text-xs font-semibold text-[#6BC4A0] border border-[#A8E6CF] px-4 py-2 rounded-xl transition-all hover:bg-[#F1FAF4]"
+                                                    className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 text-xs font-semibold text-[#6BC4A0] border border-[#A8E6CF] px-4 py-2 rounded-xl transition-all hover:bg-[#F1FAF4]"
                                                 >
                                                     Manger
                                                 </button>

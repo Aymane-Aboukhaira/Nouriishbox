@@ -144,11 +144,11 @@ export function TestimonialsSection() {
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full flex flex-col items-center">
         
         {/* Section Heading mixing font weights */}
-        <h2 className="mb-24 text-center leading-[1.1] flex flex-wrap items-baseline justify-center gap-x-4">
-          <span className="font-serif font-black text-5xl md:text-[5.5rem] text-[#1A1A1A]">Témoignages</span>
-          <span className="font-serif font-light italic text-4xl md:text-[4.5rem] text-[#C4602A]">&</span>
+        <h2 className="mb-16 sm:mb-24 text-center leading-[1.1] flex flex-wrap items-baseline justify-center gap-x-3 sm:gap-x-4">
+          <span className="font-serif font-black text-3xl sm:text-5xl md:text-[5.5rem] text-[#1A1A1A]">Témoignages</span>
+          <span className="font-serif font-light italic text-2xl sm:text-4xl md:text-[4.5rem] text-[#C4602A]">&</span>
           <span 
-            className="font-sans font-bold capitalize text-[2rem] md:text-[3.5rem] tracking-tight"
+            className="font-sans font-bold capitalize text-xl sm:text-[2rem] md:text-[3.5rem] tracking-tight"
             style={{ WebkitTextStroke: "1px #1A1A1A", color: "transparent" }}
           >
             Communauté

@@ -50,7 +50,7 @@ export function FaqSection() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative py-40 bg-[#FAFAF7] overflow-hidden border-t border-[#1A1A1A]/10"
+      className="relative py-20 sm:py-32 lg:py-40 bg-[#FAFAF7] overflow-hidden border-t border-[#1A1A1A]/10"
     >
       {/* Background Notebook Ruled Lines */}
       <div 
@@ -71,9 +71,9 @@ export function FaqSection() {
         </span>
       </motion.div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6">
-        <div className="text-center mb-24">
-          <h2 className="font-serif font-bold text-5xl md:text-7xl text-[#1A1A1A] capitalize tracking-tight">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-12 sm:mb-24">
+          <h2 className="font-serif font-bold text-3xl sm:text-5xl md:text-7xl text-[#1A1A1A] capitalize tracking-tight">
             Questions Fréquentes
           </h2>
         </div>

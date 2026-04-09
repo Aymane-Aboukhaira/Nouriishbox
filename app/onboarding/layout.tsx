@@ -29,7 +29,7 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
             <PublicNavbar />
             
             {stepInfo.step > 0 && !isRevealPage && (
-                <div className="pt-[100px] lg:pt-[120px]">
+                <div className="pt-[80px] sm:pt-[100px] lg:pt-[120px]">
                     {/* Thin Terracotta Progress Line */}
                     <div className="w-full h-[1.5px] bg-border relative">
                         <motion.div
@@ -40,7 +40,7 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
                         />
                     </div>
                     
-                    <div className="px-6 py-10 flex items-center justify-between max-w-4xl mx-auto w-full">
+                    <div className="px-4 sm:px-6 py-6 sm:py-10 flex items-center justify-between max-w-4xl mx-auto w-full">
                         <button
                             onClick={() => router.back()}
                             className={`group flex items-center gap-2 text-sm font-medium text-text-muted hover:text-text-primary transition-colors ${stepInfo.step === 1 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
@@ -50,8 +50,8 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
                         </button>
                         
                         <div className="flex flex-col items-center gap-1">
-                            <span className="text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Step {stepInfo.step}</span>
-                            <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-[0.1em]">of {stepInfo.max}</span>
+                            <span className="text-[10px] font-bold text-accent uppercase tracking-[0.2em]">Étape {stepInfo.step}</span>
+                            <span className="text-[10px] font-bold text-text-muted/60 uppercase tracking-[0.1em]">sur {stepInfo.max}</span>
                         </div>
                         
                         <div className="w-12 h-12 lg:hidden md:block hidden" /> {/* Spacer for balance */}

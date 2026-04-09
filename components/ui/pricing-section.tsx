@@ -29,7 +29,7 @@ function PricingStep({ number, title, desc, index }: { number: string; title: st
                 {/* HUGE Terracotta Number */}
                 <span 
                     className="font-serif text-accent font-bold leading-none select-none shrink-0 tracking-tighter"
-                    style={{ fontSize: '150px', marginTop: '-15px' }}
+                    style={{ fontSize: 'clamp(80px, 15vw, 150px)', marginTop: '-15px' }}
                 >
                     {number}
                 </span>
@@ -181,15 +181,15 @@ export function PricingSection() {
                             display: 'flex',
                             flexDirection: 'row',
                             alignItems: 'flex-start',
-                            gap: '80px',
-                            flexWrap: 'wrap'
+                        flexWrap: 'wrap',
+                            gap: 'clamp(32px, 5vw, 80px)',
                         }}
                     >
                         
                         {/* LEFT COLUMN: Steps */}
                         <div 
                             className="relative flex flex-col"
-                            style={{ flex: '1.5', minWidth: '320px' }}
+                            style={{ flex: '1.5', minWidth: '280px' }}
                         >
                         <PricingStep 
                             number="01" 
@@ -214,7 +214,7 @@ export function PricingSection() {
                     {/* RIGHT COLUMN: Price Card */}
                     <div 
                         className="relative"
-                        style={{ flex: '1', minWidth: '380px' }}
+                        style={{ flex: '1', minWidth: '280px' }}
                     >
                         <motion.div
                             ref={cardRef}
@@ -239,7 +239,7 @@ export function PricingSection() {
                                 <div className="flex items-baseline gap-4 mb-10 w-full rtl:flex-row-reverse rtl:justify-end">
                                     <motion.span 
                                         className="font-serif font-bold leading-none tracking-tighter"
-                                        style={{ fontSize: '140px', color: '#F5F0E8' }}
+                                        style={{ fontSize: 'clamp(72px, 18vw, 140px)', color: '#F5F0E8' }}
                                     >
                                         {rounded}
                                     </motion.span>

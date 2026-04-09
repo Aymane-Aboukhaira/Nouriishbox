@@ -17,7 +17,7 @@ import {
     closestCenter,
 } from "@dnd-kit/core";
 import { toast } from "sonner";
-import { Pause, Play, CheckCircle, Trash2, Plus, AlertTriangle, X, Search, Copy, Wand2, ShieldCheck, Star, Lock, MapPin, Clock3, MessageCircle } from "lucide-react";
+import { Pause, Play, CheckCircle, Trash2, Plus, AlertTriangle, X, Search, Copy, Wand2, ShieldCheck, Star, Lock, MapPin, Clock3, MessageCircle, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { PlannedMeal, Meal, DeliveryTimeSlot, DeliveryLocation } from "@/lib/types";
 import { isMealExcludedByTaste, getDietBoost } from "@/lib/taste-filter";
@@ -618,11 +618,6 @@ export default function PlannerPage() {
 
     const executeConfirm = () => {
         setShowIncompleteWarning(false);
-        if (subscription.status !== 'active') {
-            const subPlan = (useSubscriptionStore.getState().subscription as any).plan ?? 'solo';
-            router.push(`/checkout?plan=${subPlan}`);
-            return;
-        }
         // Open the modal instead of directly setting confirmed
         setShowConfirmModal(true);
     };
@@ -797,7 +792,7 @@ export default function PlannerPage() {
 
                 {/* ── Feature 3: Sticky volume discount header ── */}
                 {totalMeals > 0 && (
-                    <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-sm border-b border-[#F0E4D8] px-6 py-2.5">
+                    <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-sm border-b border-[#F0E4D8] px-4 sm:px-6 py-2.5">
                         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap">
                             <div className="flex items-center gap-2 text-sm">
                                 <span className="font-bold text-[#2D2D2D]">{totalMeals} repas</span>
@@ -843,7 +838,7 @@ export default function PlannerPage() {
                     </div>
                 )}
                 
-                <div className={`p-6 md:p-8 max-w-7xl mx-auto w-full transition-all ${plan.confirmed ? 'border-[3px] border-[#6BC4A0]/20 rounded-[20px] m-4 pb-12' : 'pb-32'}`}>
+                <div className={`p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full transition-all ${plan.confirmed ? 'border-[3px] border-[#6BC4A0]/20 rounded-[20px] m-2 sm:m-4 pb-12' : 'pb-32'}`}>
                 
                 {/* Global Urgency Banner */}
                 <AnimatePresence>
@@ -892,7 +887,7 @@ export default function PlannerPage() {
                 <div className="flex flex-col md:flex-row items-end justify-between mb-10 gap-6">
                     <div>
                         <div className="flex items-baseline gap-3 relative">
-                            <motion.h1 className="font-serif text-5xl transition-colors" style={{ color: scoreColor, textShadow: displayScore >= 90 ? '0 0 20px rgba(107,196,160,0.5)' : 'none' }}>
+                            <motion.h1 className="font-serif text-4xl sm:text-5xl transition-colors" style={{ color: scoreColor, textShadow: displayScore >= 90 ? '0 0 20px rgba(107,196,160,0.5)' : 'none' }}>
                                 {displayScore}<span className="text-[#9C9C9C] text-3xl">/100</span>
                             </motion.h1>
                             <AnimatePresence>
@@ -927,16 +922,31 @@ export default function PlannerPage() {
                         {/* ── Feature 5/6: Confirm button or locked state ── */}
                         {!isSunday && (
                         <motion.button
-                            whileHover={{ scale: plan.confirmed ? 1 : 1.02 }}
-                            whileTap={{ scale: plan.confirmed ? 1 : 0.98 }}
+                            whileHover={{ scale: (plan.confirmed && subscription.status === 'active') ? 1 : 1.02 }}
+                            whileTap={{ scale: (plan.confirmed && subscription.status === 'active') ? 1 : 0.98 }}
                             animate={!hasEmptyGaps && !plan.confirmed ? { scale: [1, 1.02, 1] } : { scale: 1 }}
                             transition={!hasEmptyGaps && !plan.confirmed ? { repeat: Infinity, duration: 3 } : { duration: 0 }}
-                            onClick={plan.confirmed ? undefined : handleConfirm}
-                            className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all min-w-[220px] ${plan.confirmed ? 'bg-white border-2 border-[#6BC4A0] text-[#6BC4A0] cursor-default' : (subscription.status !== 'active' ? 'bg-[#2D2D2D] text-white' : (hasEmptyGaps ? 'bg-[#F59E0B] text-white shadow-lg' : 'bg-[#6BC4A0] text-white shadow-[0_8px_24px_rgba(107,196,160,0.4)]'))}`}
+                            onClick={plan.confirmed ? (subscription.status !== 'active' ? () => router.push('/checkout') : undefined) : handleConfirm}
+                            className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-bold transition-all min-w-[220px] ${
+                                plan.confirmed 
+                                    ? (subscription.status !== 'active' 
+                                        ? 'bg-accent text-background shadow-lg hover:bg-accent/90' 
+                                        : 'bg-white border-2 border-[#6BC4A0] text-[#6BC4A0] cursor-default')
+                                    : (subscription.status !== 'active' 
+                                        ? 'bg-[#2D2D2D] text-white' 
+                                        : (hasEmptyGaps ? 'bg-[#F59E0B] text-white shadow-lg' : 'bg-[#6BC4A0] text-white shadow-[0_8px_24px_rgba(107,196,160,0.4)]'))
+                            }`}
                         >
-                            {plan.confirmed ? <><CheckCircle size={18} /> Semaine confirmée ✓</> : 
-                             (subscription.status !== 'active' ? "S'abonner pour confirmer →" :
-                             (hasEmptyGaps ? 'Confirmer (incomplet)' : 'Confirmer et réviser →'))}
+                            {plan.confirmed ? (
+                                subscription.status !== 'active' ? (
+                                    <><ShoppingBag size={18} /> S'abonner et Régler mon Plan →</>
+                                ) : (
+                                    <><CheckCircle size={18} /> Semaine confirmée ✓</>
+                                )
+                            ) : (
+                                subscription.status !== 'active' ? "S'abonner pour confirmer →" :
+                                (hasEmptyGaps ? 'Confirmer (incomplet)' : 'Confirmer et réviser →')
+                            )}
                         </motion.button>
                         )}
                     </div>
@@ -969,7 +979,7 @@ export default function PlannerPage() {
                     </motion.div>
                 ) : (
                     // Kanban Grid
-                    <div className="grid grid-cols-2 lg:grid-cols-7 gap-3 lg:gap-4 overflow-x-auto pb-6 -mx-4 px-4 lg:mx-0 lg:px-0">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3 lg:gap-4 overflow-x-auto pb-6 -mx-4 px-4 lg:mx-0 lg:px-0">
                             {Array.from({ length: 7 }, (_, i) => (
                                 <DayColumn
                                     key={i}

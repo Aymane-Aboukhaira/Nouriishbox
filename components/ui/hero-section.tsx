@@ -45,7 +45,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
       className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-[#F5F0E8]"
     >
       {/* ── Random floating decorative icons ── */}
-      <FloatingBackgroundIcons count={16} />
+      <FloatingBackgroundIcons count={8} />
       {/* ── Animated grain / noise texture overlay ── */}
       <div
         aria-hidden
@@ -202,7 +202,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
                 scale: { delay: 0.8, duration: 0.8, type: "spring" },
                 opacity: { delay: 0.8, duration: 0.8 }
               }}
-              className="absolute -bottom-10 -left-10 md:-left-20 z-10 w-64 md:w-80 pointer-events-none drop-shadow-[0_40px_80px_rgba(26,26,26,0.25)]"
+              className="absolute -bottom-6 -left-4 sm:-bottom-10 sm:-left-10 md:-left-20 z-10 w-48 sm:w-64 md:w-80 pointer-events-none drop-shadow-[0_40px_80px_rgba(26,26,26,0.25)] hidden xs:block"
             >
               <div className="relative w-full h-full">
                 <Image 

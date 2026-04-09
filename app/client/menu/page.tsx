@@ -267,7 +267,7 @@ export default function MenuPage() {
         <div className="min-h-screen relative pb-32">
             <Header title="Explorer notre Menu" subtitle="Conçu pour les besoins spécifiques de votre corps" />
             
-            <div className="p-6 md:p-8 max-w-7xl mx-auto w-full">
+            <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full">
                 
                 {/* Feature 1: Built for you today */}
                 {!isLoading && search === "" && !fixMacrosActive && activeCategory === "all" && (
@@ -395,7 +395,7 @@ export default function MenuPage() {
                 {/* Main Grid & Empty States */}
                 <AnimatePresence mode="popLayout">
                     {isLoading ? (
-                        <motion.div key="skeleton" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-5">
+                        <motion.div key="skeleton" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-5">
                             {[...Array(8)].map((_, i) => <MealCardSkeleton key={i} />)}
                         </motion.div>
                     ) : filtered.length === 0 ? (
@@ -423,7 +423,7 @@ export default function MenuPage() {
                             )}
                         </motion.div>
                     ) : (
-                        <motion.div key={gridAnimKey} className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-5">
+                        <motion.div key={gridAnimKey} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-5">
                             {filtered.map(({ meal, score }, idx) => (
                                 <motion.div
                                     key={meal.id}

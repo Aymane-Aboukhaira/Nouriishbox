@@ -260,10 +260,10 @@ function ElectricFlow({ active }: { active: boolean }) {
             initial={{ scale: 0, opacity: 0 }}
             animate={active ? { scale: 1, opacity: 1 } : {}}
             transition={{ delay: i * 0.3, duration: 0.4, type: "spring" }}
-            className="flex flex-col items-center gap-2 w-20"
+            className="flex flex-col items-center gap-2 w-16 sm:w-20"
           >
             <div
-              className="w-14 h-14 border border-[#C4602A] flex items-center justify-center text-2xl text-[#C4602A] rounded-[16px]"
+              className="w-10 h-10 sm:w-14 sm:h-14 border border-[#C4602A] flex items-center justify-center text-xl sm:text-2xl text-[#C4602A] rounded-[16px]"
               style={{
                 boxShadow: active ? `0 0 12px rgba(196,96,42,0.4)` : "none",
               }}
@@ -277,7 +277,7 @@ function ElectricFlow({ active }: { active: boolean }) {
 
           {/* Connector with traveling pulse */}
           {i < STEPS.length - 1 && (
-            <div className="relative w-16 h-[2px] bg-[#333] mx-1 shrink-0">
+            <div className="relative w-8 sm:w-16 h-[2px] bg-[#333] mx-1 shrink-0">
               {/* Static line */}
               <motion.div
                 className="absolute inset-0 bg-[#C4602A]/30"

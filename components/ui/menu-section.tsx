@@ -192,12 +192,12 @@ function SplitHeading({ text }: { text: string }) {
   return (
     <div ref={ref} className="overflow-hidden" aria-label={text}>
       <motion.div style={{ y: topY }} className="block">
-        <span className="font-serif font-bold text-5xl md:text-7xl text-[#1A1A1A] capitalize tracking-tight leading-[0.9] block">
+        <span className="font-serif font-bold text-3xl sm:text-5xl md:text-7xl text-[#1A1A1A] capitalize tracking-tight leading-[0.9] block">
           {topLine}
         </span>
       </motion.div>
       <motion.div style={{ y: bottomY }} className="block">
-        <span className="font-serif font-bold text-5xl md:text-7xl text-[#1A1A1A] capitalize tracking-tight leading-[0.9] block">
+        <span className="font-serif font-bold text-3xl sm:text-5xl md:text-7xl text-[#1A1A1A] capitalize tracking-tight leading-[0.9] block">
           {bottomLine}
         </span>
       </motion.div>
@@ -238,10 +238,10 @@ export function MenuSection({
   if (meals.length === 0) return null;
 
   return (
-    <section id="menu" className="py-32 px-6 relative bg-[#F5F0E8] overflow-hidden">
+    <section id="menu" className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 relative bg-[#F5F0E8] overflow-hidden">
 
       {/* ── Random floating decorative icons ── */}
-      <FloatingBackgroundIcons count={25} />
+      <FloatingBackgroundIcons count={10} />
 
       <div className="max-w-7xl mx-auto relative z-10">
 

@@ -168,7 +168,7 @@ export function CtaSection() {
 
             <button
               onClick={() => router.push("/onboarding")}
-              className="relative bg-[#F5F0E8] text-[#2C3E2D] px-14 md:px-24 py-6 md:py-8 rounded-[100px] text-lg md:text-2xl font-bold font-sans transition-all overflow-hidden capitalize tracking-widest z-10 group-hover:scale-105 active:scale-95 shadow-xl"
+              className="relative bg-[#F5F0E8] text-[#2C3E2D] px-8 sm:px-14 md:px-24 py-5 sm:py-6 md:py-8 rounded-[100px] text-base sm:text-lg md:text-2xl font-bold font-sans transition-all overflow-hidden capitalize tracking-widest z-10 group-hover:scale-105 active:scale-95 shadow-xl"
             >
               COMMENCER L&apos;EXPÉRIENCE
             </button>

@@ -120,7 +120,7 @@ function SignUpContent() {
       </div>
 
       {/* 2. RIGHT — AUTH PANEL */}
-      <div className="flex flex-col justify-start lg:justify-center px-8 sm:px-12 md:px-16 lg:px-24 py-16 min-h-screen overflow-y-auto">
+      <div className="flex flex-col justify-start lg:justify-center px-5 sm:px-8 md:px-16 lg:px-24 py-10 sm:py-16 min-h-screen overflow-y-auto">
         <Link href="/" className="lg:hidden mb-12 group transition-opacity hover:opacity-80">
           <div className="flex items-center font-serif tracking-tight text-2xl">
             <span className="text-primary">nourish</span>

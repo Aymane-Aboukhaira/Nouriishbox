@@ -140,10 +140,29 @@ html {
   /* Lenis handles smooth scrolling, do not use smooth here */
 }
 
-@media (pointer: fine) {
+@media (pointer: fine) and (hover: hover) {
   * {
     cursor: none !important;
   }
+}
+
+/* Mobile-first: remove tap highlight, ensure touch targets */
+@media (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Safe area padding for notched devices */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 body {

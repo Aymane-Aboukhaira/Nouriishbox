@@ -63,22 +63,22 @@ export function Header({ title, subtitle }: HeaderProps) {
     };
 
     return (
-        <header className="flex items-center justify-between px-8 py-5 bg-[#FFF8F4]/80 backdrop-blur-md sticky top-0 z-30"
+        <header className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-[#FFF8F4]/80 backdrop-blur-md sticky top-0 z-30"
             style={{ borderBottom: "1px solid #F0E4D8" }}>
             {/* Page title */}
             <div>
-                <h1 className="font-serif text-2xl text-[#2D2D2D] leading-tight">{title}</h1>
+                <h1 className="font-serif text-xl sm:text-2xl text-[#2D2D2D] leading-tight">{title}</h1>
                 {subtitle && (
                     <p className="text-sm text-[#9C9C9C] font-medium mt-0.5">{subtitle}</p>
                 )}
             </div>
 
             {/* Right side actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
                 {/* NourishPoints Badge */}
                 <motion.div
                     whileHover={{ scale: 1.05 }}
-                    className="flex items-center gap-2 px-4 py-2 rounded-2xl cursor-pointer"
+                    className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl cursor-pointer"
                     style={{
                         background: "linear-gradient(135deg, #F1FAF4, #A8E6CF30)",
                         border: "1px solid #A8E6CF",
@@ -93,7 +93,7 @@ export function Header({ title, subtitle }: HeaderProps) {
                     <span className="text-sm font-bold text-[#2F8B60]">
                         {points.balance.toLocaleString()}
                     </span>
-                    <span className="text-xs text-[#6BC4A0] font-medium">pts</span>
+                    <span className="text-xs text-[#6BC4A0] font-medium hidden sm:inline">pts</span>
                 </motion.div>
 
                 {/* Notification Bell */}
@@ -169,12 +169,11 @@ export function Header({ title, subtitle }: HeaderProps) {
                         <motion.div 
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                             onClick={() => setDrawerOpen(false)}
-                            className="absolute top-0 right-0 w-[100vw] h-[100vh] bg-[#2D2D2D]/40 z-[90] cursor-pointer text-[#F5F0E8]"
-                            style={{ margin: "0 -32px" }} // offset header px-8
+                            className="fixed inset-0 bg-[#2D2D2D]/40 z-[90] cursor-pointer"
                         />
                         <motion.div
                             initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            className="absolute top-0 right-[-32px] w-full max-w-[380px] h-[100vh] bg-white shadow-2xl z-[100] flex flex-col border-l border-[#F0E4D8]"
+                            className="fixed top-0 right-0 w-full max-w-[380px] h-full bg-white shadow-2xl z-[100] flex flex-col border-l border-[#F0E4D8]"
                         >
                             {/* Drawer Header */}
                             <div className="flex items-center justify-between p-6 border-b border-[#F0E4D8]">

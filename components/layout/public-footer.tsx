@@ -78,7 +78,7 @@ const socials = [
 
 export function PublicFooter() {
     return (
-        <footer className="relative bg-[#1A1A1A] text-[#F5F0E8] py-32 px-6 overflow-hidden">
+        <footer className="relative bg-[#1A1A1A] text-[#F5F0E8] py-16 sm:py-24 lg:py-32 px-4 sm:px-6 overflow-hidden">
             
             {/* Topographic Contour Background */}
             <div 
@@ -92,7 +92,7 @@ export function PublicFooter() {
             {/* Vignette Overlay */}
             <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_200px_rgba(0,0,0,0.9)] z-20" />
 
-            <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row gap-20 mb-20 justify-between">
+            <div className="relative z-10 max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 sm:gap-16 lg:gap-20 mb-12 sm:mb-20 justify-between">
                 
                 {/* Left Block: Logo & Bio */}
                 <div className="w-full lg:w-1/3 flex flex-col justify-between">
@@ -140,7 +140,7 @@ export function PublicFooter() {
                 </div>
 
                 {/* Middle - Links */}
-                <div className="w-full lg:w-[45%] grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16 rtl:text-right">
+                <div className="w-full lg:w-[45%] grid grid-cols-2 sm:grid-cols-4 gap-x-6 sm:gap-x-8 gap-y-10 sm:gap-y-16 rtl:text-right">
                     {[
                         { title: "Produit", links: ["Menu", "Tarifs", "Fonctionnalités"] },
                         { title: "Entreprise", links: ["À Propos", "Carrières", "Presse"] },
