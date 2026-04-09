@@ -202,11 +202,11 @@ export function HeroSection({ onStart }: HeroSectionProps) {
                 scale: { delay: 0.8, duration: 0.8, type: "spring" },
                 opacity: { delay: 0.8, duration: 0.8 }
               }}
-              className="absolute -bottom-6 -left-4 sm:-bottom-10 sm:-left-10 md:-left-20 z-10 w-48 sm:w-64 md:w-80 pointer-events-none drop-shadow-[0_40px_80px_rgba(26,26,26,0.25)] hidden xs:block"
+              className="absolute -bottom-6 -left-4 sm:-bottom-10 sm:-left-10 md:-left-20 z-10 w-48 sm:w-64 md:w-80 pointer-events-none drop-shadow-[0_40px_80px_rgba(26,26,26,0.25)] block"
             >
               <div className="relative w-full h-full">
                 <Image 
-                  src="/ContainerPhoto.png"
+                  src="/visuals/ContainerPhoto.png"
                   alt="Nourishbox Container"
                   width={500}
                   height={500}
