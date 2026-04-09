@@ -3,7 +3,6 @@ import { Fraunces, DM_Sans, Cairo } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { CustomCursor } from "@/components/ui/custom-cursor";
-import { AmbientSound } from "@/components/ui/ambient-sound";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
 
 const fraunces = Fraunces({
@@ -43,7 +42,6 @@ export default function RootLayout({
       <body className="bg-background text-text-primary font-sans antialiased min-h-screen leading-relaxed">
           <ScrollProgress />
           <CustomCursor />
-          <AmbientSound />
           {children}
           <Toaster
             position="top-right"
