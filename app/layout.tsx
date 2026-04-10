@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
+import { Analytics } from "@vercel/analytics/next";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -57,6 +58,7 @@ export default function RootLayout({
               },
             }}
           />
+          <Analytics />
       </body>
     </html>
   );
