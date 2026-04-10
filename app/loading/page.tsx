@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Leaf } from "lucide-react";
 import { usePlannerStore, useProfileStore, useMealsStore, useFamilyStore } from "@/lib/store";
@@ -65,9 +66,9 @@ export default function LoadingPage() {
                 <motion.div 
                     animate={{ scale: [1, 1.15, 1] }} 
                     transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                    className="w-16 h-16 bg-[#6BC4A0] rounded-full flex items-center justify-center text-white shadow-[0_0_30px_rgba(107,196,160,0.5)] z-10"
+                    className="w-16 h-16 bg-[#6BC4A0] rounded-2xl flex items-center justify-center text-white shadow-[0_0_30px_rgba(107,196,160,0.5)] z-10 overflow-hidden"
                 >
-                    <Leaf size={32} />
+                    <Image src="/logo.png" alt="Nourishbox" width={48} height={48} className="rounded-xl" />
                 </motion.div>
             </div>
 

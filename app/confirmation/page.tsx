@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Check, Sparkles, Smartphone, Mail, Phone, ShieldCheck, Star
@@ -132,7 +133,10 @@ function ConfirmationContent() {
 
             {/* Minimal Header */}
             <header className="w-full h-24 flex flex-col items-center justify-center bg-[#FFF8F4] z-10 sticky top-0">
-                <span className="font-serif text-2xl text-[#6BC4A0]">nourishbox</span>
+                <div className="flex items-center gap-2">
+                    <Image src="/logo.png" alt="Nourishbox" width={32} height={32} className="rounded-lg" />
+                    <span className="font-serif text-2xl text-[#6BC4A0]">nourishbox</span>
+                </div>
                 <span className="text-xs text-[#9C9C9C] font-semibold mt-1">Commande confirmée</span>
             </header>
 

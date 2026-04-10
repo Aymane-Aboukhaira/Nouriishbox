@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X, Search, User, ShoppingCart } from "lucide-react";
@@ -59,10 +60,13 @@ export function PublicNavbar() {
                 <motion.div
                   animate={{ scale: scrolled ? 0.95 : 1 }}
                   transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                  className="flex items-center font-serif tracking-tight text-2xl"
+                  className="flex items-center gap-2"
                 >
-                  <span className="text-primary group-hover:text-accent transition-colors duration-300">nourish</span>
-                  <span className="text-accent group-hover:text-primary transition-colors duration-300">box</span>
+                  <Image src="/logo.png" alt="Nourishbox" width={36} height={36} className="rounded-lg" />
+                  <span className="font-serif tracking-tight text-2xl">
+                    <span className="text-primary group-hover:text-accent transition-colors duration-300">nourish</span>
+                    <span className="text-accent group-hover:text-primary transition-colors duration-300">box</span>
+                  </span>
                 </motion.div>
               </Link>
 
@@ -139,8 +143,9 @@ export function PublicNavbar() {
 
             {/* Close button */}
             <div className="flex items-center justify-between mb-16 relative z-10 w-full">
-              <span className="font-serif tracking-tight text-[#F5F0E8] text-2xl">
-                <span className="text-[#A8E6CF]">nourish</span><span className="text-[#C4602A]">box</span>
+              <span className="flex items-center gap-2 font-serif tracking-tight text-[#F5F0E8] text-2xl">
+                <Image src="/logo.png" alt="Nourishbox" width={32} height={32} className="rounded-lg" />
+                <span><span className="text-[#A8E6CF]">nourish</span><span className="text-[#C4602A]">box</span></span>
               </span>
               <button
                 onClick={() => setMobileMenuOpen(false)}

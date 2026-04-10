@@ -82,9 +82,12 @@ function SignInContent() {
 
                 <div className="relative z-10">
                     <Link href="/" className="inline-block mb-24 group">
-                        <div className="flex items-center font-serif tracking-tight text-3xl">
-                            <span className="text-background">nourish</span>
-                            <span className="text-accent group-hover:text-background transition-colors duration-300">box</span>
+                        <div className="flex items-center gap-2.5 font-serif tracking-tight text-3xl">
+                            <Image src="/logo.png" alt="Nourishbox" width={40} height={40} className="rounded-xl" />
+                            <span>
+                                <span className="text-background">nourish</span>
+                                <span className="text-accent group-hover:text-background transition-colors duration-300">box</span>
+                            </span>
                         </div>
                     </Link>
 
@@ -119,9 +122,12 @@ function SignInContent() {
             {/* 2. RIGHT — AUTH PANEL */}
             <div className="flex flex-col justify-center px-8 sm:px-12 md:px-16 lg:px-24 py-16 min-h-screen">
                 <Link href="/" className="lg:hidden mb-12 group transition-opacity hover:opacity-80">
-                    <div className="flex items-center font-serif tracking-tight text-2xl">
-                        <span className="text-primary">nourish</span>
-                        <span className="text-accent group-hover:text-primary transition-colors duration-300">box</span>
+                    <div className="flex items-center gap-2 font-serif tracking-tight text-2xl">
+                        <Image src="/logo.png" alt="Nourishbox" width={32} height={32} className="rounded-lg" />
+                        <span>
+                            <span className="text-primary">nourish</span>
+                            <span className="text-accent group-hover:text-primary transition-colors duration-300">box</span>
+                        </span>
                     </div>
                 </Link>
 

@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -168,7 +169,8 @@ function CheckoutContent() {
         <div className="min-h-screen bg-[#FDFCF9]">
             {/* Minimal High-End Header */}
             <header className="w-full h-24 flex items-center justify-between px-6 lg:px-12 sticky top-0 z-50">
-                <Link href="/" className="flex items-center gap-2">
+                <Link href="/" className="flex items-center gap-2.5">
+                    <Image src="/logo.png" alt="Nourishbox" width={36} height={36} className="rounded-lg" />
                     <span className="font-serif text-3xl text-primary lowercase tracking-tight">nourishbox</span>
                 </Link>
                 <div className="flex items-center gap-3 text-primary/40">

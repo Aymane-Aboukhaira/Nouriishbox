@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -44,9 +45,12 @@ export function Sidebar({ variant = "client" }: SidebarProps) {
         <aside className="fixed left-0 top-0 h-full w-64 hidden md:flex flex-col z-40 bg-primary text-background shadow-2xl border-r border-white/5">
             {/* Logo */}
             <div className="flex items-center gap-3 px-8 py-10">
-                <Link href="/" className="flex items-center font-serif tracking-tight text-2xl group">
-                    <span className="text-background group-hover:text-accent transition-colors duration-300">nourish</span>
-                    <span className="text-accent group-hover:text-background transition-colors duration-300">box</span>
+                <Link href="/" className="flex items-center gap-2.5 font-serif tracking-tight text-2xl group">
+                    <Image src="/logo.png" alt="Nourishbox" width={36} height={36} className="rounded-lg" />
+                    <span>
+                        <span className="text-background group-hover:text-accent transition-colors duration-300">nourish</span>
+                        <span className="text-accent group-hover:text-background transition-colors duration-300">box</span>
+                    </span>
                 </Link>
                 {isAdmin && (
                     <span className="text-[10px] font-bold text-accent bg-accent/10 border border-accent/20 px-2 py-0.5 rounded-full tracking-widest uppercase">

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Facebook, Instagram, Twitter, Check } from "lucide-react";
 import { useState } from "react";
@@ -97,19 +98,19 @@ export function PublicFooter() {
                 {/* Left Block: Logo & Bio */}
                 <div className="w-full lg:w-1/3 flex flex-col justify-between">
                     <div>
-                      {/* Animated SVG Path Logo */}
-                      <div className="mb-10 w-48 h-16 text-[#F5F0E8]">
-                          <svg viewBox="0 0 200 60" className="w-full h-full overflow-visible" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <motion.path 
-                                d="M 10 50 L 30 10 L 50 50 L 70 10 L 90 50 M 110 50 C 110 50, 130 10, 150 10 C 170 10, 190 50, 190 50" 
-                                initial={{ pathLength: 0, opacity: 0 }} 
-                                whileInView={{ pathLength: 1, opacity: 1 }} 
-                                viewport={{ once: true }}
-                                transition={{ duration: 2.5, ease: "easeInOut" }}
-                              />
-                              <text x="10" y="75" className="font-serif text-3xl lowercase fill-[#C4602A] stroke-none">
-                        </text>
-                          </svg>
+                      {/* Logo */}
+                      <div className="mb-10 flex items-center gap-3">
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                          >
+                              <Image src="/logo.png" alt="Nourishbox" width={48} height={48} className="rounded-xl" />
+                          </motion.div>
+                          <span className="font-serif text-3xl text-[#F5F0E8] tracking-tight">
+                              <span className="text-[#A8E6CF]">nourish</span><span className="text-[#C4602A]">box</span>
+                          </span>
                       </div>
                       
                       <p className="font-sans font-normal text-[#F5F0E8]/70 mb-10 leading-[1.7] max-w-sm">
