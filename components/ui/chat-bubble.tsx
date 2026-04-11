@@ -22,9 +22,9 @@ export function ChatBubble({ role, content, timestamp }: ChatBubbleProps) {
                     <span className="text-white text-sm">🥗</span>
                 </div>
             )}
-            <div className={`max-w-[80%] ${isUser ? "items-end" : "items-start"} flex flex-col gap-1`}>
+            <div className={`max-w-[85%] md:max-w-[80%] ${isUser ? "items-end" : "items-start"} flex flex-col gap-1`}>
                 <div
-                    className="px-4 py-3 rounded-[20px] text-sm leading-relaxed"
+                    className="px-4 py-3 rounded-[20px] text-[16px] md:text-sm leading-relaxed"
                     style={
                         isUser
                             ? {

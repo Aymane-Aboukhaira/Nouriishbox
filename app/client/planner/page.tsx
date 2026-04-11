@@ -10,6 +10,7 @@ import {
     DragOverlay,
     DragStartEvent,
     PointerSensor,
+    TouchSensor,
     useSensor,
     useSensors,
     useDroppable,
@@ -104,13 +105,17 @@ function generateWeekPlan(
 // ── Components ───────────────────────────────────────────────
 
 function DayMacroBar({ meal, profile, isHovered }: { meal: Meal; profile: any; isHovered: boolean }) {
-    const pPct = Math.min(meal.macros.protein_g / ((profile.targets?.protein_g || 150) / 3) * 100, 100);
-    const cPct = Math.min(meal.macros.carbs_g / ((profile.targets?.carbs_g || 200) / 3) * 100, 100);
-    const fPct = Math.min(meal.macros.fats_g / ((profile.targets?.fats_g || 65) / 3) * 100, 100);
+    const pTarget = (profile.targets?.protein_g || 150) / 3;
+    const cTarget = (profile.targets?.carbs_g || 200) / 3;
+    const fTarget = (profile.targets?.fats_g || 65) / 3;
+    const pPct = Math.min(Math.round(meal.macros.protein_g / pTarget * 100), 100);
+    const cPct = Math.min(Math.round(meal.macros.carbs_g / cTarget * 100), 100);
+    const fPct = Math.min(Math.round(meal.macros.fats_g / fTarget * 100), 100);
 
     return (
         <div className="relative mt-1 mb-2 pointer-events-none">
-            <div className="flex flex-col gap-[2px]">
+            {/* Desktop: compact bars */}
+            <div className="hidden lg:flex flex-col gap-[2px]">
                 <div className="h-[3px] w-full bg-[#F0EBE3] rounded-full overflow-hidden">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${pPct}%` }} transition={{ duration: 0.6, ease: "easeOut" }} className="h-full bg-[#B09AE0]" />
                 </div>
@@ -120,6 +125,23 @@ function DayMacroBar({ meal, profile, isHovered }: { meal: Meal; profile: any; i
                 <div className="h-[3px] w-full bg-[#F0EBE3] rounded-full overflow-hidden">
                     <motion.div initial={{ width: 0 }} animate={{ width: `${fPct}%` }} transition={{ duration: 0.6, ease: "easeOut" }} className="h-full bg-[#FFA07A]" />
                 </div>
+            </div>
+
+            {/* Mobile: stacked rows with labels, bars, percentages */}
+            <div className="flex lg:hidden flex-col gap-1.5">
+                {[
+                    { label: 'Prot', value: meal.macros.protein_g, target: pTarget, pct: pPct, color: '#B09AE0' },
+                    { label: 'Gluc', value: meal.macros.carbs_g, target: cTarget, pct: cPct, color: '#F59E0B' },
+                    { label: 'Lip', value: meal.macros.fats_g, target: fTarget, pct: fPct, color: '#FFA07A' },
+                ].map(m => (
+                    <div key={m.label} className="flex items-center gap-2">
+                        <span className="text-[11px] font-bold text-[#6B6B6B] w-8 flex-shrink-0">{m.label}</span>
+                        <div className="flex-1 h-[8px] bg-[#F0EBE3] rounded-full overflow-hidden">
+                            <motion.div initial={{ width: 0 }} animate={{ width: `${m.pct}%` }} transition={{ duration: 0.6, ease: "easeOut" }} className="h-full rounded-full" style={{ backgroundColor: m.color }} />
+                        </div>
+                        <span className="text-[13px] font-bold text-[#2D2D2D] w-10 text-right flex-shrink-0">{m.pct}%</span>
+                    </div>
+                ))}
             </div>
 
             <AnimatePresence>
@@ -213,20 +235,21 @@ function DraggableMealItem({
                         <p className="text-[9px] text-[#9C9C9C]">{meal.macros.kcal} kcal</p>
                     </div>
                     {!isConfirmed ? (
-                        <div className="flex flex-col items-center gap-1 opacity-0 group-hover:opacity-100 transition-all absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 shadow-sm border border-[#F0E4D8] rounded-2xl p-1">
+                        <div className="flex lg:flex-col items-center gap-2 lg:gap-1 lg:opacity-0 lg:group-hover:opacity-100 opacity-100 transition-all absolute lg:right-1 lg:top-1/2 lg:-translate-y-1/2 -top-2 -right-2 bg-white shadow-md lg:shadow-sm border border-[#F0E4D8] rounded-full lg:rounded-2xl p-1 z-20">
                             <button
                                 onPointerDown={(e) => e.stopPropagation()}
                                 onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
-                                className="text-[#9C9C9C] hover:text-[#B09AE0] p-1 rounded-xl transition-colors"
+                                className="text-[#9C9C9C] hover:text-[#B09AE0] p-2 rounded-full lg:rounded-xl transition-colors min-w-[44px] min-h-[44px] lg:min-w-[32px] lg:min-h-[32px] flex items-center justify-center"
                             >
-                                <Copy size={11} />
+                                <Copy size={16} className="lg:w-[14px] lg:h-[14px]" />
                             </button>
+                            <div className="w-[1px] h-4 bg-[#F0E4D8] lg:hidden" />
                             <button
                                 onPointerDown={(e) => e.stopPropagation()}
                                 onClick={(e) => { e.stopPropagation(); onRemove(); }}
-                                className="text-[#9C9C9C] hover:text-[#E05252] p-1 rounded-xl transition-colors"
+                                className="text-[#9C9C9C] hover:text-[#E05252] p-2 rounded-full lg:rounded-xl transition-colors min-w-[44px] min-h-[44px] lg:min-w-[32px] lg:min-h-[32px] flex items-center justify-center"
                             >
-                                <Trash2 size={11} />
+                                <Trash2 size={16} className="lg:w-[14px] lg:h-[14px]" />
                             </button>
                         </div>
                     ) : (
@@ -246,17 +269,17 @@ function DrawerDraggableMeal({ meal, score, onAdd }: { meal: Meal; score: number
         data: { type: 'drawer-meal', meal }
     });
     return (
-        <div ref={setNodeRef} {...listeners} {...attributes} className="min-w-[130px] max-w-[130px] bg-white rounded-2xl border border-[#F0E4D8] p-3 shadow-sm flex flex-col items-center text-center hover:border-[#6BC4A0] cursor-grab active:cursor-grabbing transition-colors relative">
+        <div ref={setNodeRef} {...listeners} {...attributes} className="min-w-[140px] max-w-[160px] min-h-[64px] bg-white rounded-2xl border border-[#F0E4D8] p-3 shadow-sm flex flex-col items-center text-center hover:border-[#6BC4A0] cursor-grab active:cursor-grabbing transition-colors relative">
             <div className="text-2xl mb-1 mt-1">{meal.emoji}</div>
-            <p className="text-[11px] font-semibold text-[#2D2D2D] line-clamp-2 h-8 leading-tight mb-1">{meal.name}</p>
-            <p className="text-[10px] text-[#9C9C9C] mb-2">{meal.macros.kcal} kcal</p>
-            <div className={`text-[9px] font-bold px-1.5 py-0.5 rounded w-full mb-3 ${score >= 80 ? 'bg-[#E1F5EE] text-[#085041]' : score >= 60 ? 'bg-[#FAEEDA] text-[#633806]' : 'bg-[#E8E8E8] text-[#9C9C9C]'}`}>
+            <p className="text-[12px] font-semibold text-[#2D2D2D] line-clamp-2 h-8 leading-tight mb-1">{meal.name}</p>
+            <p className="text-[11px] text-[#9C9C9C] mb-2">{meal.macros.kcal} kcal</p>
+            <div className={`text-[10px] font-bold px-1.5 py-0.5 rounded w-full mb-3 ${score >= 80 ? 'bg-[#E1F5EE] text-[#085041]' : score >= 60 ? 'bg-[#FAEEDA] text-[#633806]' : 'bg-[#E8E8E8] text-[#9C9C9C]'}`}>
                 {score >= 80 ? 'Excellent' : score >= 60 ? 'Bon match' : 'Correct'} ({score}%)
             </div>
             <button 
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={(e) => { e.stopPropagation(); onAdd?.(); }}
-                className="w-full bg-[#F1EFE8] text-[#2D2D2D] hover:bg-[#E8E0D8] py-1.5 rounded-xl text-xs font-bold mt-auto transition-colors shadow-sm"
+                className="w-full bg-[#F1EFE8] text-[#2D2D2D] hover:bg-[#E8E0D8] py-2 rounded-xl text-xs font-bold mt-auto transition-colors shadow-sm min-h-[44px]"
             >
                 + Ajouter
             </button>
@@ -306,6 +329,7 @@ function DayColumn({
     onDuplicateMeal,
     onOpenAddDrawer,
     onCardClick,
+    activeDragId,
 }: {
     dayIndex: number;
     dayKey: string;
@@ -323,6 +347,7 @@ function DayColumn({
     onDuplicateMeal: (meal: Meal) => void;
     onOpenAddDrawer: () => void;
     onCardClick: (meal: Meal, pmId: string) => void;
+    activeDragId: string | null;
 }) {
     const { setNodeRef, isOver } = useDroppable({
         id: dayKey,
@@ -377,9 +402,9 @@ function DayColumn({
             {/* Drop zone */}
             <motion.div
                 ref={setNodeRef}
-                animate={isEmptyUrgent ? { scale: [1, 1.02, 1] } : { scale: 1 }}
-                transition={isEmptyUrgent ? { repeat: Infinity, duration: 2 } : {}}
-                className={`flex flex-col gap-2 min-h-[120px] lg:min-h-[500px] flex-1 w-full p-2.5 rounded-2xl transition-all relative ${!hasMeal && !isPaused ? 'cursor-pointer' : ''}`}
+                animate={(isEmptyUrgent || !!activeDragId) ? { scale: [1, 1.01, 1], opacity: [1, 0.8, 1] } : { scale: 1, opacity: 1 }}
+                transition={(isEmptyUrgent || !!activeDragId) ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : {}}
+                className={`flex flex-col gap-2 min-h-[160px] lg:min-h-[500px] flex-1 w-full p-2.5 rounded-2xl transition-all relative ${!hasMeal && !isPaused ? 'cursor-pointer' : ''}`}
                 onClick={() => { if (!hasMeal && !isPaused && !isConfirmed) onOpenAddDrawer(); }}
                 style={{
                     background: isPaused
@@ -438,12 +463,13 @@ function DayColumn({
                             );
                         })}
                         {plannedMeals.length === 0 && (
-                            <div className="flex flex-col items-center justify-center h-full text-[#C4C4C4]">
+                            <div className="flex flex-col items-center justify-center h-full text-[#C4C4C4] py-6">
                                 <div className="h-[3px] w-[80%] border-t-2 border-dashed border-[#F0E4D8] mb-4" />
-                                <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center mb-1 ${isEmptyUrgent ? 'border-[#FFA07A]' : isEmptyWarning ? 'border-[#F59E0B]/50' : 'border-[#F0E4D8]'}`}>
-                                    <Plus size={16} className={isEmptyUrgent ? "text-[#FFA07A]" : isEmptyWarning ? "text-[#F59E0B] animate-[pulse_4s_ease-in-out_infinite]" : "text-[#D4C9BE]"} />
+                                <div className={`w-10 h-10 lg:w-8 lg:h-8 rounded-full border-2 flex items-center justify-center mb-2 ${isEmptyUrgent ? 'border-[#FFA07A]' : isEmptyWarning ? 'border-[#F59E0B]/50' : 'border-[#F0E4D8]'}`}>
+                                    <Plus size={20} className={isEmptyUrgent ? "text-[#FFA07A]" : isEmptyWarning ? "text-[#F59E0B] animate-[pulse_4s_ease-in-out_infinite]" : "text-[#D4C9BE]"} />
                                 </div>
-                                <p className={`text-[10px] font-bold capitalize tracking-wider ${isEmptyUrgent ? 'text-[#FFA07A]' : 'text-[#D4C9BE]'}`}>Ajouter un repas</p>
+                                <p className={`text-xs lg:text-[10px] font-bold capitalize tracking-wider ${isEmptyUrgent ? 'text-[#FFA07A]' : 'text-[#D4C9BE]'}`}>Déposer ici</p>
+                                <p className="text-[10px] text-[#D4C9BE] mt-0.5 lg:hidden">ou appuyez pour ajouter</p>
                             </div>
                         )}
                     </AnimatePresence>
@@ -505,6 +531,25 @@ export default function PlannerPage() {
     const [sheetSelectedTime, setSheetSelectedTime] = useState<DeliveryTimeSlot>('12:30');
     const [sheetSelectedLocation, setSheetSelectedLocation] = useState<DeliveryLocation>('home');
     const [sheetPendingAddress, setSheetPendingAddress] = useState<string>('');
+
+    const weeklyTotals = useMemo(() => {
+        let calories = 0;
+        let protein = 0;
+        let carbs = 0;
+        let fats = 0;
+        
+        activeMemberMeals.forEach(pm => {
+            const meal = meals.find(m => m.id === pm.meal_id);
+            if (meal) {
+                calories += meal.macros.kcal;
+                protein += meal.macros.protein_g;
+                carbs += meal.macros.carbs_g;
+                fats += meal.macros.fats_g;
+            }
+        });
+        
+        return { calories, protein, carbs, fats };
+    }, [activeMemberMeals, meals]);
 
     const [displayScore, setDisplayScore] = useState(0);
     const [urgencyHours, setUrgencyHours] = useState(999);
@@ -680,7 +725,10 @@ export default function PlannerPage() {
     };
 
     // Dnd logic
-    const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+    const sensors = useSensors(
+        useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+        useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
+    );
     const handleDragStart = (e: DragStartEvent) => {
         setActiveDragId(e.active.id as string);
         setActiveDragData(e.active.data.current);
@@ -959,6 +1007,54 @@ export default function PlannerPage() {
                     </div>
                 </div>
 
+                {/* ── Weekly Summary Card (Mobile) ── */}
+                <AnimatePresence>
+                    {!isPlanEmpty && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="lg:hidden mx-4 mb-8 bg-white rounded-[24px] border border-[#F0E4D8] p-5 shadow-sm"
+                        >
+                            <div className="flex items-center justify-between mb-5">
+                                <div>
+                                    <h3 className="text-[10px] font-bold text-[#9C9C9C] uppercase tracking-wider">Cibles de la semaine</h3>
+                                    <p className="font-serif text-lg text-[#2D2D2D]">Résumé hebdomadaire</p>
+                                </div>
+                                <div className="text-right">
+                                    <span className="text-2xl font-black text-[#6BC4A0]">{weeklyTotals.calories}</span>
+                                    <span className="text-[10px] text-[#9C9C9C] font-bold block mt-[-4px]">KCAL</span>
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-4">
+                                {[
+                                    { label: 'Protéines', val: weeklyTotals.protein, target: (profile.targets?.protein_g || 150) * 7 / 3, color: '#B09AE0' },
+                                    { label: 'Glucides', val: weeklyTotals.carbs, target: (profile.targets?.carbs_g || 200) * 7 / 3, color: '#F59E0B' },
+                                    { label: 'Lipides', val: weeklyTotals.fats, target: (profile.targets?.fats_g || 65) * 7 / 3, color: '#FFA07A' },
+                                ].map(m => {
+                                    const pct = Math.min(Math.round(m.val / m.target * 100), 100);
+                                    return (
+                                        <div key={m.label} className="space-y-1.5">
+                                            <div className="flex justify-between items-end">
+                                                <span className="text-[12px] font-bold text-[#6B6B6B]">{m.label}</span>
+                                                <span className="text-[12px] font-black text-[#2D2D2D]">
+                                                    {Math.round(m.val)}g <span className="text-[#9C9C9C] font-bold">/ {Math.round(m.target)}g</span>
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex-1 h-2 bg-[#F0EBE3] rounded-full overflow-hidden">
+                                                    <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} className="h-full rounded-full" style={{ backgroundColor: m.color }} />
+                                                </div>
+                                                <span className="text-[13px] font-black text-[#2D2D2D] w-10 text-right">{pct}%</span>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
                 {/* Main Content Area */}
                 {isPlanEmpty && !plan.confirmed ? (
                     // Empty State
@@ -1047,6 +1143,7 @@ export default function PlannerPage() {
                                     setDrawerMode('add');
                                 }}
                                 onCardClick={(meal, pmId) => setSelectedMeal({ mealId: meal.id, pmId })}
+                                activeDragId={activeDragId}
                             />
                         </div>
 
@@ -1078,6 +1175,7 @@ export default function PlannerPage() {
                                         setDrawerMode('add');
                                     }}
                                     onCardClick={(meal, pmId) => setSelectedMeal({ mealId: meal.id, pmId })}
+                                    activeDragId={activeDragId}
                                 />
                             ))}
                         </div>
@@ -1107,28 +1205,73 @@ export default function PlannerPage() {
                 </div>
             )}
 
+            {/* ── Mobile Floating Action Button ── */}
+            <AnimatePresence>
+                {!plan.confirmed && drawerMode === 'closed' && (
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                        className="lg:hidden fixed bottom-6 right-6 z-40"
+                    >
+                         <button
+                            onClick={() => {
+                                setActiveDrawerDay(DAY_KEYS[mobileDayIndex]);
+                                setDrawerMode('add');
+                            }}
+                            className="bg-[#6BC4A0] text-white px-6 py-4 rounded-full shadow-[0_8px_32px_rgba(107,196,160,0.4)] flex items-center gap-2 font-bold active:scale-95 transition-transform"
+                        >
+                            <Plus size={20} />
+                            Ajouter des repas
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Quick-Add Drawer */}
-            <div className="sticky bottom-0 w-full z-10">
+            <div className={`w-full z-[60] ${drawerMode === 'closed' ? 'hidden lg:block sticky bottom-0' : 'fixed inset-0 lg:sticky lg:bottom-0 overflow-hidden'}`}>
                 <style>{`
                     .hide-scrollbar::-webkit-scrollbar { display: none; }
                     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
                 `}</style>
+                
+                <AnimatePresence>
+                    {drawerMode !== 'closed' && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setDrawerMode('closed')}
+                            className="absolute inset-0 bg-black/40 backdrop-blur-sm lg:hidden"
+                        />
+                    )}
+                </AnimatePresence>
+
                 <motion.div
                     ref={drawerRef}
-                    initial={{ height: 48 }}
-                    animate={{ height: drawerMode === 'closed' ? 48 : 'auto' }}
+                    initial={{ height: 48, y: '100%' }}
+                    animate={{ 
+                        height: drawerMode === 'closed' ? 48 : 'auto',
+                        y: drawerMode === 'closed' && typeof window !== 'undefined' && window.innerWidth < 1024 ? '100%' : 0
+                    }}
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                     style={{ overflow: 'hidden' }}
-                    className={`w-full ${drawerMode === 'closed' ? 'bg-[#FFF8F4] border-t border-[#E8E0D8]' : 'bg-white rounded-t-3xl shadow-[0_-8px_30px_rgba(45,45,45,0.08)]'}`}
+                    className={`w-full relative ${drawerMode === 'closed' ? 'bg-[#FFF8F4] border-t border-[#E8E0D8]' : 'bg-white rounded-t-[32px] lg:rounded-t-none lg:rounded-none shadow-[0_-8px_30px_rgba(45,45,45,0.08)] lg:shadow-none'}`}
                 >
-                    {/* Handle Bar */}
+                    {/* Desktop-only closed state bar */}
                     {drawerMode === 'closed' ? (
-                        <div className="h-12 w-full flex items-center justify-center relative cursor-pointer hover:bg-[#F9F4F0] transition-colors"
+                        <div className="h-12 w-full hidden lg:flex items-center justify-center relative cursor-pointer hover:bg-[#F9F4F0] transition-colors"
                              onClick={() => { setActiveDrawerDay(DAY_KEYS[0]); setDrawerMode('add'); }}>
                             <div className="absolute left-6 text-[#9C9C9C] text-xs font-semibold">+ Ajout rapide</div>
                             <div className="w-6 h-[3px] bg-[#D4C9BE] rounded-full" />
                         </div>
                     ) : (
+                        <div className="p-6 md:p-8 max-h-[85vh] overflow-y-auto hide-scrollbar">
+                            {/* Mobile Handle */}
+                            <div className="lg:hidden flex justify-center mb-6 mt-[-16px]">
+                                <div className="w-12 h-1.5 bg-[#E8E0D8] rounded-full" />
+                            </div>
+
                         <div className="p-6">
                             {/* Header */}
                             <div className="flex items-center justify-between mb-4">
@@ -1206,9 +1349,10 @@ export default function PlannerPage() {
                                 </div>
                             )}
                         </div>
-                    )}
-                </motion.div>
-            </div>
+                    </div>
+                )}
+            </motion.div>
+        </div>
 
             {/* Incomplete Warning Modal */}
             <AnimatePresence>
