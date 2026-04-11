@@ -538,7 +538,7 @@ export default function PlannerPage() {
         let carbs = 0;
         let fats = 0;
         
-        activeMemberMeals.forEach(pm => {
+        activeMemberMeals.filter(pm => !plan.paused_days.includes(pm.day_index)).forEach(pm => {
             const meal = meals.find(m => m.id === pm.meal_id);
             if (meal) {
                 calories += meal.macros.kcal;
@@ -654,7 +654,7 @@ export default function PlannerPage() {
     // Derived states
     const isPlanEmpty = plan.planned_meals.length === 0 && !plannerDays;
     const nonPausedLayoutCount = 7 - plan.paused_days.length;
-    const activeLayoutCount = activeMemberMeals.length;
+    const activeLayoutCount = activeMemberMeals.filter(pm => !plan.paused_days.includes(pm.day_index)).length;
     const hasEmptyGaps = activeLayoutCount < nonPausedLayoutCount;
 
     // Actions
@@ -813,11 +813,12 @@ export default function PlannerPage() {
     const alreadyUsedMeals = meals.filter(m => alreadyUsedMealIds.includes(m.id) && !isMealExcludedByTaste(m, tastePrefs));
 
     // ── Feature 3: Volume discount pricing (MUST be before early return) ───
-    const totalMeals = plan.planned_meals.length;
-    const subtotal = useMemo(() => plan.planned_meals.reduce((s, pm) => {
+    const activeGlobalMeals = useMemo(() => plan.planned_meals.filter(pm => !plan.paused_days.includes(pm.day_index)), [plan.planned_meals, plan.paused_days]);
+    const totalMeals = activeGlobalMeals.length;
+    const subtotal = useMemo(() => activeGlobalMeals.reduce((s, pm) => {
         const m = meals.find(x => x.id === pm.meal_id);
         return s + (m?.price_mad ?? 0);
-    }, 0), [plan.planned_meals, meals]);
+    }, 0), [activeGlobalMeals, meals]);
     const discountPct = totalMeals >= 20 ? 10 : totalMeals >= 10 ? 5 : 0;
     const discountedTotal = Math.round(subtotal * (1 - discountPct / 100));
 
@@ -1187,11 +1188,12 @@ export default function PlannerPage() {
             {plan.planned_meals.length > 0 && (
                 <div className="mx-6 mb-3 md:mx-8">
                     {(() => {
-                        const total = plan.planned_meals.reduce((sum, pm) => {
+                        const activeMeals = plan.planned_meals.filter(pm => !plan.paused_days.includes(pm.day_index));
+                        const total = activeMeals.reduce((sum, pm) => {
                             const m = meals.find(x => x.id === pm.meal_id);
                             return sum + (m?.price_mad ?? 0);
                         }, 0);
-                        const mealCount = plan.planned_meals.length;
+                        const mealCount = activeMeals.length;
                         return (
                             <div className="flex items-center justify-between bg-white rounded-2xl px-5 py-3 border border-[#F0E4D8] shadow-sm">
                                 <div className="flex items-center gap-2">
@@ -1943,7 +1945,7 @@ export default function PlannerPage() {
 
                                 {/* Meals grouped by day */}
                                 <div className="space-y-2 mb-6">
-                                    {plan.planned_meals.map((pm, idx) => {
+                                    {plan.planned_meals.filter(pm => !plan.paused_days.includes(pm.day_index)).map((pm, idx) => {
                                         const m = meals.find(x => x.id === pm.meal_id);
                                         if (!m) return null;
                                         const assign = deliveryAssignments[pm.id];
@@ -1992,7 +1994,7 @@ export default function PlannerPage() {
                                 </div>
 
                                 {/* Missing delivery warning */}
-                                {plan.planned_meals.some(pm => !deliveryAssignments[pm.id]) && (
+                                {plan.planned_meals.filter(pm => !plan.paused_days.includes(pm.day_index)).some(pm => !deliveryAssignments[pm.id]) && (
                                     <div className="bg-[#FFF0E5] border border-[#FFA07A]/30 rounded-xl p-3 mb-4">
                                         <p className="text-[11px] text-[#9A3412] font-semibold">
                                             ⚠️ Certains repas n'ont pas d'heure/lieu de livraison. Ouvrez chaque repas pour le définir, ou confirmez quand même.
