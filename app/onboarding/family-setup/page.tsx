@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFamilyStore } from "@/lib/store";
-import { Minus, Plus, ArrowRight, Utensils } from "lucide-react";
+import { Minus, Plus, ArrowRight, Utensils, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function FamilySetupPage() {
@@ -11,14 +11,16 @@ export default function FamilySetupPage() {
     
     const [adults, setAdults] = useState(2);
     const [children, setChildren] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleNext = () => {
+        setIsLoading(true);
         setupFamily(adults, children);
         router.push("/onboarding/family-preferences?mode=family");
     };
 
     return (
-        <div className="w-full pb-32 flex flex-col items-center">
+        <div className="w-full pb-16 flex flex-col items-center">
             <div className="text-center mb-12 w-full">
                 <motion.span 
                     initial={{ opacity: 0, y: 10 }}
@@ -100,24 +102,29 @@ export default function FamilySetupPage() {
                 </motion.div>
             </div>
 
-            <div className="fixed bottom-0 inset-x-0 p-6 z-20 pointer-events-none">
-                <div className="max-w-xl mx-auto pointer-events-auto">
-                    <motion.button
-                        whileHover={{ scale: 1.02, y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={handleNext}
-                        className="w-full h-16 rounded-full bg-primary text-background font-sans font-bold flex items-center justify-center gap-3 text-lg shadow-[0_15px_30px_-10px_rgba(44,62,45,0.4)] hover:bg-primary/90 transition-all uppercase tracking-widest"
-                    >
-                        <span>Continuer</span>
-                        <ArrowRight size={20} />
-                    </motion.button>
-                    <button 
-                        onClick={() => router.push("/onboarding/express")}
-                        className="w-full mt-4 py-2 text-text-muted hover:text-primary transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
-                    >
-                        <span>Trop fatigué ? Envoyez une note vocale</span>
-                    </button>
-                </div>
+            <div className="mt-12 w-full max-w-xl mx-auto px-5 sm:px-0 flex flex-col gap-3">
+                <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleNext}
+                    disabled={isLoading}
+                    className="w-full h-14 sm:h-16 rounded-full bg-primary text-white font-sans font-bold flex items-center justify-center gap-3 text-sm sm:text-base shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:bg-primary/95 transition-all uppercase tracking-[0.15em] disabled:opacity-70 disabled:cursor-not-allowed group relative overflow-hidden"
+                >
+                    {isLoading ? (
+                        <Loader2 size={20} className="animate-spin text-white/70" />
+                    ) : (
+                        <>
+                            <span>Continuer</span>
+                            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                        </>
+                    )}
+                </motion.button>
+                <button 
+                    onClick={() => router.push("/onboarding/express")}
+                    className="w-full py-3 text-text-muted hover:text-primary transition-colors text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95"
+                >
+                    <span>Trop fatigué ? Envoyez une note vocale</span>
+                </button>
             </div>
         </div>
     );

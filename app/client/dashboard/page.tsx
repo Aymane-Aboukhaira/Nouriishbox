@@ -421,9 +421,13 @@ export default function DashboardPage() {
                                             transition={{ delay: 0.5 + idx * 0.08 }}
                                             className={`flex items-center gap-4 p-3.5 rounded-2xl transition-colors cursor-pointer group ${isConsumed ? 'bg-[#F9F9F9] opacity-70 grayscale-[30%]' : 'hover:bg-[#F1FAF4] border border-transparent'}`}
                                         >
-                                            <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl"
+                                            <div className="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center text-2xl"
                                                 style={{ background: "linear-gradient(135deg, #F1FAF4, #A8E6CF22)" }}>
-                                                {meal.emoji}
+                                                {meal.image_url ? (
+                                                    <img src={meal.image_url} alt={meal.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    meal.emoji
+                                                )}
                                             </div>
                                             <div className="flex-1">
                                                 <p className="font-semibold text-sm text-[#2D2D2D]">{meal.name}</p>

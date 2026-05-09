@@ -110,14 +110,7 @@ export function Sidebar({ variant = "client" }: SidebarProps) {
                             <span className="tracking-wide">Client View</span>
                         </div>
                     </Link>
-                ) : (
-                    <Link href="/admin/dashboard">
-                        <div className="flex items-center gap-4 px-5 py-3 rounded-xl text-background/60 hover:text-background hover:bg-white/5 transition-all cursor-pointer text-sm font-medium font-sans">
-                            <BarChart3 size={18} strokeWidth={1.5} className="text-background/40" />
-                            <span className="tracking-wide">Admin Hub</span>
-                        </div>
-                    </Link>
-                )}
+                ) : null}
             </div>
         </aside>
     );

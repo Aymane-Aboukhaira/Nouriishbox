@@ -74,6 +74,7 @@ export interface FamilyMember {
     assigned_meal_ids: string[];
     savedLocations?: SavedLocation[];
     taste_leaning?: 'none' | 'pescatarian' | 'plant_based' | 'meat_heavy';
+    allergies?: string[];
 }
 
 export interface PlannedMeal {

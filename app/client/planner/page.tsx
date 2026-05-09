@@ -404,7 +404,7 @@ function DayColumn({
                 ref={setNodeRef}
                 animate={(isEmptyUrgent || !!activeDragId) ? { scale: [1, 1.01, 1], opacity: [1, 0.8, 1] } : { scale: 1, opacity: 1 }}
                 transition={(isEmptyUrgent || !!activeDragId) ? { repeat: Infinity, duration: 2, ease: "easeInOut" } : {}}
-                className={`flex flex-col gap-2 min-h-[160px] lg:min-h-[500px] flex-1 w-full p-2.5 rounded-2xl transition-all relative ${!hasMeal && !isPaused ? 'cursor-pointer' : ''}`}
+                className={`flex flex-col gap-2 min-h-[160px] flex-1 w-full p-2.5 rounded-2xl transition-all relative ${!hasMeal && !isPaused ? 'cursor-pointer' : ''}`}
                 onClick={() => { if (!hasMeal && !isPaused && !isConfirmed) onOpenAddDrawer(); }}
                 style={{
                     background: isPaused

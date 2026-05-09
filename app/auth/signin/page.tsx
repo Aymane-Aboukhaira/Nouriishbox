@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, AlertCircle, Loader2, ArrowRight, Image as ImageIcon } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, Loader2, ArrowRight } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -65,7 +65,7 @@ function SignInContent() {
     return (
         <div className="min-h-screen grid lg:grid-cols-2 overflow-hidden bg-background">
             {/* 1. LEFT — EXPERIENCE PANEL */}
-            <div className="hidden lg:flex flex-col justify-between bg-primary p-16 relative overflow-hidden">
+            <div className="hidden lg:flex flex-col justify-center bg-primary p-16 relative overflow-hidden">
                 {/* Grain texture overlay */}
                 <div
                     className="absolute inset-0 pointer-events-none opacity-[0.03]"
@@ -81,7 +81,7 @@ function SignInContent() {
                 <div className="absolute bottom-[-10%] left-[-10%] w-[50%] aspect-square rounded-full bg-accent/5 blur-[80px] pointer-events-none" />
 
                 <div className="relative z-10">
-                    <Link href="/" className="inline-block mb-24 group">
+                    <Link href="/" className="inline-block mb-12 group">
                         <div className="flex items-center gap-2.5 font-serif tracking-tight text-3xl">
                             <Image src="/logo.png" alt="Nourishbox" width={40} height={40} className="rounded-xl" />
                             <span>
@@ -101,22 +101,6 @@ function SignInContent() {
                         <span className="italic opacity-90">A Été Conçu Pour Le Faire.</span>
                     </motion.h1>
                 </div>
-
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95, y: 40 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
-                    className="relative z-10 w-full"
-                >
-                    <div className="relative aspect-square max-w-sm ml-auto rounded-[32px] border-2 border-dashed border-background/20 bg-background/5 flex items-center justify-center overflow-hidden">
-                        <div className="text-center">
-                            <div className="w-16 h-16 rounded-2xl bg-background/10 mx-auto mb-4 flex items-center justify-center text-background/40">
-                                <ImageIcon size={28} strokeWidth={1.5} />
-                            </div>
-                            <p className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-background/30 px-6">Produit en aperçu</p>
-                        </div>
-                    </div>
-                </motion.div>
             </div>
 
             {/* 2. RIGHT — AUTH PANEL */}

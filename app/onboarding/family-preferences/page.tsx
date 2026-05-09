@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFamilyStore } from "@/lib/store";
-import { ArrowRight, Sparkles, User, Baby, ChevronDown, MapPin, Clock, Check } from "lucide-react";
+import { ArrowRight, Sparkles, User, Baby, ChevronDown, MapPin, Clock, Check, Loader2, Leaf, Fish, Beef, Scale, Sunrise, Sun, Sunset, Moon, Wheat, Milk, ShieldAlert } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BodySlider } from "../components/BodySlider";
 import type { Goal, DeliveryLocation, DeliveryTimeSlot, SavedLocation } from "@/lib/types";
@@ -26,14 +26,37 @@ const LOCATION_LABELS: Record<string, string> = {
 };
 const TIME_SLOTS: DeliveryTimeSlot[] = ['07:00', '12:30', '18:00', '21:00'];
 
+const DIET_PREFS = [
+    { id: 'none', label: 'Standard', icon: Scale },
+    { id: 'pescatarian', label: 'Pescétarien', icon: Fish },
+    { id: 'plant_based', label: 'Végétalien', icon: Leaf },
+    { id: 'meat_heavy', label: 'Riche en Viande', icon: Beef },
+];
+
+const ALLERGIES_LIST = [
+    { id: 'gluten', label: 'Gluten', icon: Wheat },
+    { id: 'dairy', label: 'Lactose', icon: Milk },
+    { id: 'nuts', label: 'Fruits à coque', icon: ShieldAlert },
+    { id: 'seafood', label: 'Fruits de mer', icon: Fish },
+];
+
+const TIME_SLOT_INFO: Record<string, { label: string, icon: any, desc: string }> = {
+    "07:00": { label: "Matin", icon: Sunrise, desc: "07:00 - 09:00" },
+    "12:30": { label: "Midi", icon: Sun, desc: "12:00 - 14:00" },
+    "18:00": { label: "Soir", icon: Sunset, desc: "17:30 - 19:30" },
+    "21:00": { label: "Nuit", icon: Moon, desc: "20:30 - 22:30" },
+};
+
 export function FamilyPreferencesPage() {
     const router = useRouter();
     const { members, updateMember } = useFamilyStore();
     
     // Track which accordion is open
     const [openId, setOpenId] = useState<string | null>(members[0]?.id || null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleNext = () => {
+        setIsLoading(true);
         router.push("/onboarding/review?mode=family");
     };
 
@@ -58,7 +81,7 @@ export function FamilyPreferencesPage() {
     };
 
     return (
-        <div className="w-full pb-32">
+        <div className="w-full pb-16">
             <div className="text-center mb-12">
                 <motion.span 
                     initial={{ opacity: 0, y: 10 }}
@@ -188,9 +211,9 @@ export function FamilyPreferencesPage() {
                                                     <BodySlider 
                                                         label="Taille" 
                                                         unit="cm" 
-                                                        min={120} 
-                                                        max={220} 
-                                                        value={member.height_cm || 170} 
+                                                        min={member.relation === 'child' ? 70 : 120} 
+                                                        max={member.relation === 'child' ? 190 : 220} 
+                                                        value={member.height_cm || (member.relation === 'child' ? 120 : 170)} 
                                                         onChange={(v) => updateMember(member.id, { height_cm: v })} 
                                                     />
                                                     <BodySlider 
@@ -205,24 +228,63 @@ export function FamilyPreferencesPage() {
                                             </div>
 
                                             {/* Dietary Taste & Goal */}
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                                            <div className="space-y-8">
+                                                {/* Diet Prefs */}
                                                 <div className="space-y-3">
                                                     <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Préférence Alimentaire</label>
-                                                    <div className="relative">
-                                                        <select 
-                                                            className="w-full bg-white border-[1.5px] border-border rounded-2xl px-5 py-4 font-serif text-lg text-text-primary focus:border-primary outline-none cursor-pointer appearance-none shadow-sm"
-                                                            value={member.taste_leaning || 'none'}
-                                                            onChange={(e) => updateMember(member.id, { taste_leaning: e.target.value as any })}
-                                                        >
-                                                            <option value="none">Équilibré Standard</option>
-                                                            <option value="pescatarian">Pescétarien</option>
-                                                            <option value="plant_based">Végétalien</option>
-                                                            <option value="meat_heavy">Riche en Viande</option>
-                                                        </select>
-                                                        <ChevronDown size={18} className="absolute right-5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
+                                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                                        {DIET_PREFS.map(pref => {
+                                                            const isSelected = (member.taste_leaning || 'none') === pref.id;
+                                                            return (
+                                                                <button
+                                                                    key={pref.id}
+                                                                    onClick={() => updateMember(member.id, { taste_leaning: pref.id as any })}
+                                                                    className={`p-4 rounded-2xl border-[1.5px] flex flex-col items-center justify-center gap-3 transition-all ${
+                                                                        isSelected 
+                                                                            ? "bg-primary/5 border-primary text-primary shadow-[0_4px_12px_rgba(44,62,45,0.08)]" 
+                                                                            : "bg-white border-border text-text-muted hover:border-primary/30 hover:bg-background/50"
+                                                                    }`}
+                                                                >
+                                                                    <pref.icon size={24} strokeWidth={1.5} />
+                                                                    <span className="text-[10px] font-bold uppercase tracking-widest text-center">{pref.label}</span>
+                                                                </button>
+                                                            );
+                                                        })}
                                                     </div>
                                                 </div>
 
+                                                {/* Allergies */}
+                                                <div className="space-y-3">
+                                                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Allergies & Intolérances</label>
+                                                    <div className="flex flex-wrap gap-3">
+                                                        {ALLERGIES_LIST.map(allergy => {
+                                                            const isSelected = (member.allergies || []).includes(allergy.id);
+                                                            return (
+                                                                <button
+                                                                    key={allergy.id}
+                                                                    onClick={() => {
+                                                                        const current = member.allergies || [];
+                                                                        const next = isSelected 
+                                                                            ? current.filter(a => a !== allergy.id)
+                                                                            : [...current, allergy.id];
+                                                                        updateMember(member.id, { allergies: next });
+                                                                    }}
+                                                                    className={`px-4 py-3 rounded-xl border-[1.5px] flex items-center gap-2 transition-all ${
+                                                                        isSelected 
+                                                                            ? "bg-accent/10 border-accent text-accent shadow-sm" 
+                                                                            : "bg-white border-border text-text-muted hover:border-accent/30"
+                                                                    }`}
+                                                                >
+                                                                    <allergy.icon size={16} strokeWidth={2} />
+                                                                    <span className="text-xs font-bold">{allergy.label}</span>
+                                                                    {isSelected && <Check size={14} strokeWidth={3} className="ml-1" />}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+
+                                                {/* Goal */}
                                                 <div className="space-y-3">
                                                     <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] px-1">Objectif Principal</label>
                                                     <div className="flex flex-wrap gap-2">
@@ -310,22 +372,30 @@ export function FamilyPreferencesPage() {
 
                                                                     <div className="space-y-3">
                                                                         <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
-                                                                            <Clock size={12} strokeWidth={2}/> Heure de Livraison Cible
+                                                                            <Clock size={14} strokeWidth={2}/> Créneau de Livraison
                                                                         </label>
-                                                                        <div className="flex flex-wrap gap-2">
-                                                                            {TIME_SLOTS.map(slot => (
-                                                                                <button
-                                                                                    key={slot}
-                                                                                    onClick={() => updateLocationField(member.id, loc.tag, 'timeSlot', slot)}
-                                                                                    className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-tighter transition-all border ${
-                                                                                        loc.timeSlot === slot
-                                                                                            ? "bg-primary border-primary text-background shadow-md"
-                                                                                            : "bg-white border-border text-text-muted hover:border-primary/20"
-                                                                                    }`}
-                                                                                >
-                                                                                    {slot}
-                                                                                </button>
-                                                                            ))}
+                                                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                                                            {TIME_SLOTS.map(slot => {
+                                                                                const info = TIME_SLOT_INFO[slot];
+                                                                                const isSelected = loc.timeSlot === slot;
+                                                                                return (
+                                                                                    <button
+                                                                                        key={slot}
+                                                                                        onClick={() => updateLocationField(member.id, loc.tag, 'timeSlot', slot)}
+                                                                                        className={`p-3 rounded-xl border-[1.5px] flex flex-col items-center justify-center gap-2 transition-all ${
+                                                                                            isSelected
+                                                                                                ? "bg-primary border-primary text-white shadow-md"
+                                                                                                : "bg-white border-border text-text-muted hover:border-primary/30"
+                                                                                        }`}
+                                                                                    >
+                                                                                        {info && <info.icon size={20} strokeWidth={1.5} className={isSelected ? "text-accent" : ""} />}
+                                                                                        <div className="text-center">
+                                                                                            <div className={`text-[10px] font-bold uppercase tracking-widest ${isSelected ? "text-white" : "text-text-primary"}`}>{info?.label || slot}</div>
+                                                                                            <div className={`text-[9px] ${isSelected ? "text-white/80" : "text-text-muted"}`}>{info?.desc || ""}</div>
+                                                                                        </div>
+                                                                                    </button>
+                                                                                );
+                                                                            })}
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -354,24 +424,29 @@ export function FamilyPreferencesPage() {
                 })}
             </div>
 
-            <div className="fixed bottom-0 inset-x-0 p-6 z-20 pointer-events-none">
-                <div className="max-w-xl mx-auto pointer-events-auto">
-                    <motion.button
-                        whileHover={{ scale: 1.02, y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={handleNext}
-                        className="w-full h-16 rounded-full bg-primary text-background font-sans font-bold flex items-center justify-center gap-3 text-lg shadow-[0_15px_30px_-10px_rgba(44,62,45,0.4)] hover:bg-primary/90 transition-all uppercase tracking-widest"
-                    >
-                        <span>Vérifier le profil familial</span>
-                        <ArrowRight size={20} />
-                    </motion.button>
-                    <button 
-                        onClick={() => router.push("/onboarding/express")}
-                        className="w-full mt-4 py-2 text-text-muted hover:text-primary transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
-                    >
-                        <span>Trop fatigué ? Envoyez une note vocale</span>
-                    </button>
-                </div>
+            <div className="mt-12 w-full max-w-xl mx-auto px-5 sm:px-0 flex flex-col gap-3">
+                <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleNext}
+                    disabled={isLoading}
+                    className="w-full h-14 sm:h-16 rounded-full bg-primary text-white font-sans font-bold flex items-center justify-center gap-3 text-sm sm:text-base shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:bg-primary/95 transition-all uppercase tracking-[0.15em] disabled:opacity-70 disabled:cursor-not-allowed group relative overflow-hidden"
+                >
+                    {isLoading ? (
+                        <Loader2 size={20} className="animate-spin text-white/70" />
+                    ) : (
+                        <>
+                            <span>Vérifier le profil familial</span>
+                            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                        </>
+                    )}
+                </motion.button>
+                <button 
+                    onClick={() => router.push("/onboarding/express")}
+                    className="w-full py-3 text-text-muted hover:text-primary transition-colors text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95"
+                >
+                    <span>Trop fatigué ? Envoyez une note vocale</span>
+                </button>
             </div>
         </div>
     );

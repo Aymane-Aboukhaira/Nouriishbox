@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Header } from "@/components/layout/header";
-import { MealCard } from "@/components/ui/meal-card";
-import { useFamilyStore, useMealsStore } from "@/lib/store";
+import { useFamilyStore, useSubscriptionStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, X, UserPlus, Trash2 } from "lucide-react";
+import { UserPlus, Trash2, X, PauseCircle, PlayCircle, MapPin, ShieldAlert, ChevronDown } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -21,30 +20,35 @@ const memberSchema = z.object({
 type MemberForm = z.infer<typeof memberSchema>;
 
 const RELATION_LABELS: Record<Relation, string> = {
-    self: "Moi-même",
-    partner: "Conjoint(e)",
-    child: "Enfant",
-    parent: "Parent",
-    other: "Autre",
+    self: "Moi-même", partner: "Conjoint(e)", child: "Enfant", parent: "Parent", other: "Autre",
 };
-
 const GOAL_LABELS: Record<Goal, string> = {
-    weight_loss: "Perte de poids",
-    muscle_gain: "Prise de masse",
-    maintenance: "Maintien",
-    balance: "Équilibre",
+    weight_loss: "Perte de poids", muscle_gain: "Prise de masse", maintenance: "Maintien", balance: "Équilibre",
 };
+const AVATAR_COLORS = ["#6BC4A0", "#B09AE0", "#FFA07A", "#FFD3B6", "#A8E6CF", "#D6C1FF", "#FFE5A0", "#C8EEFF"];
 
-const AVATAR_COLORS = [
-    "#6BC4A0", "#B09AE0", "#FFA07A", "#FFD3B6", "#A8E6CF",
-    "#D6C1FF", "#FFE5A0", "#C8EEFF", "#FFD6D6",
+const ALLERGY_OPTIONS = [
+    { id: "gluten", label: "Gluten" },
+    { id: "dairy", label: "Lactose" },
+    { id: "nuts", label: "Fruits à coque" },
+    { id: "seafood", label: "Fruits de mer" },
+    { id: "eggs", label: "Œufs" },
+    { id: "soy", label: "Soja" },
 ];
 
+const DELIVERY_LABELS = ["Domicile", "Bureau", "Salle de sport", "Autre"];
+
+// Price per member per week (mock)
+const MEMBER_PRICE_MAD = 299;
+
 export default function FamilyPage() {
-    const { members, activeMemberId, setActiveMember, addMember, removeMember, assignMeal, unassignMeal } = useFamilyStore();
-    const { meals } = useMealsStore();
+    const { members, activeMemberId, setActiveMember, addMember, removeMember, updateMember } = useFamilyStore();
+    const { subscription, pauseSubscription, resumeSubscription } = useSubscriptionStore();
+
     const [showAddModal, setShowAddModal] = useState(false);
     const [selectedColor, setSelectedColor] = useState(AVATAR_COLORS[0]);
+    const [editingAddress, setEditingAddress] = useState<string | null>(null);
+    const [addressValue, setAddressValue] = useState("");
 
     const activeMember = members.find((m) => m.id === activeMemberId);
 
@@ -55,25 +59,28 @@ export default function FamilyPage() {
     });
 
     const onSubmit = (data: MemberForm) => {
-        addMember({ ...data, avatar_color: selectedColor });
+        addMember({ ...data, avatar_color: selectedColor, assigned_meal_ids: [] });
         toast.success(`${data.name} ajouté à votre famille ! 🎉`);
         reset();
         setShowAddModal(false);
     };
 
-    const activeMemberMeals = meals.filter((m) =>
-        activeMember?.assigned_meal_ids.includes(m.id)
-    );
+    const isMemberPaused = subscription.status === "paused";
 
-    const unassignedMeals = meals.filter(
-        (m) => !activeMember?.assigned_meal_ids.includes(m.id) && m.is_active
-    ).slice(0, 8);
+    const toggleMemberAllergy = (memberId: string, allergyId: string, currentAllergies: string[]) => {
+        const next = currentAllergies.includes(allergyId)
+            ? currentAllergies.filter(a => a !== allergyId)
+            : [...currentAllergies, allergyId];
+        updateMember(memberId, { allergies: next });
+        toast.success("Allergies mises à jour");
+    };
 
     return (
         <div className="min-h-screen">
-            <Header title="Family Hub" subtitle="Gérez la nutrition de toute votre famille" />
-            <div className="p-8">
-                {/* Family member profile chips */}
+            <Header title="Family Hub" subtitle="Gérez les abonnements et préférences de votre famille" />
+            <div className="p-4 sm:p-8">
+
+                {/* Member selector chips */}
                 <div className="flex items-center gap-3 mb-8 flex-wrap">
                     {members.map((member) => (
                         <motion.button
@@ -88,25 +95,18 @@ export default function FamilyPage() {
                                     : { background: "white", border: "1px solid #F0E4D8" }
                             }
                         >
-                            <div
-                                className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-                                style={{ background: member.avatar_color }}
-                            >
+                            <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0" style={{ background: member.avatar_color }}>
                                 {member.name.charAt(0)}
                             </div>
                             <div className="text-left">
                                 <p className="text-sm font-semibold text-[#2D2D2D]">{member.name}</p>
-                                <p className="text-[10px] text-[#9C9C9C]">
-                                    {RELATION_LABELS[member.relation]} · {member.daily_kcal} kcal
-                                </p>
+                                <p className="text-[10px] text-[#9C9C9C]">{RELATION_LABELS[member.relation]}</p>
                             </div>
                             {member.id === activeMemberId && (
                                 <div className="w-2 h-2 rounded-full ml-1" style={{ background: member.avatar_color }} />
                             )}
                         </motion.button>
                     ))}
-
-                    {/* Add member button */}
                     <motion.button
                         whileHover={{ scale: 1.04 }}
                         whileTap={{ scale: 0.96 }}
@@ -120,121 +120,178 @@ export default function FamilyPage() {
 
                 {/* Active member detail */}
                 {activeMember && (
-                    <div className="grid grid-cols-3 gap-6">
-                        {/* Member profile card */}
-                        <motion.div
-                            key={activeMember.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="p-6 rounded-[20px] bg-white"
-                            style={{ border: "1px solid #F0E4D8", boxShadow: "0 4px 24px rgba(45,45,45,0.06)" }}
-                        >
-                            <div className="flex items-center gap-4 mb-6">
-                                <div
-                                    className="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-2xl font-bold"
-                                    style={{ background: activeMember.avatar_color }}
-                                >
-                                    {activeMember.name.charAt(0)}
-                                </div>
-                                <div>
-                                    <h2 className="font-serif text-lg text-[#2D2D2D]">{activeMember.name}</h2>
-                                    <p className="text-sm text-[#9C9C9C]">{RELATION_LABELS[activeMember.relation]}</p>
-                                </div>
-                            </div>
-
-                            <div className="space-y-3">
-                                {[
-                                    { label: "Âge", value: activeMember.age ? `${activeMember.age} ans` : "—" },
-                                    { label: "Objectif", value: GOAL_LABELS[activeMember.goal] },
-                                    { label: "Calories/jour", value: `${activeMember.daily_kcal} kcal` },
-                                    { label: "Repas assignés", value: `${activeMember.assigned_meal_ids.length} repas` },
-                                ].map((item) => (
-                                    <div key={item.label} className="flex justify-between items-center py-2 border-b border-[#F0E4D8] last:border-0">
-                                        <span className="text-xs text-[#9C9C9C] font-medium">{item.label}</span>
-                                        <span className="text-sm font-semibold text-[#2D2D2D]">{item.value}</span>
+                    <motion.div
+                        key={activeMember.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+                    >
+                        {/* ── Left: Profile + Subscription price ── */}
+                        <div className="flex flex-col gap-4">
+                            {/* Profile card */}
+                            <div className="p-6 rounded-[20px] bg-white" style={{ border: "1px solid #F0E4D8", boxShadow: "0 4px 24px rgba(45,45,45,0.06)" }}>
+                                <div className="flex items-center gap-4 mb-5">
+                                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl font-bold" style={{ background: activeMember.avatar_color }}>
+                                        {activeMember.name.charAt(0)}
                                     </div>
-                                ))}
+                                    <div>
+                                        <h2 className="font-serif text-lg text-[#2D2D2D]">{activeMember.name}</h2>
+                                        <p className="text-sm text-[#9C9C9C]">{RELATION_LABELS[activeMember.relation]}</p>
+                                    </div>
+                                </div>
+                                <div className="space-y-3">
+                                    {[
+                                        { label: "Âge", value: activeMember.age ? `${activeMember.age} ans` : "—" },
+                                        { label: "Objectif", value: GOAL_LABELS[activeMember.goal] },
+                                        { label: "Calories / jour", value: `${activeMember.daily_kcal} kcal` },
+                                    ].map((item) => (
+                                        <div key={item.label} className="flex justify-between items-center py-2 border-b border-[#F0E4D8] last:border-0">
+                                            <span className="text-xs text-[#9C9C9C] font-medium">{item.label}</span>
+                                            <span className="text-sm font-semibold text-[#2D2D2D]">{item.value}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
 
-                            {activeMember.relation !== "self" && (
+                            {/* Subscription price */}
+                            <div className="p-5 rounded-[20px] bg-white" style={{ border: "1px solid #F0E4D8", boxShadow: "0 4px 24px rgba(45,45,45,0.04)" }}>
+                                <p className="text-xs font-bold text-[#9C9C9C] uppercase tracking-widest mb-3">Abonnement</p>
+                                <div className="flex items-end justify-between">
+                                    <div>
+                                        <span className="text-3xl font-serif font-bold text-[#2D2D2D]">{MEMBER_PRICE_MAD}</span>
+                                        <span className="text-sm text-[#9C9C9C] ml-1">MAD / semaine</span>
+                                    </div>
+                                    <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${isMemberPaused ? 'bg-amber-50 text-amber-600' : 'bg-[#E1F5EE] text-[#085041]'}`}>
+                                        {isMemberPaused ? "En pause" : "Actif"}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Pause / Resume */}
+                            {activeMember.relation !== "self" ? (
                                 <button
                                     onClick={() => {
                                         removeMember(activeMember.id);
                                         toast.info(`${activeMember.name} retiré de la famille`);
                                         setActiveMember(members[0]?.id ?? "");
                                     }}
-                                    className="mt-4 w-full flex items-center justify-center gap-2 py-2 text-xs text-[#E07050] hover:bg-red-50 rounded-xl transition-colors"
+                                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-bold text-[#E07050] border border-[#FFD6D6] hover:bg-red-50 transition-colors"
                                 >
-                                    <Trash2 size={12} />
+                                    <Trash2 size={14} />
                                     Retirer de la famille
                                 </button>
-                            )}
-                        </motion.div>
+                            ) : null}
 
-                        {/* Assigned meals */}
-                        <div className="col-span-2">
-                            <h3 className="font-serif text-lg text-[#2D2D2D] mb-4">
-                                Repas de {activeMember.name}
-                                <span className="text-sm font-sans font-normal text-[#9C9C9C] ml-2">
-                                    ({activeMemberMeals.length} assignés)
-                                </span>
-                            </h3>
+                            <button
+                                onClick={() => {
+                                    if (isMemberPaused) {
+                                        resumeSubscription();
+                                        toast.success("Abonnement repris");
+                                    } else {
+                                        pauseSubscription(2);
+                                        toast.success("Abonnement mis en pause (2 semaines)");
+                                    }
+                                }}
+                                className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-bold border transition-colors ${isMemberPaused ? 'text-[#6BC4A0] border-[#A8E6CF] hover:bg-[#F1FAF4]' : 'text-[#9C9C9C] border-[#F0E4D8] hover:bg-[#FFF8F4]'}`}
+                            >
+                                {isMemberPaused ? <PlayCircle size={14} /> : <PauseCircle size={14} />}
+                                {isMemberPaused ? "Reprendre l'abonnement" : "Mettre en pause (2 sem)"}
+                            </button>
+                        </div>
 
-                            {activeMemberMeals.length === 0 ? (
-                                <div className="flex flex-col items-center py-12 text-[#9C9C9C]">
-                                    <span className="text-4xl mb-3">🍽️</span>
-                                    <p className="text-sm font-medium">Aucun repas assigné</p>
-                                    <p className="text-xs mt-1">Ajoutez des repas depuis la liste ci-dessous</p>
+                        {/* ── Right: Address + Allergies ── */}
+                        <div className="lg:col-span-2 flex flex-col gap-5">
+                            {/* Delivery address */}
+                            <div className="p-6 rounded-[20px] bg-white" style={{ border: "1px solid #F0E4D8", boxShadow: "0 4px 24px rgba(45,45,45,0.06)" }}>
+                                <div className="flex items-center gap-2 mb-4">
+                                    <MapPin size={18} strokeWidth={1.5} className="text-[#6BC4A0]" />
+                                    <h3 className="font-serif text-base text-[#2D2D2D]">Adresse de Livraison</h3>
                                 </div>
-                            ) : (
-                                <div className="grid grid-cols-2 gap-3 mb-6">
-                                    {activeMemberMeals.map((meal) => (
-                                        <div key={meal.id} className="relative group">
-                                            <MealCard
-                                                meal={meal}
-                                                variant="default"
-                                                isAdded
-                                                showAdd={false}
-                                            />
+
+                                {editingAddress === activeMember.id ? (
+                                    <div className="space-y-3">
+                                        <input
+                                            autoFocus
+                                            value={addressValue}
+                                            onChange={e => setAddressValue(e.target.value)}
+                                            placeholder="Ex: 12 Rue des Orangers, Tanger"
+                                            className="w-full px-4 py-3 rounded-xl bg-[#FFF8F4] border border-[#F0E4D8] text-sm text-[#2D2D2D] outline-none focus:border-[#A8E6CF] transition-colors"
+                                        />
+                                        <div className="flex gap-2">
                                             <button
                                                 onClick={() => {
-                                                    unassignMeal(activeMember.id, meal.id);
-                                                    toast.info(`${meal.name} retiré de la liste de ${activeMember.name}`);
+                                                    updateMember(activeMember.id, { delivery_address: addressValue } as any);
+                                                    toast.success("Adresse mise à jour");
+                                                    setEditingAddress(null);
                                                 }}
-                                                className="absolute top-3 right-3 w-6 h-6 rounded-full bg-red-50 text-red-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-100"
+                                                className="flex-1 py-2.5 rounded-xl bg-[#6BC4A0] text-white font-bold text-xs"
                                             >
-                                                <X size={12} />
+                                                Enregistrer
+                                            </button>
+                                            <button onClick={() => setEditingAddress(null)} className="px-4 py-2.5 rounded-xl border border-[#F0E4D8] text-xs font-bold text-[#9C9C9C]">
+                                                Annuler
                                             </button>
                                         </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* Available meals to assign */}
-                            <div className="p-5 rounded-[20px] bg-[#F1FAF4] border border-[#A8E6CF]">
-                                <h4 className="text-sm font-semibold text-[#2F8B60] mb-3">
-                                    + Ajouter depuis le menu
-                                </h4>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {unassignedMeals.slice(0, 6).map((meal) => (
-                                        <motion.button
-                                            key={meal.id}
-                                            whileHover={{ scale: 1.02 }}
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center justify-between gap-4">
+                                        <p className="text-sm text-[#2D2D2D] font-medium">
+                                            {(activeMember as any).delivery_address || "Aucune adresse définie"}
+                                        </p>
+                                        <button
                                             onClick={() => {
-                                                assignMeal(activeMember.id, meal.id);
-                                                toast.success(`${meal.emoji} ${meal.name} assigné à ${activeMember.name} !`);
+                                                setAddressValue((activeMember as any).delivery_address || "");
+                                                setEditingAddress(activeMember.id);
                                             }}
-                                            className="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#F0E4D8] hover:border-[#A8E6CF] text-left transition-all"
+                                            className="flex-shrink-0 text-xs font-bold text-[#6BC4A0] underline underline-offset-2 hover:opacity-70"
                                         >
-                                            <span className="text-lg">{meal.emoji}</span>
-                                            <span className="text-xs font-medium text-[#2D2D2D] truncate">{meal.name}</span>
-                                            <Plus size={12} className="ml-auto text-[#6BC4A0] flex-shrink-0" />
-                                        </motion.button>
-                                    ))}
+                                            Modifier
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Allergies */}
+                            <div className="p-6 rounded-[20px] bg-white" style={{ border: "1px solid #F0E4D8", boxShadow: "0 4px 24px rgba(45,45,45,0.06)" }}>
+                                <div className="flex items-center gap-2 mb-4">
+                                    <ShieldAlert size={18} strokeWidth={1.5} className="text-[#FFA07A]" />
+                                    <h3 className="font-serif text-base text-[#2D2D2D]">Allergies & Intolérances</h3>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    {ALLERGY_OPTIONS.map(allergy => {
+                                        const isSelected = (activeMember.allergies ?? []).includes(allergy.id);
+                                        return (
+                                            <button
+                                                key={allergy.id}
+                                                onClick={() => toggleMemberAllergy(activeMember.id, allergy.id, activeMember.allergies ?? [])}
+                                                className={`px-4 py-2.5 rounded-xl border-[1.5px] text-xs font-bold transition-all ${
+                                                    isSelected
+                                                        ? "bg-[#FFF0E8] border-[#FFA07A] text-[#E07050]"
+                                                        : "bg-white border-[#F0E4D8] text-[#9C9C9C] hover:border-[#FFA07A]/40"
+                                                }`}
+                                            >
+                                                {isSelected && "✓ "}{allergy.label}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                {(activeMember.allergies ?? []).length === 0 && (
+                                    <p className="text-xs text-[#9C9C9C] mt-3">Aucune allergie enregistrée — vos repas ne seront pas filtrés.</p>
+                                )}
+                            </div>
+
+                            {/* Info note about meal management */}
+                            <div className="flex items-start gap-3 px-5 py-4 rounded-2xl bg-[#F1FAF4] border border-[#A8E6CF]/50">
+                                <span className="text-xl mt-0.5">📅</span>
+                                <div>
+                                    <p className="text-sm font-semibold text-[#2F8B60]">Gestion des repas</p>
+                                    <p className="text-xs text-[#6B6B6B] mt-1">
+                                        Les repas de chaque membre sont gérés depuis le <strong>Planificateur</strong> — vous pouvez assigner des repas par jour et par membre directement depuis là.
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 )}
 
                 {/* Add Member Modal */}
@@ -263,20 +320,14 @@ export default function FamilyPage() {
 
                                 {/* Avatar color picker */}
                                 <div className="mb-5">
-                                    <label className="text-xs font-semibold text-[#9C9C9C] capitalize tracking-wide mb-2 block">
-                                        Couleur Avatar
-                                    </label>
+                                    <label className="text-xs font-semibold text-[#9C9C9C] capitalize tracking-wide mb-2 block">Couleur Avatar</label>
                                     <div className="flex gap-2 flex-wrap">
                                         {AVATAR_COLORS.map((c) => (
                                             <button
                                                 key={c}
                                                 onClick={() => setSelectedColor(c)}
                                                 className="w-8 h-8 rounded-full transition-transform"
-                                                style={{
-                                                    background: c,
-                                                    border: selectedColor === c ? "3px solid #2D2D2D" : "3px solid transparent",
-                                                    transform: selectedColor === c ? "scale(1.15)" : "scale(1)",
-                                                }}
+                                                style={{ background: c, border: selectedColor === c ? "3px solid #2D2D2D" : "3px solid transparent", transform: selectedColor === c ? "scale(1.15)" : "scale(1)" }}
                                             />
                                         ))}
                                     </div>
@@ -310,7 +361,6 @@ export default function FamilyPage() {
                                             ))}
                                         </select>
                                     </div>
-
                                     <div>
                                         <label className="text-xs font-semibold text-[#6B6B6B] mb-1.5 block">Objectif</label>
                                         <select {...register("goal")} className="w-full px-4 py-3 rounded-2xl bg-[#FFF8F4] border border-[#F0E4D8] text-sm text-[#2D2D2D] outline-none focus:border-[#A8E6CF]">
