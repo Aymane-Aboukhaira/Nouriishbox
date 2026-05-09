@@ -59,7 +59,7 @@ export default function FamilyPage() {
     });
 
     const onSubmit = (data: MemberForm) => {
-        addMember({ ...data, avatar_color: selectedColor, assigned_meal_ids: [] });
+        addMember({ ...data, avatar_color: selectedColor });
         toast.success(`${data.name} ajouté à votre famille ! 🎉`);
         reset();
         setShowAddModal(false);
