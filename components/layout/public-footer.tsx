@@ -143,10 +143,24 @@ export function PublicFooter() {
                 {/* Middle - Links */}
                 <div className="w-full lg:w-[45%] grid grid-cols-2 sm:grid-cols-4 gap-x-6 sm:gap-x-8 gap-y-10 sm:gap-y-16 rtl:text-right">
                     {[
-                        { title: "Produit", links: ["Menu", "Tarifs", "Fonctionnalités"] },
-                        { title: "Entreprise", links: ["À Propos", "Carrières", "Presse"] },
-                        { title: "Légal", links: ["Conditions", "Confidentialité"] },
-                        { title: "Support", links: ["Aide", "Contact"] }
+                        { title: "Produit", links: [
+                          { text: "Menu", href: "/menu" },
+                          { text: "Tarifs", href: "/pricing" },
+                          { text: "Fonctionnalités", href: "/features" },
+                        ]},
+                        { title: "Entreprise", links: [
+                          { text: "À Propos", href: "/about" },
+                          { text: "Carrières", href: "/careers" },
+                          { text: "Presse", href: "/press" },
+                        ]},
+                        { title: "Légal", links: [
+                          { text: "Conditions", href: "/terms" },
+                          { text: "Confidentialité", href: "/privacy" },
+                        ]},
+                        { title: "Support", links: [
+                          { text: "Aide", href: "/help" },
+                          { text: "Contact", href: "/contact" },
+                        ]}
                     ].map((col, idx) => (
                         <motion.div 
                           initial={{ opacity: 0, filter: "blur(10px)" }}
@@ -158,8 +172,8 @@ export function PublicFooter() {
                             <h4 className="font-sans font-semibold text-xs tracking-widest mb-8 uppercase text-[#F5F0E8]">{col.title}</h4>
                             <ul className="space-y-6">
                                 {col.links.map(link => (
-                                    <li key={link}>
-                                        <FooterLink text={link} href="#" />
+                                    <li key={link.text}>
+                                        <FooterLink text={link.text} href={link.href} />
                                     </li>
                                 ))}
                             </ul>
