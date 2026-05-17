@@ -4,36 +4,36 @@ import { useProfileStore, useFamilyStore } from "@/lib/store";
 import { ArrowRight, Target, Activity, MapPin, Users, CheckCircle2, Baby, User } from "lucide-react";
 import { motion } from "framer-motion";
 
-// ── Mifflin-St Jeor BMR + activity multiplier ──────────────────
-function calcDailyKcal(member: {
+// ── Used only for family members (we don't collect individual activity levels for them) ──
+const ACTIVITY_MULTIPLIERS: Record<string, number> = {
+    sedentary: 1.2,
+    light: 1.375,
+    moderate: 1.55,
+    active: 1.725,
+    very_active: 1.9,
+};
+
+function calcFamilyMemberKcal(member: {
     age?: number; gender?: string; height_cm?: number; weight_kg?: number;
     goal?: string; relation?: string;
 }): number {
     const { age = 25, gender = "male", height_cm = 170, weight_kg = 70, goal, relation } = member;
-
-    if (relation === "child") return 1600; // fixed child baseline
-
-    let bmr: number;
-    if (gender === "female") {
-        bmr = 10 * weight_kg + 6.25 * height_cm - 5 * age - 161;
-    } else {
-        bmr = 10 * weight_kg + 6.25 * height_cm - 5 * age + 5;
-    }
-
-    const tdee = bmr * 1.45; // moderate activity default
-
+    if (relation === "child") return 1600;
+    let bmr = gender === "female"
+        ? 10 * weight_kg + 6.25 * height_cm - 5 * age - 161
+        : 10 * weight_kg + 6.25 * height_cm - 5 * age + 5;
+    const tdee = bmr * 1.45; // moderate default for family members
     switch (goal) {
-        case "weight_loss":  return Math.round(tdee - 400);
-        case "muscle_gain":  return Math.round(tdee + 300);
-        default:             return Math.round(tdee);
+        case "weight_loss": return Math.round(tdee - 500);
+        case "muscle_gain": return Math.round(tdee + 300);
+        default:            return Math.round(tdee);
     }
 }
 
 function calcMacros(kcal: number, goal?: string) {
     let proteinPct = 0.25, carbsPct = 0.45, fatsPct = 0.30;
-    if (goal === "muscle_gain")  { proteinPct = 0.35; carbsPct = 0.40; fatsPct = 0.25; }
-    if (goal === "weight_loss")  { proteinPct = 0.35; carbsPct = 0.35; fatsPct = 0.30; }
-
+    if (goal === "muscle_gain") { proteinPct = 0.35; carbsPct = 0.40; fatsPct = 0.25; }
+    if (goal === "weight_loss") { proteinPct = 0.35; carbsPct = 0.35; fatsPct = 0.30; }
     return {
         kcal,
         protein_g: Math.round((kcal * proteinPct) / 4),
@@ -49,6 +49,14 @@ const GOAL_LABELS: Record<string, string> = {
     balance:     "Équilibre",
 };
 
+const ACTIVITY_LABELS: Record<string, string> = {
+    sedentary:   "Sédentaire",
+    light:       "Légère",
+    moderate:    "Modérée",
+    active:      "Active",
+    very_active: "Très active",
+};
+
 export default function ReviewPage() {
     const router = useRouter();
     const { profile } = useProfileStore();
@@ -60,9 +68,17 @@ export default function ReviewPage() {
 
     const isFamilyMode = members.length > 1;
 
-    // ── Per-member calculated targets ─────────────────────────
+    // ── SOLO mode: trust the targets already computed & saved by the goals page ──
+    const soloKcal    = profile.targets?.kcal      ?? 0;
+    const soloProtein = profile.targets?.protein_g ?? 0;
+    const soloCarbs   = profile.targets?.carbs_g   ?? 0;
+    const soloFats    = profile.targets?.fats_g    ?? 0;
+    const soloGoal    = profile.goal               ?? "maintenance";
+    const soloActivity = profile.activity_level    ?? "moderate";
+
+    // ── FAMILY mode: calculate per-member using family store data ──
     const membersWithMacros = members.map((m) => {
-        const kcal = calcDailyKcal({
+        const kcal = calcFamilyMemberKcal({
             age: m.age, gender: m.gender, height_cm: m.height_cm,
             weight_kg: m.weight_kg, goal: m.goal, relation: m.relation,
         });
@@ -70,7 +86,6 @@ export default function ReviewPage() {
         return { ...m, calculatedKcal: kcal, macros };
     });
 
-    // ── Family total for summary card ─────────────────────────
     const familyTotals = membersWithMacros.reduce(
         (acc, m) => ({
             kcal:      acc.kcal      + m.calculatedKcal,
@@ -81,12 +96,10 @@ export default function ReviewPage() {
         { kcal: 0, protein_g: 0, carbs_g: 0, fats_g: 0 }
     );
 
-    const primaryMember = membersWithMacros.find(m => m.relation === "self") ?? membersWithMacros[0];
-
     return (
         <div className="w-full pb-16">
             <div className="text-center mb-12">
-                <motion.span 
+                <motion.span
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] mb-4 block"
@@ -98,7 +111,7 @@ export default function ReviewPage() {
                         <CheckCircle2 size={32} strokeWidth={1.5} />
                     </div>
                 </div>
-                <motion.h1 
+                <motion.h1
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
@@ -106,7 +119,7 @@ export default function ReviewPage() {
                 >
                     Profil {isFamilyMode ? "Familial" : ""} Complet
                 </motion.h1>
-                <motion.p 
+                <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
@@ -120,7 +133,6 @@ export default function ReviewPage() {
 
             <div className="space-y-6 max-w-2xl mx-auto">
 
-                {/* ── Family mode: per-member cards ── */}
                 {isFamilyMode ? (
                     <>
                         {/* Total family banner */}
@@ -140,18 +152,16 @@ export default function ReviewPage() {
                                     <span className="text-xs font-bold text-accent uppercase tracking-widest ml-2">kcal</span>
                                 </div>
                                 <div className="flex gap-6">
-                                    <div className="text-center">
-                                        <span className="block text-xl font-serif text-white">{familyTotals.protein_g}g</span>
-                                        <span className="text-[9px] text-white/60 uppercase font-bold tracking-tighter">Protéines</span>
-                                    </div>
-                                    <div className="text-center">
-                                        <span className="block text-xl font-serif text-white">{familyTotals.carbs_g}g</span>
-                                        <span className="text-[9px] text-white/60 uppercase font-bold tracking-tighter">Glucides</span>
-                                    </div>
-                                    <div className="text-center">
-                                        <span className="block text-xl font-serif text-white">{familyTotals.fats_g}g</span>
-                                        <span className="text-[9px] text-white/60 uppercase font-bold tracking-tighter">Lipides</span>
-                                    </div>
+                                    {[
+                                        { label: "Protéines", val: familyTotals.protein_g },
+                                        { label: "Glucides",  val: familyTotals.carbs_g },
+                                        { label: "Lipides",   val: familyTotals.fats_g },
+                                    ].map(({ label, val }) => (
+                                        <div key={label} className="text-center">
+                                            <span className="block text-xl font-serif text-white">{val}g</span>
+                                            <span className="text-[9px] text-white/60 uppercase font-bold tracking-tighter">{label}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         </motion.div>
@@ -182,7 +192,6 @@ export default function ReviewPage() {
                                             </p>
                                         </div>
                                     </div>
-
                                     <div className="flex justify-between items-end">
                                         <div>
                                             <span className="text-3xl font-serif text-text-primary">{m.calculatedKcal}</span>
@@ -191,8 +200,8 @@ export default function ReviewPage() {
                                         <div className="flex gap-3 text-right">
                                             {[
                                                 { label: "P", val: m.macros.protein_g, color: "text-primary" },
-                                                { label: "G", val: m.macros.carbs_g, color: "text-accent" },
-                                                { label: "L", val: m.macros.fats_g, color: "text-text-muted" },
+                                                { label: "G", val: m.macros.carbs_g,   color: "text-accent" },
+                                                { label: "L", val: m.macros.fats_g,    color: "text-text-muted" },
                                             ].map(({ label, val, color }) => (
                                                 <div key={label} className="text-center">
                                                     <span className={`block text-sm font-bold font-serif ${color}`}>{val}g</span>
@@ -201,8 +210,6 @@ export default function ReviewPage() {
                                             ))}
                                         </div>
                                     </div>
-
-                                    {/* Allergies */}
                                     {(m.allergies ?? []).length > 0 && (
                                         <div className="mt-3 pt-3 border-t border-border flex flex-wrap gap-1">
                                             {(m.allergies ?? []).map(a => (
@@ -217,7 +224,7 @@ export default function ReviewPage() {
                         </div>
                     </>
                 ) : (
-                    /* ── Solo mode: single macro card ── */
+                    /* ── Solo mode: read from profile.targets — exactly what the user chose ── */
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -228,22 +235,20 @@ export default function ReviewPage() {
                         <h3 className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] mb-6 border-b border-border pb-3">Vos Cibles Quotidiennes</h3>
                         <div className="flex justify-between items-center">
                             <div>
-                                <span className="text-6xl font-serif text-text-primary leading-none">
-                                    {primaryMember?.calculatedKcal ?? 0}
-                                </span>
+                                <span className="text-6xl font-serif text-text-primary leading-none">{soloKcal}</span>
                                 <span className="text-xs font-bold text-accent uppercase tracking-widest ml-2">kcal</span>
                             </div>
                             <div className="flex gap-6">
                                 <div className="text-center">
-                                    <span className="block text-xl font-serif text-primary">{primaryMember?.macros.protein_g ?? 0}g</span>
+                                    <span className="block text-xl font-serif text-primary">{soloProtein}g</span>
                                     <span className="text-[9px] text-text-muted uppercase font-bold tracking-tighter">Protéines</span>
                                 </div>
                                 <div className="text-center">
-                                    <span className="block text-xl font-serif text-primary">{primaryMember?.macros.carbs_g ?? 0}g</span>
+                                    <span className="block text-xl font-serif text-primary">{soloCarbs}g</span>
                                     <span className="text-[9px] text-text-muted uppercase font-bold tracking-tighter">Glucides</span>
                                 </div>
                                 <div className="text-center">
-                                    <span className="block text-xl font-serif text-primary">{primaryMember?.macros.fats_g ?? 0}g</span>
+                                    <span className="block text-xl font-serif text-primary">{soloFats}g</span>
                                     <span className="text-[9px] text-text-muted uppercase font-bold tracking-tighter">Lipides</span>
                                 </div>
                             </div>
@@ -251,29 +256,27 @@ export default function ReviewPage() {
                     </motion.div>
                 )}
 
-                {/* Info grid: activity + goal (primary user) */}
-                {primaryMember && (
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-white p-6 rounded-[24px] border-[1.5px] border-border flex flex-col gap-2 shadow-sm">
-                            <Activity size={20} strokeWidth={1.5} className="text-primary" />
-                            <div>
-                                <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block">Activité</span>
-                                <p className="font-serif text-lg text-text-primary capitalize">
-                                    {profile.activity_level?.replace("_", " ") || "Modérée"}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="bg-white p-6 rounded-[24px] border-[1.5px] border-border flex flex-col gap-2 shadow-sm">
-                            <Target size={20} strokeWidth={1.5} className="text-primary" />
-                            <div>
-                                <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block">Objectif</span>
-                                <p className="font-serif text-lg text-text-primary capitalize">
-                                    {GOAL_LABELS[primaryMember.goal] ?? primaryMember.goal}
-                                </p>
-                            </div>
+                {/* Info grid: activity + goal — always from profile store */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white p-6 rounded-[24px] border-[1.5px] border-border flex flex-col gap-2 shadow-sm">
+                        <Activity size={20} strokeWidth={1.5} className="text-primary" />
+                        <div>
+                            <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block">Activité</span>
+                            <p className="font-serif text-lg text-text-primary">
+                                {ACTIVITY_LABELS[soloActivity] ?? soloActivity}
+                            </p>
                         </div>
                     </div>
-                )}
+                    <div className="bg-white p-6 rounded-[24px] border-[1.5px] border-border flex flex-col gap-2 shadow-sm">
+                        <Target size={20} strokeWidth={1.5} className="text-primary" />
+                        <div>
+                            <span className="text-[9px] font-bold text-text-muted uppercase tracking-widest block">Objectif</span>
+                            <p className="font-serif text-lg text-text-primary">
+                                {GOAL_LABELS[soloGoal] ?? soloGoal}
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
                 {/* Family mode indicator */}
                 {isFamilyMode && (
