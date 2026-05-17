@@ -316,6 +316,8 @@ interface FamilyState {
     assignMeal: (memberId: string, mealId: string) => void;
     unassignMeal: (memberId: string, mealId: string) => void;
     setupFamily: (adults: number, children: number) => void;
+    /** Reset to solo mode — strips all family members, keeping only a single 'self' placeholder. */
+    resetToSolo: () => void;
 }
 
 export const useFamilyStore = create<FamilyState>()(
@@ -401,6 +403,28 @@ export const useFamilyStore = create<FamilyState>()(
                     }
                     
                     return { members: newMembers };
+                }),
+            resetToSolo: () =>
+                set((state) => {
+                    // Keep only the 'self' member (primary user), or create a bare placeholder if none exists.
+                    const selfMember = state.members.find(m => m.relation === "self");
+                    if (selfMember) {
+                        return { members: [selfMember], activeMemberId: selfMember.id };
+                    }
+                    // Fallback: create a minimal self entry so the review page always has exactly 1 member
+                    return {
+                        members: [{
+                            id: "self",
+                            name: "",
+                            relation: "self" as const,
+                            avatar_color: "#6BC4A0",
+                            age: 0,
+                            goal: "maintenance",
+                            daily_kcal: 2000,
+                            assigned_meal_ids: [],
+                        }],
+                        activeMemberId: "self",
+                    };
                 }),
         }),
         { name: "nourishbox-family" }

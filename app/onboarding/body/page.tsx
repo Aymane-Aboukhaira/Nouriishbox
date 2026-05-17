@@ -2,19 +2,26 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { BodySlider } from "../components/BodySlider";
-import { useProfileStore } from "@/lib/store";
+import { useProfileStore, useFamilyStore } from "@/lib/store";
 import { ArrowRight, Check } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function BodyMetricsPage() {
     const router = useRouter();
     const { profile, updateProfile } = useProfileStore();
+    const { resetToSolo } = useFamilyStore();
 
     const [gender, setGender] = useState<"male" | "female">(profile.gender || "female");
     const [age, setAge] = useState(profile.age || 25);
     const [height, setHeight] = useState(profile.height_cm || 170);
     const [weight, setWeight] = useState(profile.weight_kg || 70);
     const [tdee, setTdee] = useState(0);
+
+    // Clear any stale family members immediately when entering solo flow
+    useEffect(() => {
+        resetToSolo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Calculate TDEE in real time
     useEffect(() => {
