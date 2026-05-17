@@ -9,8 +9,9 @@ import { motion } from "framer-motion";
 export default function BodyMetricsPage() {
     const router = useRouter();
     const { profile, updateProfile } = useProfileStore();
-    const { resetToSolo } = useFamilyStore();
+    const { resetToSolo, updateMember } = useFamilyStore();
 
+    const [name, setName] = useState(profile.name || "");
     const [gender, setGender] = useState<"male" | "female">(profile.gender || "female");
     const [age, setAge] = useState(profile.age || 25);
     const [height, setHeight] = useState(profile.height_cm || 170);
@@ -37,7 +38,9 @@ export default function BodyMetricsPage() {
     }, [gender, age, height, weight]);
 
     const handleNext = () => {
-        updateProfile({ gender, age, height_cm: height, weight_kg: weight });
+        updateProfile({ name, gender, age, height_cm: height, weight_kg: weight });
+        // Keep the self member's name in sync so the planner greets by real name
+        updateMember("self", { name });
         router.push("/onboarding/goals");
     };
 
@@ -70,6 +73,18 @@ export default function BodyMetricsPage() {
             </div>
 
             <div className="space-y-8 max-w-lg mx-auto">
+                {/* Name input */}
+                <div className="bg-white rounded-[20px] border-[1.5px] border-border px-6 py-5 flex flex-col gap-2 shadow-sm">
+                    <label className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">Votre prénom</label>
+                    <input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Ex : Aymane"
+                        className="font-serif text-2xl text-text-primary bg-transparent outline-none placeholder:text-border"
+                        autoComplete="given-name"
+                    />
+                </div>
                 <div className="grid grid-cols-2 gap-4">
                     <button
                         onClick={() => setGender("female")}
