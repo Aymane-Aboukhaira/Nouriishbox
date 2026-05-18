@@ -8,7 +8,7 @@ import { PublicNavbar } from "@/components/layout/public-navbar";
 import { PublicFooter } from "@/components/layout/public-footer";
 import {
   Heart, Leaf, Users, MapPin, ChefHat, Target,
-  ArrowRight, Sprout, Globe2, Sparkles, Award
+  ArrowRight, Sprout, Globe2, Sparkles, Award, Utensils, Building2
 } from "lucide-react";
 
 const VALUES = [
@@ -29,7 +29,7 @@ const VALUES = [
   {
     icon: Heart,
     title: "Saveurs du Maroc",
-    desc: "Le cumin, le safran, la harissa — nous prouvons que manger sainement ne veut pas dire manger fade. Nos chefs sont des artistes.",
+    desc: "Le cumin, le safran, la harissa — nous prouvons que manger sainement ne veut pas dire manger fade. Nos chefs partenaires sont des artistes.",
     color: "#C4602A",
     bg: "#FFF0EA",
   },
@@ -43,44 +43,54 @@ const VALUES = [
 ];
 
 const MILESTONES = [
-  { year: "2024", event: "L'idée naît dans un café de la Médina", desc: "Deux amis, frustrés par l'impossibilité de manger sainement à Tanger sans passer 3h en cuisine, griffonnent les premières maquettes sur une serviette." },
-  { year: "2025", event: "Premier prototype cuisiné dans une cuisine familiale", desc: "50 box-test livrées à des amis. Les retours sont unanimes : le goût est là, les macros aussi." },
-  { year: "2025", event: "Lancement officiel — 200 premiers abonnés", desc: "Ouverture de notre dark kitchen à Tanger avec 3 chefs et un algorithme de planification hebdomadaire." },
-  { year: "2026", event: "1 200+ membres actifs chaque semaine", desc: "Extension de notre carte, lancement du plan Famille, et clinique virtuelle de nutrition intégrée à la plateforme." },
+  {
+    year: "2024",
+    event: "L'observation qui a tout déclenché",
+    desc: "En travaillant chez McDonald's à Tanger, Aymane remarque chaque jour les mêmes visages : des sportifs en tenue de gym, des professionnels en costume, tous dans la même file — pressés, sans autre option rapide. Son manager confirme : la majorité vient non pas par envie, mais par manque de temps et d'alternative.",
+  },
+  {
+    year: "2024",
+    event: "Le constat personnel",
+    desc: "Aymane essaie lui-même de manger sainement. Pas de système clair. Les applications sont en anglais, les macros sont floues, les plats locaux ne sont pas répertoriés. Il réalise qu'il manque un service pensé pour Tanger — en arabe, en darija, avec des vrais plats marocains.",
+  },
+  {
+    year: "2025",
+    event: "Les premiers repas sortent de la dark kitchen",
+    desc: "En partenariat avec une dark kitchen locale, les premières box Nourishbox sont préparées. Tout est pesé au gramme. Les profils sont configurés à la main. Les retours des premiers testeurs sont clairs : le goût est là, les macros aussi.",
+  },
+  {
+    year: "2025 →",
+    event: "Lancement officiel — les premières inscriptions ouvertes",
+    desc: "La plateforme ouvre au public. Chaque abonné reçoit un plan hebdomadaire personnalisé basé sur ses objectifs réels. Nous n'avons pas encore 1 000 clients — mais chaque repas livré est une promesse tenue.",
+  },
 ];
 
+// Honest team: founder + dark kitchen partners only
 const TEAM = [
-  { name: "Aymane A.", role: "Co-fondateur & Produit", initials: "AA", color: "#2C3E2D" },
-  { name: "Youssef K.", role: "Co-fondateur & Opérations", initials: "YK", color: "#C4602A" },
-  { name: "Chef Amine", role: "Chef Exécutif", initials: "CA", color: "#6BC4A0" },
-  { name: "Dr. Leila M.", role: "Nutritionniste en chef", initials: "LM", color: "#B09AE0" },
-  { name: "Imane R.", role: "Design & Expérience", initials: "IR", color: "#F59E0B" },
-  { name: "Karim B.", role: "Logistique & Livraison", initials: "KB", color: "#FFA07A" },
+  {
+    name: "Aymane A.",
+    role: "Fondateur & Produit",
+    initials: "AA",
+    color: "#2C3E2D",
+    desc: "Vision, plateforme, et chaque détail de l'expérience client.",
+  },
+  {
+    name: "Dark Kitchen",
+    role: "Partenaire Cuisine",
+    initials: "🍳",
+    color: "#C4602A",
+    desc: "Notre cuisine partenaire à Tanger — préparation, pesée, et qualité à chaque box.",
+    isEmoji: true,
+  },
+  {
+    name: "Livraison",
+    role: "Partenaire Logistique",
+    initials: "🛵",
+    color: "#6BC4A0",
+    desc: "Livraison rapide, fraîcheur garantie jusqu'à votre porte.",
+    isEmoji: true,
+  },
 ];
-
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!isInView) return;
-    let current = 0;
-    const step = Math.max(1, Math.floor(target / 60));
-    const interval = setInterval(() => {
-      current = Math.min(current + step, target);
-      setCount(current);
-      if (current >= target) clearInterval(interval);
-    }, 30);
-    return () => clearInterval(interval);
-  }, [isInView, target]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {count.toLocaleString("fr-FR")}{suffix}
-    </span>
-  );
-}
 
 export default function AboutPage() {
   const router = useRouter();
@@ -111,8 +121,8 @@ export default function AboutPage() {
             className="font-serif font-bold text-[#F5F0E8] leading-[0.95] tracking-tight mb-8"
             style={{ fontSize: "clamp(2.5rem, 7vw, 6rem)" }}
           >
-            Né à Tanger.{" "}
-            <span className="text-[#C4602A]">Pensé pour vous.</span>
+            Né d&apos;une observation.{" "}
+            <span className="text-[#C4602A]">Construit pour vous.</span>
           </motion.h1>
 
           <motion.p
@@ -121,21 +131,20 @@ export default function AboutPage() {
             transition={{ delay: 0.6 }}
             className="text-lg md:text-xl text-[#F5F0E8]/70 font-sans max-w-2xl mx-auto leading-relaxed mb-12"
           >
-            Nourishbox est né d&apos;une frustration simple : pourquoi est-il si difficile de manger sainement
-            quand on vit à 100 à l&apos;heure ? Nous avons décidé de changer la donne — un repas à la fois.
+            Nourishbox est né d&apos;un constat simple fait derrière un comptoir — les gens qui veulent bien
+            manger n&apos;ont pas de système qui leur correspond. On a décidé de le construire.
           </motion.p>
 
+          {/* Honest pre-launch stats — no fake numbers */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
             {[
-              { value: 1200, suffix: "+", label: "Membres actifs" },
-              { value: 30, suffix: "+", label: "Plats au menu" },
-              { value: 50000, suffix: "+", label: "Repas livrés" },
-              { value: 98, suffix: "%", label: "Taux de satisfaction" },
+              { value: "30+", label: "Plats au menu" },
+              { value: "100%", label: "Ingrédients locaux" },
+              { value: "Tanger", label: "Notre ville" },
+              { value: "2025", label: "Lancement" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <div className="font-serif font-bold text-3xl md:text-4xl text-[#F5F0E8]">
-                  <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                </div>
+                <div className="font-serif font-bold text-3xl md:text-4xl text-[#F5F0E8]">{stat.value}</div>
                 <p className="text-xs text-[#F5F0E8]/50 font-sans font-semibold uppercase tracking-widest mt-1">{stat.label}</p>
               </div>
             ))}
@@ -158,27 +167,32 @@ export default function AboutPage() {
           <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <span className="text-sm font-bold text-[#C4602A] uppercase tracking-[0.2em] font-sans mb-4 block">Comment tout a commencé</span>
             <h2 className="font-serif text-4xl md:text-5xl text-[#1A1A1A] tracking-tight mb-6 leading-[1.1]">
-              Un café, une serviette, et une obsession
+              Ce que j&apos;ai vu derrière un comptoir a tout changé
             </h2>
             <div className="space-y-5 text-[#6B6B6B] font-sans leading-relaxed text-lg">
               <p>
-                En 2024, deux amis se retrouvent dans un café de la médina de Tanger. La conversation tourne
-                autour d&apos;un constat partagé : entre les journées de travail intenses et l&apos;offre alimentaire
-                locale, impossible de manger &ldquo;propre&rdquo; sans sacrifier des heures en cuisine.
+                Je travaillais chez McDonald&apos;s à Tanger. Tous les jours, je voyais défiler les mêmes profils :
+                des gars qui sortaient de la salle de sport en tenue de training, des professionnels en costume,
+                des gens qui n&apos;avaient pas le temps. Ils ne choisissaient pas la restauration rapide — ils
+                y étaient <em>contraints</em>.
               </p>
               <p>
-                Sur une serviette, ils dessinent le plan d&apos;un service qui livrerait des repas frais, calculés au
-                gramme près pour chaque individu. Pas un meal-prep fade sous vide. De vrais plats marocains —
-                avec du cumin, du safran, de la harissa — mais dosés scientifiquement.
+                Mon manager me l&apos;a confirmé un jour : &ldquo;La plupart viennent ici non pas parce qu&apos;ils
+                aiment ça, mais parce qu&apos;on est rapides et qu&apos;ils n&apos;ont pas d&apos;autre option.&rdquo;
               </p>
               <p>
-                Six mois plus tard, les 50 premières box sortent d&apos;une cuisine familiale. Les retours sont
-                unanimes. <strong className="text-[#2C3E2D]">Nourishbox</strong> est né.
+                J&apos;ai essayé moi-même de manger sainement. Pas d&apos;application en darija, pas de macros
+                pour des plats marocains, pas de système livré à domicile. J&apos;ai réalisé qu&apos;il n&apos;existait
+                rien de structuré pour des gens comme nous — des Tangérois qui veulent bien manger
+                sans y passer leur soirée.
+              </p>
+              <p>
+                <strong className="text-[#2C3E2D]">Nourishbox</strong> est ma réponse à ce vide.
               </p>
             </div>
           </motion.div>
 
-          {/* Photo placeholder — stacked boxes visual */}
+          {/* Photo */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -266,31 +280,36 @@ export default function AboutPage() {
 
       {/* ── TEAM ── */}
       <section className="py-24 lg:py-32 px-6 bg-[#2C3E2D] text-[#F5F0E8]">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-            <span className="text-sm font-bold text-[#C4602A] uppercase tracking-[0.2em] font-sans mb-4 block">L&apos;Équipe</span>
-            <h2 className="font-serif text-4xl md:text-5xl text-[#F5F0E8] tracking-tight">Les visages derrière vos repas</h2>
+            <span className="text-sm font-bold text-[#C4602A] uppercase tracking-[0.2em] font-sans mb-4 block">L&apos;équipe</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-[#F5F0E8] tracking-tight">Petite équipe. Grande exigence.</h2>
+            <p className="text-[#F5F0E8]/60 font-sans mt-4 max-w-xl mx-auto text-lg">
+              Nourishbox est porté par son fondateur et une chaîne de partenaires soigneusement sélectionnés.
+              Pas de figure de style — juste les bonnes personnes au bon endroit.
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {TEAM.map((member, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.5 }}
+                transition={{ delay: i * 0.12, duration: 0.5 }}
                 whileHover={{ y: -6 }}
-                className="flex flex-col items-center text-center group"
+                className="flex flex-col items-center text-center group bg-white/5 rounded-[24px] p-8 border border-[#F5F0E8]/10 hover:bg-white/10 transition-all"
               >
                 <div
-                  className="w-24 h-24 md:w-28 md:h-28 rounded-full flex items-center justify-center text-2xl md:text-3xl font-serif font-bold mb-4 shadow-lg group-hover:scale-105 transition-transform border-2 border-[#F5F0E8]/10"
-                  style={{ backgroundColor: member.color, color: "#F5F0E8" }}
+                  className="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-serif font-bold mb-5 shadow-lg group-hover:scale-105 transition-transform border-2 border-[#F5F0E8]/10"
+                  style={{ backgroundColor: member.isEmoji ? "rgba(255,255,255,0.08)" : member.color, color: "#F5F0E8" }}
                 >
                   {member.initials}
                 </div>
-                <h4 className="font-serif text-lg text-[#F5F0E8]">{member.name}</h4>
-                <p className="text-sm text-[#F5F0E8]/60 font-sans">{member.role}</p>
+                <h4 className="font-serif text-xl text-[#F5F0E8] mb-1">{member.name}</h4>
+                <p className="text-sm text-[#C4602A] font-bold uppercase tracking-widest mb-3">{member.role}</p>
+                <p className="text-sm text-[#F5F0E8]/50 font-sans leading-relaxed">{member.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -311,10 +330,11 @@ export default function AboutPage() {
 
             <Sparkles className="mx-auto mb-6 text-[#C4602A]" size={40} />
             <h2 className="font-serif text-4xl md:text-5xl text-[#1A1A1A] mb-4 tracking-tight relative z-10">
-              Rejoignez l&apos;aventure
+              Faites partie des premiers
             </h2>
             <p className="text-lg text-[#6B6B6B] max-w-xl mx-auto mb-10 font-sans relative z-10">
-              Que vous soyez sportif, maman active ou simplement curieux — votre premier plan est gratuit et prend 2 minutes.
+              Nous sommes en phase de lancement. Chaque abonnement compte — et chaque retour nous aide à construire
+              le service que Tanger mérite. Votre premier plan est gratuit et prend 2 minutes.
             </p>
 
             <motion.button
